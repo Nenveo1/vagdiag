@@ -23,7 +23,7 @@ KWP2000 ist neu und bisher nur gegen den Simulator geprüft.
 - Oberfläche und Kommandozeile auf Deutsch oder Englisch
 
 Geschrieben wird nur beim Fehlerspeicher-Löschen, und nur nach Rückfrage.
-Codierung, Anpassung, Grundeinstellung und Stellglieddiagnose gibt es nicht.
+Codierung, Anpassung, Grundeinstellung und Stellglieddiagnose gibt es (noch) nicht.
 
 ## Installation
 

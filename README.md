@@ -1,5 +1,3 @@
-# vagdiag
-A software for reading K-Line Interfaces using FTDI-FT232 adapter
 
 # vagdiag 0.6.1 – VAG-Diagnose über KKL-Kabel
 

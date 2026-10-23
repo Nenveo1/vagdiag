@@ -1,0 +1,520 @@
+"""Expertenmodus: die ersten Funktionen, die etwas im Steuergerät ändern.
+
+Grundsätze
+  - Nur im Expertenmodus (DiagSession.experte – bei jedem Programmstart aus, die
+    Oberfläche zeigt beim Einschalten einen Hinweis).
+  - Jede Funktion gibt im Protokoll genau ihre Blöcke frei (KW1281.schreiben_freigeben)
+    – alles andere bleibt gesperrt, auch im Expertenmodus.
+  - Vorher werden die Bedingungen über Live-Messwerte geprüft, alte Werte werden
+    gesichert, jeder Schreibblock steht im Protokoll.
+  - Drosselklappe nur bei KW1281; Service-Reset und Stellglieddiagnose auch bei KWP2000
+    (die Stellglieddiagnose dort experimentell).
+
+Drosselklappe anlernen (Motor 01, Grundeinstellung)
+  Gruppe 060 bei E-Gas (z. B. ME7), Gruppe 098 bei Seilzug-Drosselklappe. Bedingungen
+  laut Ross-Tech: Zündung an, Motor aus, Gaspedal nicht berühren, Bordspannung
+  mindestens 11,5 V, Kühlmittel 5–95 °C, kein Fehler im Motor-Fehlerspeicher. Die
+  Grundeinstellung läuft etwa 30 Sekunden, dann zurück zu den Messwerten (das beendet
+  sie) und Fehlerspeicher lesen. Feld 4 der Gruppe 060 zeigt das Ergebnis
+  („ADP i.O.“ / „ADP ERROR“) – als Textnummer; kennt vagdiag sie noch nicht, steht
+  dort „Text Nr. …“.
+
+Service-Intervall zurücksetzen (Kombi 17, Anpassungskanal 02 → 0)
+  Wie Ross-Tech es für Modelle ab etwa 1998 beschreibt: lesen, testen, speichern. Der
+  alte Wert landet vorher als JSON-Datei in ~/vagdiag-daten/sicherungen. Bei KWP2000
+  laufen Testen und Speichern in einer Anpassungssitzung (siehe kwp2000.py).
+
+Stellglieddiagnose (geöffnetes Steuergerät, nicht bei Bremsen, Airbag, Wegfahrsperre
+und Lenkung)
+  Das Steuergerät steuert seine Stellglieder nacheinander an; jeder Schritt schaltet
+  weiter, bis es „Ende“ meldet oder der Benutzer aufhört – kommt 60 Sekunden lang kein
+  „Weiter“, hört vagdiag von selbst auf. Beim Motor vorher: steht er (Drehzahl 0)?
+  Danach wird die Verbindung beendet – dann hört jedes Steuergerät sicher auf, ein
+  Stellglied anzusteuern – und neu aufgebaut.
+
+Alle Abläufe laufen im Diagnose-Thread der Sitzung (siehe session.py).
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import queue
+import time
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import TYPE_CHECKING, Callable
+
+from . import __version__, adressen
+from .fehler import Fehler
+from .kline import KLineError
+from .kw1281 import KW1281, DiagError, Nak, NotAvailable, SchreibenGesperrt, Verbindung
+from .messwerte import Messwert
+from .pfade import DATEN_ORDNER
+from .port import PortError
+from .sprache import N_, t, zahl
+from .stellglied import Stellglied, gesperrt_nach_kennung
+
+if TYPE_CHECKING:
+    from .session import DiagSession
+
+log = logging.getLogger("vagdiag.proto")
+
+MOTOR = 0x01
+KOMBI = 0x17
+DROSSELKLAPPE_GRUPPEN = {60: N_("060 – E-Gas (z. B. ME7)"),
+                         98: N_("098 – Drosselklappe mit Seilzug")}
+DAUER = 30.0                 # s Grundeinstellung (Ross-Tech: „etwa 30 Sekunden“)
+MIN_SPANNUNG = 11.5          # V
+KUEHLMITTEL = (5.0, 95.0)    # °C
+SERVICE_KANAL = 2
+SICHERUNGEN = DATEN_ORDNER / "sicherungen"
+# Feldnamen der Gruppe 060 bei E-Gas (Ross-Tech) – nur angezeigt, wenn die Einheiten
+# passen (zwei Prozentwerte, eine Zahl, ein Text)
+FELDER_060 = (N_("Drosselklappe Poti 1"), N_("Drosselklappe Poti 2"), N_("Lernschritt"),
+              N_("Anpassungsstatus"))
+MAX_SCHRITTE = 100           # Stellglieddiagnose: höchstens so viele Stellglieder …
+SCHRITT_MAX = 60.0           # … und jedes höchstens so viele Sekunden ohne „Weiter“
+
+
+class Nichts(DiagError):
+    """Ablauf vor dem ersten Schreibblock beendet – am Steuergerät hat sich nichts
+    geändert."""
+
+
+# ---------------------------------------------------------------- Ergebnisse
+@dataclass
+class Bedingung:
+    name: str               # interner (deutscher) Text, angezeigt mit t()
+    wert: str               # gemessen, als Text
+    ok: bool | None         # None = nicht prüfbar
+
+
+@dataclass
+class Pruefung:
+    gruppe: int
+    bedingungen: list[Bedingung]
+    vorher: list[Messwert]
+    fehler: list[Fehler]
+    kennung: tuple = ()      # geprüftes Steuergerät – die Ausführung gilt nur dafür
+
+    @property
+    def verletzt(self) -> list[Bedingung]:
+        return [b for b in self.bedingungen if b.ok is False]
+
+    @property
+    def ungeprueft(self) -> list[Bedingung]:
+        return [b for b in self.bedingungen if b.ok is None]
+
+
+@dataclass
+class GrundeinstellungErgebnis:
+    gruppe: int
+    vorher: list[Messwert]
+    nachher: list[Messwert]
+    fehler_nachher: list[Fehler] | None
+    dauer: float
+    abgebrochen: bool
+    status: str | None      # "ok", "fehler", "laeuft" oder None (Text unbekannt)
+
+
+@dataclass
+class ServiceErgebnis:
+    alt: int
+    neu: int
+    sicherung: Path
+    werkstattcode: int
+
+
+@dataclass
+class StellgliedPruefung:
+    adresse: int
+    kwp2000: bool
+    bedingungen: list[Bedingung]
+    kennung: tuple = ()
+
+    @property
+    def verletzt(self) -> list[Bedingung]:
+        return [b for b in self.bedingungen if b.ok is False]
+
+    @property
+    def ungeprueft(self) -> list[Bedingung]:
+        return [b for b in self.bedingungen if b.ok is None]
+
+
+@dataclass
+class StellgliedErgebnis:
+    adresse: int
+    schritte: list[Stellglied]
+    grund: str              # "ende", "durch", "kein_status", "max", "zeit", "beendet",
+                            # "abgebrochen"
+    dauer: float
+    wieder_verbunden: bool
+    kwp2000: bool
+
+
+@dataclass
+class _Live:
+    drehzahl: float | None = None
+    spannung: float | None = None
+    kuehlmittel: float | None = None
+    quellen: list[str] = field(default_factory=list)
+
+
+# ---------------------------------------------------------------- Hilfen
+def feldnamen_060(werte: list[Messwert]) -> list[str]:
+    """Namen für Gruppe 060, wenn die Einheiten zur E-Gas-Belegung passen."""
+    if (len(werte) >= 4 and werte[0].einheit == "%" and werte[1].einheit == "%"
+            and werte[2].einheit == "" and werte[3].typ == 37):
+        return [t(n) for n in FELDER_060]
+    return [t("Feld {nummer}", nummer=i + 1) for i in range(len(werte))]
+
+
+def adp_status(werte: list[Messwert]) -> str | None:
+    """Status aus Feld 4 („ADP läuft / i.O. / ERROR“) – None, solange der Text
+    unbekannt ist („Text Nr. …“)."""
+    if len(werte) < 4:
+        return None
+    text = werte[3].text.lower()
+    if "error" in text or "fehler" in text:
+        return "fehler"
+    if "läuft" in text or "running" in text or " run" in text:
+        return "laeuft"
+    if "i.o" in text or "ok" in text:
+        return "ok"
+    return None
+
+
+def kennung_text(kennung: tuple) -> str:
+    """„17 – Schalttafeleinsatz (Kombi): 6K9920806 KOMBIINSTRUMENT TRW V04“"""
+    if len(kennung) != 3:
+        return "?"
+    adresse, teilenummer, bauteil = kennung
+    return f"{adressen.text(adresse)}: " + (" ".join(x for x in (teilenummer, bauteil) if x)
+                                             or "?")
+
+
+def _verbindung_pruefen(s: "DiagSession", adresse: int | None,
+                        kwp2000_ok: bool = False, kennung: tuple | None = None) -> Verbindung:
+    """Verbunden mit diesem Steuergerät (adresse None: mit irgendeinem)? Mit `kennung`:
+    genau mit dem Gerät, das der Benutzer bestätigt hat – nicht mit einem anderen, das
+    inzwischen verbunden ist. Geräte, die sich als Airbag, Bremse, Wegfahrsperre oder
+    Lenkung melden, bekommen nie eine Expertenfunktion."""
+    proto = s._proto_pruefen()
+    v = proto.verbindung
+    if v is None or (adresse is not None and v.adresse != adresse):
+        if adresse is None:
+            raise Nichts(t("Erst ein Steuergerät öffnen"))
+        raise Nichts(t("Erst mit {steuergeraet} verbinden",
+                       steuergeraet=adressen.text(adresse)))
+    if kennung is not None and v.kennung != tuple(kennung):
+        raise Nichts(t("Inzwischen ist ein anderes Steuergerät verbunden ({jetzt} statt "
+                       "{vorher}) – nichts gesendet.", jetzt=kennung_text(v.kennung),
+                       vorher=kennung_text(tuple(kennung))))
+    grund = gesperrt_nach_kennung(v.teilenummer, v.bauteil)
+    if grund:
+        raise Nichts(grund)
+    if proto.ist_kwp2000 and not kwp2000_ok:
+        raise NotAvailable(t("Diese Expertenfunktion gibt es bisher nur bei KW1281 – dieses "
+                             "Steuergerät spricht KWP2000."))
+    return v
+
+
+def _live_lesen(s: "DiagSession") -> _Live:
+    """Drehzahl, Bordspannung und Kühlmittel aus den Gruppen 001 und 004 (bei ME7
+    und vielen anderen Motorsteuergeräten so belegt). Fehlt etwas, bleibt es None."""
+    live = _Live()
+    proto = s._proto_pruefen()
+    for gruppe in (1, 4):
+        try:
+            werte = s._wiederholt(lambda: proto.gruppe_lesen(gruppe))
+        except (Nak, NotAvailable):
+            continue
+        live.quellen.append(f"{gruppe:03d}")
+        for m in werte:
+            if not m.gueltig or m.zahl is None:
+                continue
+            if m.einheit == "/min":
+                # die höchste Drehzahl aus allen Gruppen – eine einzige über 0 genügt
+                live.drehzahl = m.zahl if live.drehzahl is None else max(live.drehzahl, m.zahl)
+            elif m.einheit == "V" and live.spannung is None:
+                live.spannung = m.zahl
+            elif m.einheit == "°C" and live.kuehlmittel is None:
+                live.kuehlmittel = m.zahl      # 001 Feld 2 bzw. 004 Feld 3
+    return live
+
+
+def _bedingungen(live: _Live, fehler: list[Fehler]) -> list[Bedingung]:
+    def text(wert: float | None, stellen: int, einheit: str) -> str:
+        return "–" if wert is None else f"{zahl(wert, stellen)} {einheit}"
+
+    return [
+        Bedingung(N_("Motor aus (Drehzahl 0)"), text(live.drehzahl, 0, "/min"),
+                  None if live.drehzahl is None else live.drehzahl < 1),
+        Bedingung(N_("Bordspannung mindestens 11,5 V"), text(live.spannung, 2, "V"),
+                  None if live.spannung is None else live.spannung >= MIN_SPANNUNG),
+        Bedingung(N_("Kühlmittel zwischen 5 und 95 °C"), text(live.kuehlmittel, 0, "°C"),
+                  None if live.kuehlmittel is None
+                  else KUEHLMITTEL[0] <= live.kuehlmittel <= KUEHLMITTEL[1]),
+        Bedingung(N_("Kein Fehler im Motor-Fehlerspeicher"),
+                  t("{anzahl} Fehler", anzahl=len(fehler)), not fehler),
+    ]
+
+
+# ---------------------------------------------------------------- Drosselklappe
+def drosselklappe_pruefen(s: "DiagSession", gruppe: int,
+                          kennung: tuple | None = None) -> Pruefung:
+    """Nur lesen: Gruppe vorhanden? Bedingungen erfüllt?"""
+    if gruppe not in DROSSELKLAPPE_GRUPPEN:
+        raise ValueError(t("Drosselklappe anlernen nur mit Gruppe 060 oder 098"))
+    v = _verbindung_pruefen(s, MOTOR, kennung=kennung)
+    proto = s._proto_pruefen()
+    try:
+        vorher = s._wiederholt(lambda: proto.gruppe_lesen(gruppe))
+    except (Nak, NotAvailable) as exc:
+        raise Nichts(t("Gruppe {gruppe:03d} gibt es in diesem Motorsteuergerät nicht ({fehler}) "
+                       "– die Drosselklappe wird hier anders angelernt.", gruppe=gruppe,
+                       fehler=exc)) from exc
+    fehler = proto.fehler_lesen()
+    pruefung = Pruefung(gruppe, _bedingungen(_live_lesen(s), fehler), vorher, fehler,
+                        v.kennung)
+    log.info(t("EXPERTE: Prüfung Grundeinstellung %03d – %s"), gruppe, "; ".join(
+        f"{t(b.name)}: {b.wert} ({'?' if b.ok is None else 'ok' if b.ok else 'NEIN'})"
+        for b in pruefung.bedingungen))
+    return pruefung
+
+
+def drosselklappe_anlernen(s: "DiagSession", gruppe: int, dauer: float = DAUER,
+                           melden: Callable[[str, object], None] | None = None,
+                           ohne_pruefung_ok: bool = False,
+                           kennung: tuple | None = None) -> GrundeinstellungErgebnis:
+    """Grundeinstellung der Gruppe etwa `dauer` Sekunden lang, dann zurück zu den
+    Messwerten. Die Bedingungen werden unmittelbar davor noch einmal gelesen; eine
+    verletzte bricht ab, bevor etwas gesendet wird. Nicht prüfbare nur mit
+    ohne_pruefung_ok (der Benutzer hat sie selbst bestätigt). Mit `kennung` nur an genau
+    dem Steuergerät, das der Benutzer bestätigt hat."""
+    melden = melden or (lambda art, daten: None)
+    pruefung = drosselklappe_pruefen(s, gruppe, kennung)
+    if pruefung.verletzt:
+        raise Nichts(t("Nicht gestartet – Bedingung nicht erfüllt: {liste}", liste=", ".join(
+            f"{t(b.name)} ({b.wert})" for b in pruefung.verletzt)))
+    if pruefung.ungeprueft and not ohne_pruefung_ok:
+        raise Nichts(t("Nicht gestartet – nicht prüfbar: {liste}", liste=", ".join(
+            t(b.name) for b in pruefung.ungeprueft)))
+    proto = s._proto_pruefen()
+    log.warning(t("EXPERTE: Grundeinstellung %03d startet (%s, %s)"), gruppe,
+                proto.verbindung.teilenummer, proto.verbindung.bauteil)
+    start = time.monotonic()
+    letzte = pruefung.vorher
+    abgebrochen = False
+    nachher: list[Messwert] = []
+    try:
+        with proto.schreiben_freigeben(grundeinstellung=[gruppe]):
+            while time.monotonic() - start < dauer:
+                if s._abbruch.is_set():
+                    abgebrochen = True
+                    log.warning(t("EXPERTE: Grundeinstellung abgebrochen"))
+                    break
+                letzte = s._wiederholt(lambda: proto.grundeinstellung(gruppe))
+                melden("grundeinstellung", {"gruppe": gruppe, "werte": letzte,
+                                            "sekunden": time.monotonic() - start,
+                                            "dauer": dauer, "status": adp_status(letzte)})
+    finally:
+        # Eine normale Gruppenabfrage beendet die Grundeinstellung – auch nach Fehlern
+        if proto.verbunden:
+            try:
+                nachher = s._wiederholt(lambda: proto.gruppe_lesen(gruppe))
+            except DiagError as exc:
+                log.warning(t("EXPERTE: Rückkehr zu den Messwerten: %s"), exc)
+    fehler_nachher = None
+    try:
+        fehler_nachher = proto.fehler_lesen()
+    except DiagError as exc:
+        log.warning(t("EXPERTE: Fehlerspeicher danach nicht lesbar: %s"), exc)
+    ergebnis = GrundeinstellungErgebnis(gruppe, pruefung.vorher, nachher or letzte,
+                                        fehler_nachher, time.monotonic() - start,
+                                        abgebrochen, adp_status(nachher or letzte))
+    log.warning(t("EXPERTE: Grundeinstellung %03d beendet nach %.0f s – Feld 4: %s"),
+                gruppe, ergebnis.dauer,
+                ergebnis.nachher[3].text if len(ergebnis.nachher) >= 4 else "–")
+    return ergebnis
+
+
+# ---------------------------------------------------------------- Service-Intervall
+def service_lesen(s: "DiagSession", kennung: tuple | None = None):
+    """Kanal 02 des Kombis lesen (nur lesen)."""
+    _verbindung_pruefen(s, KOMBI, kwp2000_ok=True, kennung=kennung)
+    proto = s._proto_pruefen()
+    try:
+        return s._wiederholt(lambda: proto.anpassung_lesen(SERVICE_KANAL))
+    except (Nak, NotAvailable) as exc:
+        raise Nichts(t("Kanal 02 gibt es bei diesem Kombi nicht ({fehler}). Dann hat es keine "
+                       "Service-Anzeige, oder sie wird nur am Kombi selbst zurückgesetzt "
+                       "(Knopf).", fehler=exc)) from exc
+
+
+def sichern(v: Verbindung, kanal: int, alt: int, neu: int, ordner: Path | None = None) -> Path:
+    """Alten Anpassungswert als JSON ablegen – bevor etwas geschrieben wird."""
+    ziel = Path(ordner) if ordner is not None else SICHERUNGEN
+    ziel.mkdir(parents=True, exist_ok=True)
+    pfad = ziel / time.strftime(f"anpassung-{v.adresse:02X}-kanal{kanal:02d}-%Y%m%d-%H%M%S.json")
+    pfad.write_text(json.dumps({
+        "zeit": time.strftime("%Y-%m-%d %H:%M:%S"), "vagdiag": __version__,
+        "adresse": f"{v.adresse:02X}", "teilenummer": v.teilenummer, "bauteil": v.bauteil,
+        "codierung": v.codierung, "werkstattcode": v.werkstattcode,
+        "kanal": kanal, "alter_wert": alt, "neuer_wert": neu,
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    log.warning(t("EXPERTE: alter Wert gesichert in %s"), pfad)
+    return pfad
+
+
+def service_zuruecksetzen(s: "DiagSession", erwartet: int, ordner: Path | None = None,
+                          kennung: tuple | None = None) -> ServiceErgebnis:
+    """Kanal 02 auf 0: noch einmal lesen (muss dem angezeigten Wert entsprechen),
+    sichern, testen, speichern, zurücklesen – mit `kennung` nur an genau dem Kombi, das
+    der Benutzer bestätigt hat."""
+    v = _verbindung_pruefen(s, KOMBI, kwp2000_ok=True, kennung=kennung)
+    proto = s._proto_pruefen()
+    alt = service_lesen(s, kennung)
+    if alt.wert != erwartet:
+        raise Nichts(t("Kanal 02 steht jetzt auf {jetzt} statt {vorher} – nichts geschrieben, "
+                       "bitte neu lesen.", jetzt=alt.wert, vorher=erwartet))
+    pfad = sichern(v, SERVICE_KANAL, alt.wert, 0, ordner)
+    werkstattcode = v.werkstattcode or 0
+    with proto.schreiben_freigeben(anpassung=[(SERVICE_KANAL, 0)]):
+        proto.anpassung_schreiben(SERVICE_KANAL, 0, werkstattcode)
+    neu = s._wiederholt(lambda: proto.anpassung_lesen(SERVICE_KANAL))
+    log.warning(t("EXPERTE: Service-Intervall zurückgesetzt – Kanal 02 vorher %d, jetzt %d"),
+                alt.wert, neu.wert)
+    return ServiceErgebnis(alt.wert, neu.wert, pfad, werkstattcode)
+
+
+# ---------------------------------------------------------------- Stellglieddiagnose
+def stellglied_pruefen(s: "DiagSession", kennung: tuple | None = None) -> StellgliedPruefung:
+    """Nur lesen: Darf dieses Steuergerät? Beim Motor: steht er (Drehzahl 0)?"""
+    v = _verbindung_pruefen(s, None, kwp2000_ok=True, kennung=kennung)
+    grund = KW1281.stellglied_gesperrt(v.adresse, v)
+    if grund:
+        raise Nichts(grund)
+    bedingungen: list[Bedingung] = []
+    if v.adresse == MOTOR:
+        live = _live_lesen(s)
+        bedingungen.append(Bedingung(
+            N_("Motor aus (Drehzahl 0)"),
+            "–" if live.drehzahl is None else f"{zahl(live.drehzahl, 0)} /min",
+            None if live.drehzahl is None else live.drehzahl < 1))
+    pruefung = StellgliedPruefung(v.adresse, s._proto_pruefen().ist_kwp2000, bedingungen,
+                                  v.kennung)
+    log.info(t("EXPERTE: Prüfung Stellglieddiagnose %02X – %s"), v.adresse, "; ".join(
+        f"{t(b.name)}: {b.wert} ({'?' if b.ok is None else 'ok' if b.ok else 'NEIN'})"
+        for b in bedingungen) or "–")
+    return pruefung
+
+
+def _befehl_abwarten(s: "DiagSession", befehle: queue.Queue, proto,
+                     hoechstens: float) -> str | None:
+    """Auf „weiter“ oder „ende“ warten und die Verbindung derweil wach halten.
+    None: abgebrochen (DiagSession.abbrechen); "zeit": nach `hoechstens` Sekunden kein
+    Befehl – dann soll das Stellglied nicht länger angesteuert bleiben."""
+    ende = time.monotonic() + hoechstens
+    while True:
+        if s._abbruch.is_set():
+            return None
+        rest = ende - time.monotonic()
+        if rest <= 0:
+            return "zeit"
+        try:
+            return befehle.get(timeout=min(s.keepalive, rest))
+        except queue.Empty:
+            if time.monotonic() < ende:
+                proto.keep_alive()
+
+
+def stellglieddiagnose(s: "DiagSession", befehle: queue.Queue,
+                       melden: Callable[[str, object], None] | None = None,
+                       ohne_pruefung_ok: bool = False,
+                       schritt_max: float = SCHRITT_MAX,
+                       kennung: tuple | None = None) -> StellgliedErgebnis:
+    """Stellglieder nacheinander ansteuern. Jedes gemeldete Stellglied geht als Ereignis
+    „stellglied“ hinaus; dann wartet der Ablauf auf „weiter“ (nächstes) oder „ende“ –
+    höchstens schritt_max Sekunden. Zum Schluss: Routine beenden (KWP2000), Verbindung
+    beenden, neu verbinden."""
+    melden = melden or (lambda art, daten: None)
+    pruefung = stellglied_pruefen(s, kennung)
+    if pruefung.verletzt:
+        raise Nichts(t("Nicht gestartet – Bedingung nicht erfüllt: {liste}", liste=", ".join(
+            f"{t(b.name)} ({b.wert})" for b in pruefung.verletzt)))
+    if pruefung.ungeprueft and not ohne_pruefung_ok:
+        raise Nichts(t("Nicht gestartet – nicht prüfbar: {liste}", liste=", ".join(
+            t(b.name) for b in pruefung.ungeprueft)))
+    proto = s._proto_pruefen()
+    if not proto.experte:
+        raise SchreibenGesperrt(t("Schreiben geht nur im Expertenmodus"))
+    v = proto.verbindung
+    adresse, bauds = v.adresse, s._letzte_bauds
+    log.warning(t("EXPERTE: Stellglieddiagnose %02X startet (%s, %s)%s"), adresse,
+                v.teilenummer, v.bauteil,
+                " – " + t("KWP2000, experimentell") if pruefung.kwp2000 else "")
+    schritte: list[Stellglied] = []
+    grund = "beendet"
+    start = time.monotonic()
+    wieder = False
+    try:
+        with proto.schreiben_freigeben(stellglied=True):
+            aktuell = proto.stellglied_starten()
+            vorher: Stellglied | None = None
+            while True:
+                if aktuell is None:
+                    grund = "kein_status" if pruefung.kwp2000 else "ende"
+                    break
+                if aktuell.ende:
+                    grund = "ende"
+                    break
+                if (pruefung.kwp2000 and schritte and aktuell.code == schritte[0].code
+                        and any(x.code != schritte[0].code for x in schritte)):
+                    grund = "durch"           # einmal durch die Liste, wieder am Anfang
+                    break
+                if len(schritte) >= MAX_SCHRITTE:
+                    grund = "max"
+                    break
+                gleich = vorher is not None and aktuell.code == vorher.code
+                schritte.append(aktuell)
+                melden("stellglied", {"schritt": len(schritte), "stellglied": aktuell,
+                                      "gleich": gleich, "kwp2000": pruefung.kwp2000,
+                                      "adresse": adresse, "hoechstens": schritt_max})
+                befehl = _befehl_abwarten(s, befehle, proto, schritt_max)
+                if befehl is None:
+                    grund = "abgebrochen"
+                    break
+                if befehl == "zeit":
+                    grund = "zeit"
+                    log.warning(t("EXPERTE: %.0f s ohne „Weiter“ – Stellglieddiagnose wird "
+                                  "beendet"), schritt_max)
+                    break
+                if befehl != "weiter":
+                    grund = "beendet"
+                    break
+                vorher = aktuell
+                aktuell = proto.stellglied_weiter()
+    finally:
+        try:
+            proto.stellglied_beenden()
+        except (DiagError, KLineError, PortError) as exc:
+            log.info(t("EXPERTE: Stellglieddiagnose beenden: %s"), exc)
+        # Ende der Verbindung: damit hört jedes Steuergerät sicher auf, ein Stellglied
+        # anzusteuern. Danach wieder verbinden, damit es weitergehen kann.
+        try:
+            s._trennen()
+        except (DiagError, KLineError, PortError) as exc:
+            log.info(t("Trennen: %s"), exc)
+        dauer = time.monotonic() - start
+        if not s._abbruch.is_set():           # beim Abbrechen/Schließen nicht neu verbinden
+            try:
+                s._verbinden(adresse, bauds)
+                wieder = True
+            except (DiagError, KLineError, PortError) as exc:
+                log.warning(t("EXPERTE: nach der Stellglieddiagnose nicht wieder verbunden: "
+                              "%s"), exc)
+    log.warning(t("EXPERTE: Stellglieddiagnose %02X beendet nach %.0f s – %d Schritte (%s)"),
+                adresse, dauer, len(schritte), grund)
+    return StellgliedErgebnis(adresse, schritte, grund, dauer, wieder, pruefung.kwp2000)

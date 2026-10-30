@@ -1,0 +1,1646 @@
+# texte: Klartexte der Messwerte vom Typ 37 (25 hex), Schlüssel = a·256 + b
+# Aus KLineKWP1281Lib 2.2.1 (https://github.com/domnulvlad/KLineKWP1281Lib), Datei src/text_table_DE.h
+# Copyright (C) domnulvlad und Mitwirkende der Bibliothek
+# SPDX-License-Identifier: GPL-3.0-only
+# Umgewandelt für vagdiag am 2026-10-28 (nur die Schreibweise, siehe werkzeuge/texte_aus_klinekwp1281lib.py)
+0000	-
+0001	ADP. läuft
+0002	ADP. i.O.
+0003	L-Reg.AUS
+0004	L-Reg.EIN
+0005	Leerlauf
+0006	Teillast
+0007	Vollast
+0008	Anreicherung
+0009	Schub
+000A	Fahrst. EIN
+000B	Neutral
+000C	Motoreingr.
+000D	A/C-High
+000E	A/C-Low
+000F	Kompr. EIN
+0010	Kompr. AUS
+0011	TE aktiv
+0012	TE n.aktiv
+0013	SLP EIN
+0014	SLP AUS
+0015	AKF-AV AUF
+0016	AKF-AV ZU
+0017	SU-V EIN
+0018	SU-V AUS
+0019	AGR aktiv
+001A	AGR n.aktiv
+001B	L-Adaption
+001C	Öld.1 <min
+001D	Öld.1i.O.
+001E	Öld.2 <min
+001F	Öld.2 i.O.
+0020	MIN-Taste
+0021	STD-Taste
+0022	T-KM-Taste
+0023	MFA Sp.1
+0024	MFA Sp.2
+0025	MFA RESET
+0026	MFA MODE
+0027	Motor EIN
+0028	Motor AUS
+0029	Motor
+002A	Getriebe
+002B	Mot. + Getr.
+002C	Katüb. EIN
+002D	Katüb. AUS
+002E	Luftst. JA
+002F	Luftst. NEIN
+0030	Losfahrsch.
+0031	Kl.15 EIN
+0032	Kl.15 AUS
+0033	Kl.50 EIN
+0034	Kl.50 AUS
+0035	Nutzb. ZUL.
+0036	Nutzb. GESP.
+0037	Hochtaster
+0038	Rücktaster
+0039	M-Schalter
+003A	Bremse
+003B	Kick Down
+003C	WK auf
+003D	WK zu
+003E	Klima KD
+003F	PN aktiv
+0040	PN deaktiv
+0041	Pedal betä-
+0042	tigen und
+0043	halten ...
+0044	Pedal
+0045	lösen;
+0046	VR/VL Ent-
+0047	lüfterschrb.
+0048	AUF
+0049	Pedal 10x
+004A	betätigen;
+004B	Entlüfter-
+004C	schrb.ZU
+004D	Teilentlüf-
+004E	tung beendet
+004F	...
+0050	-
+0051	bitte warten
+0052	.. (10 Sek.)
+0053	-
+0054	-
+0055	Auslassven-
+0056	tile schal-
+0057	ten ...
+0058	-
+0059	-
+005A	ERROR
+005B	zu klein
+005C	richtig
+005D	zu gross
+005E	Endp. Masse
+005F	Endp. Plus
+0060	Kl.30 EIN
+0061	Kl.30 AUS
+0062	Bls. EIN
+0063	Bls. AUS
+0064	Türk. EIN
+0065	Türk. AUS
+0066	BF-Airbag
+0067	aktiviert
+0068	gesperrt
+0069	Hecks. EIN
+006A	Hecks. AUS
+006B	alte
+006C	Schlüssel
+006D	zahl:
+006E	Neue
+006F	Pumpe EIN
+0070	Pumpe AUS
+0071	Relais EIN
+0072	Relais AUS
+0073	ungültig
+0074	ASR aktiv
+0075	Vers. GRA
+0076	WK-Regelung
+0077	ASR n.aktiv
+0078	kein Eingr.
+0079	NW-V1 EIN
+007A	NW-V1 AUS
+007B	NW-V2 EIN
+007C	NW-V2 AUS
+007D	belegt
+007E	nicht belegt
+007F	Gurt: JA
+0080	Gurt: NEIN
+0081	n. definiert
+0082	verpolt
+0083	Empfindlich-
+0084	keit in %
+0085	früh
+0086	spät
+0087	ein
+0088	aus
+0089	Tankgeber
+008A	Tankinhalt
+008B	Istwert
+008C	Grundwert
+008D	Öl in 1
+008E	Inspek. in 1
+008F	000 km
+0090	000 Meilen
+0091	0 Tagen
+0092	Sprache
+0093	Verbrauchs-
+0094	anzeige
+0095	Kilometer-
+0096	Meilen-
+0097	stand
+0098	Faktor für
+0099	Tachometer
+009A	Wegstrecke
+009B	gesperrt
+009C	Bus i.O.
+009D	Bus n.i.O.
+009E	Fahrer
+009F	Fah. + Beif.
+00A0	Beifahrer
+00A1	hl
+00A2	hl+hr
+00A3	hr
+00A4	Memory
+00A5	verriegeln
+00A6	entriegeln
+00A7	unbetätigt
+00A8	dreht
+00A9	steht
+00AA	AUF
+00AB	zu
+00AC	Tür auf
+00AD	Tür zu
+00AE	Steuergerät
+00AF	antwortet
+00B0	nicht
+00B1	-
+00B2	verriegelt
+00B3	entriegelt
+00B4	safe
+00B5	nicht safe
+00B6	Pos. X+
+00B7	Pos. X-
+00B8	Pos. Y+
+00B9	Pos. Y-
+00BA	links
+00BB	rechts
+00BC	abklappen
+00BD	ausgerastet
+00BE	eingerastet
+00BF	Ja
+00C0	Nein
+00C1	betätigt
+00C2	i.O.
+00C3	n.i.O.
+00C4	k. Messwert
+00C5	Schlüssel
+00C6	L-Kor1 EIN
+00C7	L-Kor1 AUS
+00C8	L-Kor2 EIN
+00C9	L-Kor2 AUS
+00CA	B1-S1 EIN
+00CB	B1-S1 AUS
+00CC	B2-S1 EIN
+00CD	B2-S1 AUS
+00CE	B1-S2 EIN
+00CF	B1-S2 AUS
+00D0	B1-S2 n.i.O.
+00D1	B1-S2 i.O.
+00D2	B2-S2 EIN
+00D3	B2-S2 AUS
+00D4	B2-S2 n.i.O.
+00D5	B2-S2 i.O.
+00D6	Hzg. vK. EIN
+00D7	Hzg. vK. AUS
+00D8	Hzg. nK. EIN
+00D9	Hzg. nK. AUS
+00DA	KatB1 n.i.O.
+00DB	KatB1 i.O.
+00DC	KatB2 n.i.O.
+00DD	KatB2 i.O.
+00DE	TEV n.i.O.
+00DF	TEV i.O.
+00E0	Messung
+00E1	Messg. ENDE
+00E2	Systemtest
+00E3	Syst. n.i.O.
+00E4	Syst. i.O.
+00E5	Feinleck
+00E6	Grobleck
+00E7	Abbruch
+00E8	L-EV i.O.
+00E9	L-EV n.i.O.
+00EA	Test EIN
+00EB	Test AUS
+00EC	B1-S1 n.i.O.
+00ED	B1-S1 i.O.
+00EE	B2-S1 n.i.O.
+00EF	B2-S1 i.O.
+00F0	Lsp. vorn
+00F1	Lsp. hinten
+00F2	Kurzschluss
+00F3	Unterbrech.
+00F4	Antenne
+00F5	Telefon
+00F6	CD-Verbind.
+00F7	ext. Display
+00F8	n. verbaut
+00F9	Leitungsbe-
+00FA	NW-St. EIN
+00FB	NW-St. AUS
+00FC	Ber. n.i.O.
+00FD	Ber. i.O.
+00FE	----------
+00FF	füllung
+0100	leiser >
+0101	leiser >>
+0102	lauter >
+0103	Grundwert 1
+0104	Grundwert 2
+0105	Insp1 in 1
+0106	Insp2 in 1
+0107	Insp2 in 5
+0108	00 km
+0109	00 Meilen
+010A	Tagen
+010B	Monaten
+010C	Öl in 5
+010D	unplausibel
+010E	Oktanzahl
+010F	1. Kennfeld
+0110	2. Kennfeld
+0111	passiv
+0112	aktiv
+0113	Heizung EIN
+0114	Heizung AUS
+0115	zuheizen
+0116	lüften
+0117	heizen
+0118	Gebläse EIN
+0119	Gebläse AUS
+011A	automatisch
+011B	manuell
+011C	lauter >>
+011D	Sp. ab >
+011E	Start
+011F	Nachlauf
+0120	Regelpause
+0121	Störung
+0122	Unterspan-
+0123	nungsab-
+0124	schaltung
+0125	neuer Wert
+0126	Anpassung
+0127	an Batterie
+0128	ENDE
+0129	Reed auf
+012A	Reed zu
+012B	Sp. ab >>
+012C	Sp. auf >
+012D	Sp. auf >>
+012E	Radio
+012F	senden
+0130	Abgleich
+0131	Lenkw.-Sens.
+0132	System ent-
+0133	lüften
+0134	warten
+0135	weiter mit
+0136	Grundein-
+0137	stellung 2
+0138	Regellage
+0139	gelernt
+013A	anheben
+013B	absenken
+013C	Regelung
+013D	Klappe auf
+013E	Klappe zu
+013F	Scheinwerfer
+0140	einstellen
+0141	Ebene
+0142	Berg
+0143	Ton ein
+0144	Ton aus
+0145	Rückw. ja
+0146	Rückw. nein
+0147	Anhänger ja
+0148	Anhäng. nein
+0149	stand in 10
+014A	km
+014B	Meilen
+014C	L-Kor1 iO
+014D	L-Kor1 niO
+014E	L-Kor2 iO
+014F	L-Kor2 niO
+0150	vor
+0151	zurück
+0152	Abweich. von
+0153	vorwärts
+0154	rückwärts
+0155	beliebig
+0156	n. erkannt
+0157	automat. auf
+0158	automat. zu
+0159	manuell auf
+015A	manuell zu
+015B	HDF betätigt
+015C	HD-Griff bet.
+015D	Auto-Lock /
+015E	entriegeln
+015F	Innenraum-
+0160	überwachung
+0161	System
+0162	überwachung
+0163	Rad vl
+0164	Rad vr
+0165	Rad hl
+0166	Rad hr
+0167	Reserverad
+0168	TV-Antenne 1
+0169	TV-Antenne 2
+016A	TV-Antenne 3
+016B	TV-Antenne 4
+016C	Navigations-
+016D	verbindung
+016E	Rückw. EIN
+016F	Rückw. AUS
+0170	GPS-Antenne
+0171	Datenbus
+0172	Motor 0
+0173	Motor 1
+0174	ABS 0
+0175	ABS 1
+0176	Getriebe 0
+0177	Getriebe 1
+0178	Kombi 0
+0179	Kombi 1
+017A	D-Pumpe 0
+017B	D-Pumpe 1
+017C	Lenkwink. 0
+017D	Lenkwink. 1
+017E	Abstand 0
+017F	Abstand 1
+0180	Hybrid
+0181	Diesel
+0182	Elektro
+0183	TDI-Start
+0184	ABS
+0185	schalten
+0186	Gang
+0187	Synchr. 1
+0188	Synchr. 2
+0189	E-Antr. frei
+018A	Gener. frei
+018B	Gener. ein
+018C	Lautspr. vl
+018D	Lautspr. vr
+018E	Lautspr. hl
+018F	Lautspr. hr
+0190	Hochtöner
+0191	Tieftöner
+0192	NF vl
+0193	NF vr
+0194	NF hl
+0195	NF hr
+0196	NF links
+0197	NF rechts
+0198	Sound
+0199	Ltg. B-Teil
+019A	Taste:
+019B	Beep
+019C	Blinken
+019D	Airbag 0
+019E	Airbag 1
+019F	Elektr. ZE 0
+01A0	Elektr. ZE 1
+01A1	Klima 0
+01A2	Klima 1
+01A3	Kupplung 0
+01A4	Kupplung 1
+01A5	Allrad 0
+01A6	Allrad 1
+01A7	Lernwert
+01A8	gelernt
+01A9	gelöscht
+01AA	PIN ?
+01AB	Stufe 1
+01AC	Stufe 2
+01AD	Stufe 3
+01AE	Stufe 4
+01AF	F-Airbag
+01B0	SF-Airbag
+01B1	SBF-Airbag
+01B2	F-Gurtstraff.
+01B3	BF-Gurtstraf.
+01B4	GALA EIN
+01B5	GALA AUS
+01B6	Heckscheib.-
+01B7	Frontschei.-
+01B8	heizung
+01B9	verbaut
+01BA	Stromregelung
+01BB	Stufe Int.
+01BC	CO2-Einstel-
+01BD	lung
+01BE	Bts.EIN
+01BF	Bts.AUS
+01C0	ABS n. aktiv
+01C1	EDS aktiv
+01C2	EDS n. aktiv
+01C3	ESP aktiv
+01C4	ESP n. aktiv
+01C5	MIL EIN
+01C6	MIL AUS
+01C7	Radposition +
+01C8	Ident.-Nr.
+01C9	Eingabe
+01CA	ungültig
+01CB	Lautstärke
+01CC	Lampe EIN
+01CD	Lampe AUS
+01CE	öffnen
+01CF	schliessen
+01D0	erkannt
+01D1	vorne
+01D2	hinten
+01D3	Frei
+01D4	Öl-
+01D5	qualität
+01D6	menge in 1
+01D7	Russ-
+01D8	Liter
+01D9	thermische
+01DA	Belastg. in 1
+01DB	Minimalwert
+01DC	Maximalwert
+01DD	Typ
+01DE	normierter
+01DF	Verbrauch
+01E0	Frequenz
+01E1	St.-Heiz. EIN
+01E2	St.-Heiz. AUS
+01E3	Sitzbelsensor
+01E4	HR/HL Ent-
+01E5	-
+01E6	Einstellung
+01E7	Alarmhorn
+01E8	Rest-Europa
+01E9	Deutschland
+01EA	Großbrit.
+01EB	lernen
+01EC	Licht EIN
+01ED	Licht AUS
+01EE	F-Tür 0
+01EF	F-Tür 1
+01F0	BF-Tür 0
+01F1	BF-Tür 1
+01F2	Tür hl 0
+01F3	Tür hl 1
+01F4	Tür hr 0
+01F5	Tür hr 1
+01F6	Zentral 0
+01F7	Zentral 1
+01F8	MemoryLenks 0
+01F9	MemoryLenks 1
+01FA	Elektr. ZE 0
+01FB	Elektr. ZE 1
+01FC	Dachelektr. 0
+01FD	Dachelektr. 1
+01FE	Reifen 0
+01FF	Reifen 1
+0200	Lenkrad 0
+0201	Lenkrad 1
+0202	Lenkung 0
+0203	Lenkung 1
+0204	Parken 0
+0205	Parken 1
+0206	Niveau 0
+0207	Niveau 1
+0208	Eindraht
+0209	Zweidraht
+020A	Stufe 1
+020B	Stufe 2
+020C	Abgleich
+020D	nicht möglich
+020E	autounlock
+020F	Pedal
+0210	lösen
+0211	Magnet-
+0212	spule
+0213	Spulentest
+0214	beendet
+0215	Kopfairbag FS
+0216	Kopfairb. BFS
+0217	Seitairb. hFS
+0218	Seitairb.hBFS
+0219	Gurtstraf.hFS
+021A	Gurtstra.hBFS
+021B	keine Kommun.
+021C	inaktiv
+021D	Line-Out vl
+021E	Line-Out vr
+021F	Line-Out hl
+0220	Line-Out hr
+0221	LED ein
+0222	LED aus
+0223	Taster ein
+0224	Taster aus
+0225	Lautstärke v.
+0226	Lautstärke h.
+0227	Tonhöhe vorn
+0228	Tonhöhe hi.
+0229	Löseschalt. 1
+022A	Löseschalt. 2
+022B	ADR ein
+022C	ADR aus
+022D	kleiner
+022E	grösser
+022F	Radio 0
+0230	Radio 1
+0231	Telefon 0
+0232	Telefon 1
+0233	Navigation 0
+0234	Navigation 1
+0235	Telemat 0
+0236	Telemat 1
+0237	SprachE 0
+0238	SprachE 1
+0239	GALA
+023A	Verb.RadioDSP
+023B	CD-Funktion
+023C	ZF-Ausgang
+023D	Fehlererkenn.
+023E	F-ScheibHeiz.
+023F	Warnton Lastm
+0240	anagement
+0241	rücksetzen
+0242	SERVICE-IA
+0243	Anhänger 0
+0244	Anhänger 1
+0245	Stufe 5
+0246	Tippbetrieb
+0247	Standheizung0
+0248	Standheizung1
+0249	Verdeck 0
+024A	Verdeck 1
+024B	El.Zündschl 0
+024C	El.Zündschl 1
+024D	Wischermodu 0
+024E	Wischermodu 1
+024F	Batt.manage 0
+0250	Batt.manage 1
+0251	Memory Beif 0
+0252	Memory Beif 1
+0253	Memory hint 0
+0254	Memory hint 1
+0255	CD-ROM LW 0
+0256	CD-ROM LW 1
+0257	Radionaviga 0
+0258	Radionaviga 1
+0259	TV-Tuner 0
+025A	TV-Tuner 1
+025B	CD-Wechsler 0
+025C	CD-Wechsler 1
+025D	Tel.Telemat 0
+025E	Tel.Telemat 1
+025F	AnzBedmo.vo 0
+0260	AnzBedmo.vo 1
+0261	AnzBedmo.hi 0
+0262	AnzBedmo.hi 1
+0263	weiter
+0264	angemeldet
+0265	n.angemeldet
+0266	Feldstärke
+0267	Notbatterie
+0268	voll
+0269	leer
+026A	schwach
+026B	Dimmung
+026C	Geschw.Signal
+026D	Notruf-Taster
+026E	Pannen-Taster
+026F	Timer Heck-
+0270	scheibenheiz.
+0271	Bremsverst. 0
+0272	Bremsverst. 1
+0273	Dämpferreg. 0
+0274	Dämpferreg. 1
+0275	Slave_Eins 0
+0276	Slave_Eins 1
+0277	Slave_Zwei 0
+0278	Slave_Zwei 1
+0279	Gateway 0
+027A	Gateway 1
+027B	KraftstPump 0
+027C	KraftstPump 1
+027D	Dig.Soundp. 0
+027E	Dig.Soundp. 1
+027F	betätigen
+0280	Prüfung
+0281	gestartet
+0282	fehlerhaft
+0283	Taster Auf
+0284	Taster Ab
+0285	Taster Reset
+0286	beschleunigen
+0287	verzögern
+0288	gespeich. AUS
+0289	Wiederaufnah.
+028A	Abstand +
+028B	Abstand -
+028C	Spracheingabe
+028D	Service-Mode
+028E	Radumfang
+028F	Radimpulse
+0290	Notantenne
+0291	Hauptantenne
+0292	nicht
+0293	KatB3 n.i.O.
+0294	KatB3 i.O.
+0295	KatB4 n.i.O.
+0296	KatB4 i.O.
+0297	B3-S1 n.i.O.
+0298	B3-S1 i.O.
+0299	B3-S2 n.i.O.
+029A	B3-S2 i.O.
+029B	B4-S1 n.i.O.
+029C	B4-S1 i.O.
+029D	B4-S2 n.i.O.
+029E	B4-S2 i.O.
+029F	Kraftstoff-
+02A0	Vorratsanz.
+02A1	Lader 1 ein
+02A2	Lader 2 ein
+02A3	Vorderachse
+02A4	Hinterachse
+02A5	Druckspeicher
+02A6	entlüften
+02A7	befüllen
+02A8	Funktion
+02A9	läuft
+02AA	fertig
+02AB	abgebrochen
+02AC	weiter mit
+02AD	nächst. Kanal
+02AE	Wert
+02AF	zulässig
+02B0	unzulässig
+02B1	eingeben
+02B2	el.ZE 1Draht
+02B3	el.ZE 1Draht
+02B4	Zentral1Draht
+02B5	F-Tür 1Draht
+02B6	BF-Tür 1Draht
+02B7	Tür hl 1Draht
+02B8	Tür hr 1Draht
+02B9	MemoLenks 1Dr
+02BA	Dachel 1Draht
+02BB	Kombi 1Draht
+02BC	Reifen 1Draht
+02BD	Gateway1Draht
+02BE	Lenkrad 1Drah
+02BF	Klima 1Draht
+02C0	Parken 1Draht
+02C1	Niveau 1Draht
+02C2	St.heiz1Draht
+02C3	Verdeck1Draht
+02C4	Züschlo1Draht
+02C5	Wischer1Draht
+02C6	Batterie1Drah
+02C7	Kraftst 1Drah
+02C8	MemoBF 1Draht
+02C9	MemoHi 1Draht
+02CA	AnzeiHi 1Drah
+02CB	AnzeiVo 1Drah
+02CC	Soundp 1Draht
+02CD	CD-ROM 1Draht
+02CE	Telemat 1Drah
+02CF	RadioNav1Drah
+02D0	TvTuner1Draht
+02D1	CDWechs1Draht
+02D2	Radio 1Draht
+02D3	Telefon1Draht
+02D4	Navigat 1Drah
+02D5	SprachE 1Drah
+02D6	Tel.mati1Drah
+02D7	Anhänger1Drah
+02D8	Antenne 2
+02D9	Empfänger i.O.
+02DA	Empfänger niO
+02DB	Taster
+02DC	Schalter
+02DD	AUF <\Z\L>
+02DE	schrb.ZU <\Z\L>
+02DF	AV 1 belegt
+02E0	AV 1 offen
+02E1	AV 2 belegt
+02E2	AV 2 offen
+02E3	Monitor 2 an
+02E4	Monitor 2 ab
+02E5	Spannung
+02E6	Zü.U-brechBat
+02E7	Aktivieren
+02E8	Aktivieren
+02E9	Telefon 0
+02EA	Telefon 1
+02EB	Verkehrfunk 0
+02EC	Verkehrfunk 1
+02ED	WIV
+02EE	1=nein
+02EF	2=ja
+02F0	TV-AntVerst 0
+02F1	TV-AntVerst 1
+02F2	ESPSensoren 0
+02F3	ESPSensoren 1
+02F4	Wählhebel 0
+02F5	Wählhebel 1
+02F6	Dämpfer VL
+02F7	Dämpfer VR
+02F8	Dämpfer HL
+02F9	Dämpfer HR
+02FA	Radbeschleun.
+02FB	Aufbaubeschl.
+02FC	komfortabel
+02FD	normal
+02FE	sport 1
+02FF	sport 2
+0300	MOST Busruhe
+0301	Tiefniveau
+0302	Normalniveau
+0303	Hochniveau
+0304	Klemme X ein
+0305	Klemme X aus
+0306	Mitteltöner
+0307	Mitteltieftön
+0308	angeschlossen
+0309	n.angeschlos.
+030A	empf.Satellit
+030B	Tast-GespEnde
+030C	Fenster AUF
+030D	ü.Heckschloss
+030E	deaktiviert
+030F	Kurzschl.Plus
+0310	KurzschlMasse
+0311	S-Kon.schließ
+0312	GPS-Empfang
+0313	kein GPS-Empf
+0314	Suche Satelli
+0315	Lade Almanach
+0316	Testruf
+0317	Parkbremse 1
+0318	Parkbremse 0
+0319	Parkbr.1Draht
+031A	Breitengrad
+031B	Längengrad
+031C	Höhe
+031D	Datum
+031E	Zeit
+031F	Richtung
+0320	NOx-Sensor1 0
+0321	NOx-Sensor1 1
+0322	NOx-S1 1Draht
+0323	NOx-Sensor2 0
+0324	NOx-Sensor2 1
+0325	NOx-S2 1Draht
+0326	Einstieg F 0
+0327	Einstieg F 1
+0328	Einstieg BF 0
+0329	Einstieg BF 1
+032A	EinstgF 1Drah
+032B	EinstgBF 1Dra
+032C	Kompon.-Test
+032D	Sensorabgl.
+032E	Login
+032F	durchgeführt
+0330	einschalten
+0331	ausschalten
+0332	anfahren
+0333	CDC-Test
+0334	CDC-Dämpfer
+0335	weich
+0336	bestromen
+0337	Bandinitiali.
+0338	beenden
+0339	Tastenprüfung
+033A	erreicht
+033B	nicht gelernt
+033C	El.Lenks.Ver.
+033D	gültig
+033E	möglich
+033F	nicht möglich
+0340	Kopfairb.hi F
+0341	Kopfair.hi BF
+0342	Benutzer
+0343	gesetzt
+0344	löschen
+0345	gelöscht
+0346	Leuchtweite 0
+0347	Leuchtweite 1
+0348	Sonderfahrz 0
+0349	Sonderfahrz 1
+034A	Sond.Fzg 1Dra
+034B	A-CAN Busruhe
+034C	K-CAN Busruhe
+034D	I-CAN Busruhe
+034E	Motor Sl.Ind
+034F	Slave1 Sl.Ind
+0350	Slave2 Sl.Ind
+0351	ABS Sl.Ind
+0352	Getr. Sl.Ind
+0353	Bremsv Sl.Ind
+0354	Abstan Sl.Ind
+0355	Battma Sl.Ind
+0356	Airbag Sl.Ind
+0357	Lenkun Sl.Ind
+0358	Lenkwi Sl.Ind
+0359	Lenkra Sl.Ind
+035A	KESSY Sl.Ind
+035B	Niveau Sl.Ind
+035C	Dämpfer Sl.In
+035D	Allrad Sl.Ind
+035E	D-Pump Sl.Ind
+035F	Kupplg. Sl.In
+0360	Kraftst Sl.In
+0361	Gateway Sl.In
+0362	Kombi Sl.Ind
+0363	Klima Sl.Ind
+0364	Dachel Sl.Ind
+0365	el. ZE Sl.Ind
+0366	Wischer Sl.In
+0367	Reifen Sl.Ind
+0368	Parken Sl.Ind
+0369	Zentral Sl.In
+036A	El.ZE Sl.Ind
+036B	St.heiz Sl.In
+036C	Anhäng Sl.Ind
+036D	Verdeck Sl.In
+036E	F-Tür Sl.Ind
+036F	BF-Tür Sl.Ind
+0370	Tür hl Sl.Ind
+0371	Tür hr Sl.Ind
+0372	MemLenk Sl.In
+0373	Mem BF Sl.Ind
+0374	Mem hi Sl.Ind
+0375	CD-ROM Sl.Ind
+0376	Navigat Sl.In
+0377	TV-Tune Sl.In
+0378	CD-Wech Sl.In
+0379	TelTele Sl.In
+037A	AnzeiVo Sl.In
+037B	AnzeiHi Sl.In
+037C	Soundp. Sl.In
+037D	Leuchtw Sl.In
+037E	Radio Sl.Ind
+037F	Telefon Sl.In
+0380	Telemat Sl.In
+0381	Sprache Sl.In
+0382	ZusHeiz Sl.In
+0383	SondFzg Sl.In
+0384	Sperren Sl.In
+0385	Kraftst Sl.In
+0386	F-Ident Sl.In
+0387	SprachV Sl.In
+0388	El. ZE2 Sl.In
+0389	Parkbre Sl.In
+038A	-
+038B	WFS 0
+038C	WFS 1
+038D	Zus.Heizung 0
+038E	Zus.Heizung 1
+038F	ZusHeiz 1Drah
+0390	Prüfsumme
+0391	F-Ident. 0
+0392	F-Ident. 1
+0393	F-Ident 1Drah
+0394	AHK erkannt
+0395	AHK n.erkannt
+0396	E.-manager 0
+0397	E.-manager 1
+0398	E.-manag 1Dra
+0399	Sperren-El. 0
+039A	Sperren-El. 1
+039B	AnzBedmo.hl 0
+039C	AnzBedmo.hl 1
+039D	AnzBedmo.hr 0
+039E	AnzBedmo.hr 1
+039F	Mediap.Pos1 0
+03A0	Mediap.Pos1 1
+03A1	Mediap.Pos2 0
+03A2	Mediap.Pos2 1
+03A3	Mediap.Pos3 0
+03A4	Mediap.Pos3 1
+03A5	Mediap.Pos4 0
+03A6	Mediap.Pos4 1
+03A7	Spiegel in
+03A8	Position 1
+03A9	Position 2
+03AA	Position 3
+03AB	Schraube 1 um
+03AC	Schraube 2 um
+03AD	Umdrehungen
+03AE	Funkbetätig.
+03AF	Klemme S ein
+03B0	Klemme S aus
+03B1	Einzeltür
+03B2	Kessy
+03B3	Beep + Blink
+03B4	Komfort
+03B5	Alarmverzög.
+03B6	Elektr. ZE2 0
+03B7	Elektr. ZE2 1
+03B8	El.ZE2 1Draht
+03B9	B1-S3 n.i.O.
+03BA	B1-S3 i.O.
+03BB	B2-S3 n.i.O.
+03BC	B2-S3 i.O.
+03BD	B3-S3 n.i.O.
+03BE	B3-S3 i.O.
+03BF	B4-S3 n.i.O.
+03C0	B4-S3 i.O.
+03C1	Kat1 B1 i.O.
+03C2	Kat1 B1 n.i.O.
+03C3	Kat2 B1 i.O.
+03C4	Kat2 B1 n.i.O.
+03C5	Kat3 B1 i.O.
+03C6	Kat3 B1 n.i.O.
+03C7	Kat4 B1 i.O.
+03C8	Kat4 B1 n.i.O.
+03C9	Kat1 B2 i.O.
+03CA	Kat1 B2 n.i.O.
+03CB	Kat2 B2 i.O.
+03CC	Kat2 B2 n.i.O.
+03CD	Kat3 B2 i.O.
+03CE	Kat3 B2 n.i.O.
+03CF	Kat4 B2 i.O.
+03D0	Kat4 B2 n.i.O.
+03D1	Kat1 B3 i.O.
+03D2	Kat1 B3 n.i.O.
+03D3	Kat2 B3 i.O.
+03D4	Kat2 B3 n.i.O.
+03D5	Kat3 B3 i.O.
+03D6	Kat3 B3 n.i.O.
+03D7	Kat4 B3 i.O.
+03D8	Kat4 B3 n.i.O.
+03D9	Kat1 B4 i.O.
+03DA	Kat1 B4 n.i.O.
+03DB	Kat2 B4 i.O.
+03DC	Kat2 B4 n.i.O.
+03DD	Kat3 B4 i.O.
+03DE	Kat3 B4 n.i.O.
+03DF	Kat4 B4 i.O.
+03E0	Kat4 B4 n.i.O
+03E1	Sprachverst 0
+03E2	Sprachverst 1
+03E3	SprachVer 1Dr
+03E4	messen
+03E5	Lenkwi Initia
+03E6	Lenkwi k.lnit
+03E7	WSC
+03E8	Bedieneinheit
+03E9	Mikro vorn li
+03EA	Mikro vorn re
+03EB	Mikr mitte li
+03EC	Mikr mitte re
+03ED	Mikro hint li
+03EE	Mikro hint re
+03EF	aufwärts
+03F0	abwärts
+03F1	Position unten
+03F2	Position oben
+03F3	Ü-temp.Absch.
+03F4	Einklemmschut
+03F5	Endanschl.gel
+03F6	nicht aktiv
+03F7	anklappen
+03F8	speichern
+03F9	klein
+03FA	mittel
+03FB	gross
+03FC	15 Zoll
+03FD	16 Zoll
+03FE	Bremsassist.
+03FF	Reifendruck.
+0400	Bremsdruckver
+0401	Überrollschu.
+0402	ChipCardles 0
+0403	ChipCardles 1
+0404	Klima hinte 0
+0405	Klima hinte 1
+0406	Klima hi 1Dra
+0407	Klim hi Sl.In
+0408	DigTuner S.In
+0409	DigTuner 1Dra
+040A	DigitTuner 0
+040B	DigitTuner 1
+040C	alle Benutzer
+040D	elZünds Sl.In
+040E	E-manag Sl.In
+040F	AnzBedSthz 0
+0410	AnzBedSthz 1
+0411	AnzBedSthz1Dr
+0412	GPS FIX
+0413	DVD Status
+0414	Bremsfl.sta 0
+0415	Bremsfl.sta 1
+0416	Waschwasser 0
+0417	Waschwasser 1
+0418	Bremsbelag 0
+0419	Bremsbelag 1
+041A	Kühlmittels 0
+041B	Kühlmittels 1
+041C	Ölstand 0
+041D	Ölstand 1
+041E	MuFktSchalt 0
+041F	MuFktSchalt 1
+0420	Mikrofon
+0421	Stummschalt.
+0422	Audioausg.(+)
+0423	Audioausg.(-)
+0424	Einst.hilfe 0
+0425	Einst.hilfe 1
+0426	Verb.absch. 0
+0427	Verb.absch. 1
+0428	RuhestrStufe0
+0429	RuhestrStufe1
+042A	RuhestrStufe2
+042B	RuhestrStufe3
+042C	RuhestrStufe4
+042D	RuhestrStufe5
+042E	RuhestrStufe6
+042F	Ölmin
+0430	erkennung
+0431	auswertung
+0432	Seitenöffnung
+0433	Heckdeckel
+0434	LaderStg1 0
+0435	LaderStg1 1
+0436	LaderStg2 0
+0437	LaderStg2 1
+0438	Hauptbatterie
+0439	Telefon SIM
+043A	Telematik SIM
+043B	Teiln.Bluetoo
+043C	RS 232
+043D	ServiceNotruf
+043E	twVerb.absch1
+043F	defekt
+0440	Kompass 0
+0441	Kompass 1
+0442	Kompass1Draht
+0443	gekoppelt
+0444	vorne links
+0445	vorne rechts
+0446	hinten links
+0447	hinten rechts
+0448	Bluetooth
+0449	Grundeinstel.
+044A	Servicestell.
+044B	Kind/-ersitz
+044C	leichtErwachs
+044D	schwerErwachs
+044E	anderes
+044F	Zone
+0450	kalibriert
+0451	nor/leichtFzg
+0452	Sport
+0453	Mobilit.hilfe
+0454	Stadtlieferwa
+0455	Nutzer 1
+0456	Nutzer 2
+0457	KD-Initiali.
+0458	Neigungssenso
+0459	Personalident
+045A	mittl.Erwachs
+045B	Motor Benzin
+045C	Motor Diesel
+045D	SG Benzin
+045E	SG Diesel
+045F	Antrieb
+0460	Knieairbag F
+0461	Knieairbag BF
+0462	Gurtstr.hi.Mi.
+0463	LeiMo Links 0
+0464	LeiMo Links 1
+0465	LeiMo Rechts 0
+0466	LeiMo Rechts 1
+0467	T-Halt angesc
+0468	Ausgang High
+0469	Ausgang Low
+046A	Normal 1
+046B	Normal 2
+046C	Normal 3
+046D	Normal 4
+046E	Normal 5
+046F	MPV 1
+0470	MPV 2
+0471	GTI
+0472	Nutzer 3
+0473	Nutzer 4
+0474	Nutzer 5
+0475	Nutzer 6
+0476	Schalt.BFAirb
+0477	Stabientko. 0
+0478	Stabientko. 1
+0479	Temperatur
+047A	K-Lamp 1-farb
+047B	K-Lampe 2farb
+047C	StabKopp S.In
+047D	Kompass Sl.In
+047E	Heckdeckel 1
+047F	Heckdeckel 0
+0480	Heckdec Sl.In
+0481	Heckdeck 1Dra
+0482	CD-Lesefehler
+0483	CD-Zugriffzei
+0484	Grenzw.ueber.
+0485	Ant Bluetooth
+0486	Abglei EPB-SG
+0487	durchführen
+0488	Brems. WL EIN
+0489	Brems. WL AUS
+048A	ABS Warnl. EIN
+048B	ABS Warnl. AUS
+048C	ASR/ESP WL EIN
+048D	ASR/ESP WL AUS
+048E	ESP Taster
+048F	Fkt. Autopark
+0490	Funktion ECD
+0491	kalibriert
+0492	Kilonewton
+0493	QuerbeschlSen
+0494	BremsdruckSen
+0495	WinkegeschSen
+0496	Tag
+0497	Monat
+0498	Jahr
+0499	Bremsbelag
+049A	Verschleißanz
+049B	Stunde
+049C	Minute
+049D	Bedienung 0
+049E	Bedienung 1
+049F	Bedienung 1Dr
+04A0	Bedienu Sl.-In.
+04A1	ADR
+04A2	Weck_Wachhalt
+04A3	Ladezustand
+04A4	Privathörer
+04A5	Taster Infodi
+04A6	Taster Sprach
+04A7	Taster Rufan
+04A8	sichtbar
+04A9	n. sichtbar
+04AA	HandyHalter
+04AB	systemfremd
+04AC	systemeigen
+04AD	BT_Verbindung
+04AE	EEPROM Reset
+04AF	Allrad
+04B0	Kupplung
+04B1	geöffnet
+04B2	Fzg Variante
+04B3	Parameter ESP
+04B4	Notbremsung
+04B5	Spurhalteas 0
+04B6	Spurhalteas 1
+04B7	Spurwechsel 0
+04B8	Spurwechsel 1
+04B9	Bremsscheiben
+04BA	wischer
+04BB	Lenk
+04BC	empfehlung
+04BD	Anhänger
+04BE	Ent-
+04BF	Normal 6
+04C0	Normal 7
+04C1	Rückfahrkam 0
+04C2	Rückfahrkam 1
+04C3	Rückfahr 1Dr
+04C4	Rückfahr Sl.-In.
+04C5	E-CAN Busruhe
+04C6	Zentral2 0
+04C7	Zentral2 1
+04C8	Zentral2 1Dr
+04C9	Zentral2 Sl.-In.
+04CA	ACAN Nachlauf
+04CB	F-CAN Busruhe
+04CC	zurückgesetzt
+04CD	Reset n.i.O.
+04CE	AnzBedDach 0
+04CF	AnzBedDach 1
+04D0	AnzBedDa 1Dr
+04D1	AnzBedDa Sl.-In.
+04D2	Rad 1
+04D3	Rad 2
+04D4	Rad 3
+04D5	Rad 4
+04D6	Rad 5
+04D7	DVDLesefehler
+04D8	DVDZugriffzei
+04D9	Hochdruck
+04DA	Gebläse def.
+04DB	Niederdruck
+04DC	keineMotdreh.
+04DD	ECON-Betrieb
+04DE	Klimaanl. AUS
+04DF	Aussentemp.
+04E0	Unterspannung
+04E1	Motortemp.
+04E2	AbschalvomMSG
+04E3	Überspannung
+04E4	Verdampftemp.
+04E5	Codierung
+04E6	Kompr.Ansteu.
+04E7	Drucksensor
+04E8	AbschMotdreh.
+04E9	AbschalvomBSG
+04EA	Kältemittverl
+04EB	k.Külüfsignal
+04EC	WFS Sl.-In.
+04ED	WFS 1Dr
+04EE	Freilauf
+04EF	Halten
+04F0	geschlossen
+04F1	fährt auf
+04F2	fährt zu
+04F3	schwergängig
+04F4	Hindernis
+04F5	gestoppt
+04F6	offen
+04F7	li. schwergä.
+04F8	re. schwergä.
+04F9	anfahrhilfe
+04FA	Defrosthinten
+04FB	Klimaanla. EIN
+04FC	KontrollKlima
+04FD	RelKlimaKompr
+04FE	Kühllüf.Stufe
+04FF	k.Grundeinst.
+0500	Imp.wandler 1
+0501	Imp.wandler 2
+0502	Warnung
+0503	keine
+0504	eingeschr.
+0505	stabilisier.
+0506	eingefahren
+0507	ausgefahren
+0508	Anzeigegruppe
+0509	Lüfter
+050A	durch
+050B	erb. zum RSE
+050C	RSP aktiv
+050D	RSP n.aktiv
+050E	Mot.bremsmom.
+050F	unterstützung
+0510	Anz.Notbr.ein
+0511	Anz.Notbr.aus
+0512	Kamera-sync
+0513	Display-sync
+0514	Bedingung niO
+0515	ESP-Zuschalt.
+0516	Gepäck.abdeck
+0517	Zuziehhilfe
+0518	Hydraul.Pumpe
+0519	Hydr.Ventile
+051A	hoch
+051B	kritisch
+051C	Parametersatz
+051D	Dämpf.ausfall
+051E	Geschwindigk.
+051F	Anfahr-Modus
+0520	Luefter ein
+0521	Luefter aus
+0522	Parklenkassi.
+0523	vorhanden
+0524	n.vorhanden
+0525	ESPSensor2 0
+0526	ESPSensor2 1
+0527	BordstBF:ja
+0528	BordstBF:nein
+0529	Bordst F:ja
+052A	Bordst F:nein
+052B	PLA-Taster
+052C	Parklenkas 0
+052D	Parklenkas 1
+052E	EinstiegF 0
+052F	EinstiegF 1
+0530	EinstF 1Dr
+0531	EinstF Sl.-In.
+0532	EinstiegBF 0
+0533	EinstiegBF 1
+0534	EinstBF 1Dr
+0535	EinstBF Sl.-In.
+0536	Vorbefüllung
+0537	Anhaltewegvk.
+0538	Reifen_2 0
+0539	Reifen_2 1
+053A	vollständig
+053B	Zwischenpos.
+053C	Tür/Fenst.ges
+053D	Laufzeitüberw
+053E	Einklemmfall
+053F	Gurtk.Beg.FS
+0540	Gurtk.Beg.BFS
+0541	SitzpossensFS
+0542	SitzpossensBF
+0543	Warntexte ein
+0544	Warntexte aus
+0545	Warntöne ein
+0546	Warntöne aus
+0547	Tür/Fenst.off
+0548	Notbr.aktiv
+0549	Notbr.n.aktiv
+054A	MOST aktiv
+054B	I-CAN aktiv
+054C	K-CAN aktiv
+054D	A-CAN aktiv
+054E	E-CAN Busruhe
+054F	Generator 0
+0550	Generator 1
+0551	Informatio1 0
+0552	Informatio1 1
+0553	Informatio2 0
+0554	Informatio2 1
+0555	BDM 0
+0556	BDM 1
+0557	Schnellhzg 0
+0558	Schnellhzg 1
+0559	Parklen Sl.-In.
+055A	FK-CAN aktiv
+055B	FK-CAN Busruh
+055C	Init. Wert
+055D	Zähler
+055E	Reset
+055F	gedrückt
+0560	gezogen
+0561	Quersperre
+0562	Akt. Lenk 0
+0563	Akt. Lenk 1
+0564	Transportmod
+0565	Einleiten
+0566	Fehler
+0567	offroad
+0568	Position 4
+0569	Position 5
+056A	Position 6
+056B	Position 7
+056C	Position 8
+056D	Position 9
+056E	Position 10
+056F	Ausstelllage
+0570	Schiebelage
+0571	entnormiert
+0572	normiert
+0573	F-Gurtkraftb.
+0574	BF-Gurtkraftb
+0575	Abschlepps 0
+0576	Abschlepps 1
+0577	Abschlepp 1Dr
+0578	Abschle Sl.-In.
+0579	SDown Query
+057A	SDown Suspend
+057B	Lautspr.mitte
+057C	reduziert
+057D	n. reduziert
+057E	n. verfügbar
+057F	Winkelgeschw.
+0580	Status
+0581	E-CAN aktiv
+0582	Kopfstütze F
+0583	Kopfstütze BF
+0584	MedPos3 1Dr
+0585	MedPos3 Sl.-In.
+0586	Inform2 1Dr
+0587	Inform2 Sl.-In.
+0588	Bewegung
+0589	Heckkl.groß
+058A	Heckkl.klein
+058B	Init
+058C	Fernl.ass. 0
+058D	Fernl.ass. 1
+058E	Media
+058F	Wiedergabe
+0590	Zustand DSP
+0591	Mediaplayer
+0592	Akkuladung
+0593	HF-Verbindung
+0594	FzgOrtung 1
+0595	FzgOrtung 0
+0596	FzgOrtung 1Dr
+0597	FzgOrtung Sl.-In.
+0598	QR-Strom Mode
+0599	Drehf. auf
+059A	Drehf. zu
+059B	Sperrkl. auf
+059C	Sperrkl. zu
+059D	Telefonbuch
+059E	Klimakomp. 1
+059F	Klimakomp. 0
+05A0	Elektroantr 1
+05A1	Elektroantr 0
+05A2	Hybrid Bat 1
+05A3	Hybrid Bat 0
+05A4	Stufe 0
+05A5	Stufe 6
+05A6	Stufe 7
+05A7	aktiv
+05A8	Coming Home
+05A9	Leaving Home
+05AA	SRA Zeit
+05AB	Fußraumbel.
+05AC	AFL
+05AD	Niveau 2
+05AE	Niveau 3
+05AF	Trocknung
+05B0	Bestätig.Ton
+05B1	3.Sitzr. 0
+05B2	3.Sitzr. 1
+05B3	3.Sitzr.Slind
+05B4	3.Sitzr. 1Dr
+05B5	MFM 0
+05B6	MFM 1
+05B7	MFM Sl.-In.
+05B8	MFM 1Dr
+05B9	ELV 0
+05BA	ELV 1
+05BB	ELV Sl.-In.
+05BC	ELV 1Dr
+05BD	Lichtst 0
+05BE	Lichtst 1
+05BF	Lichtst Sl.-In.
+05C0	Lichtst 1Dr
+05C1	HDF
+05C2	Paniktaste
+05C3	El.Schiebet.li
+05C4	El.Schiebet.re
+05C5	Zug
+05C6	Zug eingesch.
+05C7	Kessy 0
+05C8	Kessy 1
+05C9	Kessy 1Dr
+05CA	E-Antr Sl.-In
+05CB	Hybrid Sl.-In
+05CC	Spannungstab0
+05CD	Spannungstab1
+05CE	Normal 6
+05CF	Normal 7
+05D0	Normal 8
+05D1	Normal 9
+05D2	Normal 10
+05D3	Gurtmikro 0
+05D4	Gurtmikro 1
+05D5	Benutz.oh.BDH
+05D6	Hochtöner 2
+05D7	Stop-Phase
+05D8	Wiederstart
+05D9	XDS
+05DA	DSR
+05DB	stark
+05DC	verbunden
+05DD	n. verbunden
+05DE	gekoppelt
+05DF	n. gekoppelt
+05E0	FrontsenFAS 0
+05E1	FrontsenFAS 1
+05E2	schlecht
+05E3	ausreichend
+05E4	gut
+05E5	sehr gut
+05E6	optimal
+05E7	Aktiv Modus
+05E8	Remote Starts
+05E9	P nicht eingelegt
+05EA	v <> 0 km/h
+05EB	DWA Alarm
+05EC	Motorhaube
+05ED	Zeit abgelauf
+05EE	Fahrzeug-SG 0
+05EF	Fahrzeug-SG 1
+05F0	unendlich
+05F1	Stufe 8
+05F2	Stufe 9
+05F3	Anzeige OPS
+05F4	Rückfahrkam.
+05F5	Comfort
+05F6	AUTO
+05F7	DYNAMIC
+05F8	INDIVIDUAL
+05F9	nicht kalib.
+05FA	nie kalib.
+05FB	normal
+05FC	Sport
+05FD	CORSA
+05FE	Subwoofer
+05FF	Aerodyn. 0
+0600	Aerodyn. 1
+0601	Aerodyn. Sl.-In.
+0602	Wechselrich 0
+0603	Wechselrich 1
+0604	Bremssensor 0
+0605	Bremssensor 1
+0606	InterfaceSB 0
+0607	InterfaceSB 1
+0608	Interf SB 1Dr
+0609	Körpersch. 0
+060A	Körpersch. 1
+060B	APS Taster
+060C	k.Abschaltbed
+060D	Redukti. 0
+060E	Redukti. 1
+060F	Redukti. Sl.-In.
+0610	Kamera 0
+0611	Kamera 1
+0612	ZusatzBedie 0
+0613	ZusatzBedie 1
+0614	Getriebe 2 0
+0615	Getriebe 2 1
+0616	Dachel. 2 0
+0617	Dachel. 2 1
+0618	Dachel. 2 1Dr
+0619	HVLadegerät 0
+061A	HVLadegerät 1
+061B	Dachel. 2 Sl.-In.
+061C	Aussenger. 0
+061D	Aussenger. 1
+061E	Fkt. gesperrt
+061F	Aggre.-Lager 0
+0620	Aggre.-Lager 1
+0621	Kühlmittel-
+0622	Temperatur
+0623	Displaymodus
+0624	Motordrehzahl
+0625	Thermomgt. 0
+0626	Thermomgt. 1
+0627	Thermomgt. Sl.-In.
+0628	HV-Ladeger. 0
+0629	HV-Ladeger. 1
+062A	HV-Lade. Sl.-In.
+062B	Hyb.BMS 0
+062C	Hyb.BMS 1
+062D	Hyb.BMS Sl.-In.
+062E	Notruf 0
+062F	Notruf 1
+0630	Notruf Slind
+0631	Elektroantr. 0
+0632	Elektroantr. 1
+0633	Elektroantr. Sl.-In.
+0634	L-CAN Busruhe
+0635	L-CAN aktiv
+0636	RE-Ladeger. 0
+0637	RE-Ladeger. 1
+0638	RE-Lade. Sl.-In.
+0639	Vorfeldübe. 0
+063A	Vorfeldübe. 1
+063B	Fußg.-Schutz 0
+063C	Fußg.-Schutz 1
+063D	Memory FSH 0
+063E	Memory FSH 1
+063F	Mem. FSH 1Dr
+0640	Fußg.-Schutz 1Dr
+0641	Notruf 1Dr
+0642	beschl. Stufe 2
+0643	verzög. Stufe 2
+0644	nicht erteilt
+0645	erteilt
+0646	Drehz.-begrenz
+0647	Abschaltst 1
+0648	Abschaltst 3
+0649	Abschaltst 2
+064A	n. betriebsber.
+064B	Überhitzung
+064C	Überhitzschut
+064D	Sensorfehler
+064E	VA-Liftsys. 0
+064F	VA-Liftsys. 1
+0650	keine Leist.-begr.
+0651	75% Leist.-begr.
+0652	50% Leist.-begr.
+0653	25% Leist.-begr.
+0654	Inform1 1Dr
+0655	Inform1 Sl.-In.
+0656	SpoilWarnakti
+0657	Kraftstofflog
+0658	VerbleibKraft
+0659	ObSchwelKraft
+065A	Wegstrecke
+065B	HA-Lenkung 0
+065C	HA-Lenkung 1
+065D	HA-Lenk.Slind
+065E	Standard
+0668	10
+0669	Test Mode
+066A	Start Bildsch
+066B	Hochgeschwind
+066C	Notruf 1 Drah
+066D	TSUS/N Version
+066E	TSUP/N Version
+066F	TSU HW Version
+0670	TSU SW Version
+0672	Verfallsdatum

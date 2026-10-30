@@ -1,0 +1,88 @@
+# fehlerarten: Fehlerarten (Statusbyte ohne Bit 7)
+# Aus KLineKWP1281Lib 2.2.1 (https://github.com/domnulvlad/KLineKWP1281Lib), Datei src/fault_code_elaboration_DE.h
+# Copyright (C) domnulvlad und Mitwirkende der Bibliothek
+# SPDX-License-Identifier: GPL-3.0-only
+# Umgewandelt für vagdiag am 2026-10-28 (nur die Schreibweise, siehe werkzeuge/texte_aus_klinekwp1281lib.py)
+0000	-
+0001	Signal an Plus
+0002	Signal an Masse
+0003	kein Signal
+0004	Mechanischer Fehler
+0005	Eingang Offen
+0006	Signal zu groß
+0007	Signal zu klein
+0008	Regelgrenze überschritten
+0009	Adaptionsgrenze überschritten
+000A	Adaptionsgrenze unterschritten
+000B	Regelgrenze unterschritten
+000C	Adaptionsgrenze ( mul ) überschritten
+000D	Adaptionsgrenze ( mul ) unterschritten
+000E	Adaptionsgrenze ( add ) überschritten
+000F	Adaptionsgrenze ( add ) unterschritten
+0010	Signal außerhalb der Toleranz
+0011	Regeldifferenz
+0012	oberer Anschlagwert
+0013	unterer Anschlagwert
+0014	Fehler in Grundeinstellung
+0015	Zeit für Druckaufbau vorn zu lang
+0016	Zeit für Druckabbau vorn zu lang
+0017	Zeit für Druckaufbau hinten zu lang
+0018	Zeit für Druckabbau hinten zu lang
+0019	undefinierter Schalterzustand
+001A	Ausgang Offen
+001B	unplausibles Signal
+001C	Kurzschluss nach Plus
+001D	Kurzschluss nach Masse
+001E	Unterbrechung / Kurzschluß nach Plus
+001F	Unterbrechung / Kurzschluß nach Masse
+0020	Widerstandswert zu groß
+0021	Widerstandswert zu klein
+0022	keine Fehlerart erkannt
+0023	-
+0024	Unterbrechung
+0025	defekt
+0026	Ausgang schaltet nicht / KS nach Plus
+0027	Ausgang schaltet nicht / KS nach Masse
+0028	Kurzschluß zu anderem Ventil
+0029	Blockiert oder Spannungslos
+002A	Drehzahlabweichung zu groß
+002B	geschlossen
+002C	Kurzschluss
+002D	Steckverbindung
+002E	undicht
+002F	falsch Angeschlossen
+0030	Spannungsversorgung
+0031	keine Kommunikation
+0032	Stellung früh nicht erreicht
+0033	Stellung spät nicht erreicht
+0034	Spannungsversorgung zu groß
+0035	Spannungsversorgung zu klein
+0036	falsche Ausstattung
+0037	Adaption nicht erfolgt
+0038	im Notlauf
+0039	elektr. Fehler im Stromkreis
+003A	verriegelt nicht
+003B	entriegelt nicht
+003C	safed nicht
+003D	entsafed nicht
+003E	keine oder falsche Einstellung
+003F	Temperaturabschaltung
+0040	zur Zeit nicht prüfbar
+0041	nicht berechtigt
+0042	Abgleich nicht durchgeführt
+0043	Sollwert nicht erreicht
+0044	Zylinder 1
+0045	Zylinder 2
+0046	Zylinder 3
+0047	Zylinder 4
+0048	Zylinder 5
+0049	Zylinder 6
+004A	Zylinder 7
+004B	Zylinder 8
+004C	Klemme 30 fehlt
+004D	interne Spannungsversorgung
+004E	fehlende Botschaften
+004F	bitte Fehlerspeicher auslesen
+0050	im Eindrahtbetrieb
+0051	offen
+0052	ausgelöst

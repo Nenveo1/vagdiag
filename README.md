@@ -1,629 +1,642 @@
-# vagdiag 0.9.0 – VAG-Diagnose über KKL-Kabel
+# vagdiag 1.0.3 – VAG-Diagnose über KKL-Kabel
 
-Diagnoseprogramm für Linux und Windows für VW, Audi, SEAT und Škoda mit
-K-Leitung (Protokolle KW1281 und KWP2000, etwa Baujahre 1995–2006). Es braucht
-ein KKL-Kabel mit FTDI-Chip (FT232R/FT232RL). Getestet wurde es an einem VW
-Polo 6KV mit Motor (ME7.5), ABS, Kombi, Wegfahrsperre und Airbag (alle KW1281).
-KWP2000 ist neu und bisher nur gegen den Simulator geprüft.
+Diagnose für VW, Audi, SEAT und Škoda mit K-Leitung (KW1281 und KWP2000, etwa
+Baujahre 1995–2006) unter Linux und Windows, mit einem KKL-Kabel mit FTDI-Chip
+(FT232R/FT232RL). Geprüft an einem VW Polo 6KV (Motor ME7.5, ABS, Kombi,
+Wegfahrsperre, Airbag – alle KW1281); KWP2000 bisher nur am Simulator. Freie
+Software unter der GNU GPL Version 3 oder später, ohne Gewährleistung.
 
-**Funktionen**
-- Identifikation: Teilenummer, Codierung, Werkstattcode, Zusatzkennung
-- Fehlerspeicher lesen (mit Fehlerart, P-Code und Klartext für gut 500 Codes)
-  und löschen
-- Messwertblöcke: 3 Gruppen live, Feldnamen, Min/Max, CSV auf Wunsch,
-  Gruppensuche, Gruppe 000 (zehn Rohwerte) und Marker (F9)
-- Anpassungskanäle lesen (KW1281 und KWP2000) und Kilometerstand aus dem
-  Kombi – **nur lesen**
-- Fahrtenschreiber: eine ganze Fahrt mit mehreren Steuergeräten in einer
-  Datei, mit Zusammenfassung
-- Scan: die üblichen Steuergeräte oder alle Adressen 01–7F auf einen Blick, mit
-  Fehlern und Bericht
-- OBD-II-Test (Adresse 33): spricht das Auto OBD-II/EOBD? Dazu Readiness,
-  Motorkontrollleuchte, OBD-Norm und Fahrgestellnummer – **nur lesen**
-- Identifikation, Fehlerspeicher, Anpassungskanäle, Scan und OBD-II-Test
-  lassen sich als Textdatei speichern
-- Expertenmodus (standardmäßig aus): Drosselklappe anlernen,
-  Service-Intervall zurücksetzen und Stellglieddiagnose – bei Bremsen, Airbag,
-  Wegfahrsperre, Lenkung und Niveauregulierung erst nach einer Warnung, die die
-  möglichen Schäden nennt
-- KW1281 oder KWP2000 erkennt vagdiag selbst; Motoren mit KWP2000 auch per
-  Fast-Init
-- Simulator zum Ausprobieren ohne Auto (auch mit KWP2000 bei Motor und Kombi)
-- Oberfläche und Kommandozeile auf Deutsch oder Englisch
+Was sich in welcher Version geändert hat, steht in `VERSIONEN.md`.
 
-Ohne Expertenmodus schreibt vagdiag nur beim Fehlerspeicher-Löschen, und nur
-nach Rückfrage. Im Expertenmodus kommen genau drei Funktionen dazu (siehe
-unten). Codierung und Login gibt es nicht.
+## Kurzanleitung
+
+1. vagdiag installieren (siehe „Installation“). Das Kabel in die OBD-Buchse
+   stecken, Zündung an.
+2. vagdiag starten: `vagdiag.sh` (Linux) bzw. `vagdiag.bat` (Windows) im Ordner
+   `vagdiag`.
+3. Links unter **Interface** „KKL-Kabel (FTDI)“ wählen – zum Ausprobieren ohne
+   Auto „Simulator (ohne Auto)“.
+4. Ein **Steuergerät** in der Liste wählen (oder die Adresse eintippen, z. B.
+   `01` für den Motor) und **Öffnen** – oder doppelklicken.
+5. Rechts in den Reitern lesen:
+   - **Identifikation:** Teilenummer und Codierung, gleich nach dem Öffnen.
+   - **Fehlerspeicher:** **Fehlerspeicher lesen**; **Fehlerspeicher löschen …**
+     fragt vorher nach.
+   - **Messwertblöcke:** bis zu drei Gruppen anhaken, **Start**.
+   - **Anpassung:** Kanäle lesen (nur lesen).
+6. Eine Fahrt aufzeichnen: Reiter **Fahrtenschreiber** → **Fahrt starten**
+   (Zündung an). Den Motor erst anlassen, wenn „jetzt Motor starten“ erscheint.
+   Am Ziel **Fahrt beenden** und die Zündung an lassen, bis „Fahrtenschreiber
+   beendet“ erscheint. Mit „passiv wie eine Dashcam“ hält ein Ringspeicher
+   immer die letzten Minuten bis Stunden Fahrzeit und läuft nach einem Neustart
+   von selbst weiter.
+7. Überblick: Reiter **Scan** liest alle Steuergeräte mit ihren Fehlern, Reiter
+   **OBD-II** die Readiness (z. B. vor der AU).
+8. Bei Problemen: *Datei → Protokoll speichern …* und die Datei mitschicken.
+
+vagdiag liest nur. Ohne Expertenmodus schreibt es einzig beim Löschen des
+Fehlerspeichers, nach Rückfrage. Das Airbag-Steuergerät (15) öffnet es nur nach
+einer eigenen Rückfrage.
+
+## Quick guide (English)
+
+1. Install vagdiag (see “Installation (English)”). Plug the cable into the OBD
+   port, ignition on.
+2. Start `vagdiag.sh` (Linux) or `vagdiag.bat` (Windows) in the folder
+   `vagdiag`. For English menus: *Datei → Einstellungen … → Sprache / Language
+   → English*; the window restarts.
+3. Under **Interface** on the left choose “KKL cable (FTDI)” – or “Simulator (no
+   car)” to try it without a car.
+4. Select a **control module** in the list (or type its address, e.g. `01` for
+   the engine) and click **Open** – or double-click it.
+5. Read in the tabs on the right:
+   - **Identification:** part number and coding, right after opening.
+   - **Fault codes:** **Read fault codes**; **Clear fault codes …** asks first.
+   - **Measuring blocks:** tick up to three groups, **Start**.
+   - **Adaptation:** read channels (read only).
+6. Record a drive: **Drive logger** tab → **Start drive** (ignition on). Crank
+   the engine only when “start the engine now” appears. At your destination
+   click **Finish drive** and keep the ignition on until “Drive logger
+   finished” appears. With “passive like a dashcam” a ring buffer always keeps
+   the last minutes to hours of driving time and resumes by itself after a
+   restart.
+7. Overview: the **Scan** tab reads all control modules with their faults, the
+   **OBD-II** tab reads the readiness (e.g. before an emissions test).
+8. If something goes wrong: *File → Save log …* and send the file.
+
+vagdiag only reads. Without expert mode its only write is clearing fault codes,
+after a confirmation. It opens the airbag module (15) only after a separate
+confirmation. The detailed description further down is in German only.
 
 ## Installation
 
-### CachyOS / Arch Linux
+Die ZIP-Datei entpacken – es entsteht der Ordner `vagdiag`. Im Unterordner
+`installation` liegt ein Installer je System:
 
+| System | Installer |
+|---|---|
+| Windows 10 und 11 | `installieren-windows-10-11.bat` |
+| CachyOS, Arch Linux, Arch Linux ARM | `installieren-cachyos-archlinux-archlinuxarm.sh` |
+| Debian, Ubuntu, Linux Mint, Armbian | `installieren-debian-ubuntu-linuxmint-armbian.sh` |
+| Alpine Linux (auch auf ARM) | `installieren-alpine.sh` |
+
+**Linux:** Im Ordner `vagdiag` den passenden Installer als normaler Benutzer
+starten; für die Pakete fragt er nach dem Passwort (sudo, unter Alpine auch
+doas):
 ```bash
-sudo pacman -S --needed python libusb
 cd vagdiag
-./installieren.sh
+sh installation/installieren-debian-ubuntu-linuxmint-armbian.sh
 ```
-Danach das Kabel einmal ab- und wieder anstecken (die udev-Regel greift erst
-dann).
+Danach das Kabel einmal ab- und wieder anstecken. Start: `./vagdiag.sh`,
+Kommandozeile: `./vagdiag-cli.sh --help`.
 
-- Oberfläche starten: `./vagdiag.sh`
-- Kommandozeile: `./vagdiag-cli.sh --help`
+**Windows:**
+1. Python 3.11 oder neuer von [python.org](https://www.python.org/downloads/)
+   installieren, dabei „Add python.exe to PATH“ anhaken.
+2. `installation\installieren-windows-10-11.bat` doppelklicken (bei einer
+   SmartScreen-Warnung „Weitere Informationen → Trotzdem ausführen“).
+3. Das Kabel einstecken. Den FTDI-Treiber installiert Windows meist selbst,
+   sonst den „VCP Driver“ (Setup-Programm) von
+   [ftdichip.com](https://ftdichip.com/drivers/vcp-drivers/) installieren.
+4. Start: `vagdiag.bat`, Kommandozeile: `vagdiag-cli.bat --help`.
 
-Lässt sich PySide6 per pip nicht installieren:
-```bash
-sudo pacman -S pyside6
-rm -rf .venv && python -m venv --system-site-packages .venv && .venv/bin/pip install pyftdi
-```
-Während vagdiag läuft, verschwindet `/dev/ttyUSB0`. Das ist normal: Das
+Zum Schluss fragt der Installer, ob vagdiag beim Anmelden von selbst starten
+soll (Vorauswahl Nein). Ändern lässt sich das jederzeit im Programm: *Datei →
+Beim Anmelden starten*.
+
+**Update:** vagdiag schließen, die neue ZIP-Datei über den alten Ordner
+entpacken (Dateien ersetzen) und den Installer noch einmal starten.
+Einstellungen und Messdaten bleiben erhalten.
+
+## Installation (English)
+
+Unzip the file – this creates the folder `vagdiag`. Its subfolder
+`installation` holds one installer per system (see the table above).
+
+- **Linux:** in the folder `vagdiag`, run the installer for your system as a
+  normal user, e.g. `sh installation/installieren-debian-ubuntu-linuxmint-armbian.sh`;
+  it asks for your password for the packages (sudo, on Alpine also doas). Then
+  unplug and replug the cable. Start: `./vagdiag.sh`, command line:
+  `./vagdiag-cli.sh --help`.
+- **Windows:** install Python 3.11 or newer from python.org and tick “Add
+  python.exe to PATH”. Double-click `installation\installieren-windows-10-11.bat`
+  (SmartScreen: “More info → Run anyway”). Windows usually installs the FTDI
+  driver by itself; otherwise install the “VCP Driver” from ftdichip.com.
+  Start: `vagdiag.bat`, command line: `vagdiag-cli.bat --help`.
+- At the end the installer asks in German whether vagdiag should start at
+  login: “vagdiag beim Anmelden automatisch starten? [j/N]” – `j` = yes, Enter
+  = no. You can change this at any time in the program: *File → Start at
+  login*.
+- **Update:** close vagdiag, unzip the new version over the old folder (replace
+  the files) and run the installer again. Settings and data are kept.
+
+## Bedienung im Einzelnen
+
+Links wählt man Interface und Steuergerät, rechts stehen die Reiter, unten läuft
+das Protokoll. Im Simulator steht links oben ein roter Balken „SIMULATOR“. Ein
+gelber Hinweis über den Reitern zeigt, dass das geöffnete Steuergerät nicht zu
+den geprüften gehört (siehe „Geprüfte Steuergeräte“) – gesperrt wird dadurch
+nichts.
+
+### Interface
+
+- **Interface:** KKL-Kabel (FTDI), Simulator (ohne Auto) oder Simulator mit
+  KWP2000 bei Motor und Kombi.
+- **Kabel-URL:** `ftdi:///1` (Linux) bzw. `d2xx:0` (Windows) nimmt das erste
+  FTDI-Kabel. **Kabel suchen** trägt das gefundene ein.
+- **Baudrate:** „Automatisch“ probiert 10400 und 9600 Baud, die zuletzt an
+  dieser Adresse erfolgreiche zuerst. Sehr alte Steuergeräte brauchen 4800 oder
+  1200 – dann von Hand wählen.
+- **Reizung:** Break (Standard). Bitbang nur probieren, wenn mit Break nichts
+  antwortet – manche Klon-Chips setzen den Break nicht sauber um.
+- **Motor: zuerst Fast-Init (KWP2000):** für spätere Motorsteuergeräte (vor
+  allem Diesel), die auf die normale 5-Baud-Reizung nicht antworten. Gilt nur
+  für Adresse 01; antwortet niemand, folgt die normale Reizung.
+- **Kabel testen:** öffnet das Kabel und sendet ein einzelnes Byte. Im Auto mit
+  Zündung an kommt es als Echo zurück; ohne Strom an OBD-Pin 16 (Kabel nicht
+  im Auto) ist kein Echo normal. Steuergeräte reagieren darauf nicht.
+
+Unter Linux verschwindet `/dev/ttyUSB0`, solange vagdiag das Kabel benutzt – das
 Programm spricht den Chip direkt an, damit die 5-Baud-Reizung genau stimmt.
+Nach dem Ruhezustand des Rechners oder kurzem Abziehen öffnet vagdiag das Kabel
+beim nächsten Versuch von selbst neu.
 
-### Windows 10/11
+### Steuergerät und Funktionen
 
-1. **Python 3.11 oder neuer** von [python.org](https://www.python.org/downloads/)
-   installieren und dabei den Haken bei „Add python.exe to PATH“ setzen.
-2. Die ZIP-Datei entpacken, z. B. nach `Dokumente\vagdiag`.
-3. Im Ordner `vagdiag` **installieren.bat** doppelklicken. Bei einer
-   SmartScreen-Warnung „Weitere Informationen → Trotzdem ausführen“ wählen.
-4. Das Kabel einstecken. Windows installiert den FTDI-Treiber selbst. Falls
-   nicht: den „VCP Driver“ (Setup-Programm) von
-   [ftdichip.com](https://ftdichip.com/drivers/vcp-drivers/) installieren –
-   er enthält auch den D2XX-Teil, den vagdiag benutzt.
-5. Oberfläche starten: **vagdiag.bat**. Kommandozeile: `vagdiag-cli.bat --help`
+Die Liste enthält die 15 üblichen Adressen (01 Motor, 03 ABS, 15 Airbag,
+17 Kombi, 25 Wegfahrsperre …). Ein Klick schreibt die Adresse in die Zeile
+„oder Adresse (hex)“, eine getippte Adresse (00–7F) markiert den passenden
+Eintrag. **Öffnen**, Enter oder ein Doppelklick öffnet, was in der Zeile steht;
+**Schließen** beendet die Verbindung. Nach dem Öffnen erscheint der zuletzt
+benutzte Reiter – gesendet wird dadurch nichts.
 
-Das Kabel darf nicht gleichzeitig in einem anderen Programm (z. B. VCDS-Lite)
-geöffnet sein. Kabel mit nachgemachtem FTDI-Chip arbeiten mit dem
-Windows-Treiber nicht immer zuverlässig; unter Linux gibt es das Problem nicht.
+Die Knöpfe unter **Funktionen** lesen oder löschen (mit Rückfrage) den
+Fehlerspeicher und führen zu den übrigen Reitern. **Kilometerstand (Kombi)**
+liest am Kombi (17) Gruppe 002, sonst Anpassungskanal 09 – nur lesen, nicht bei
+jedem Kombi bestätigt, deshalb mit der Anzeige vergleichen.
 
-### Update
+### Identifikation und Fehlerspeicher
 
-Die neue ZIP-Datei über den alten Ordner entpacken und Dateien ersetzen.
-Einstellungen und Messdaten bleiben erhalten. Neue Pakete kommen mit dem
-erneuten Ausführen von `installieren.sh` bzw. `installieren.bat` dazu.
+**Identifikation** zeigt Teilenummer, Bauteil, Codierung, Werkstattcode und
+Zusatzkennung. **Speichern …** schreibt das als Textdatei – so auch in
+Fehlerspeicher, Anpassung, Scan und OBD-II; gesendet wird dabei nichts.
 
-## Bedienung
+**Fehlerspeicher** zeigt jeden Fehler mit Code, OBD-Code (P, C, B oder U),
+Beschreibung, Fehlerart und „sporadisch“. Die Texte kommen zuerst aus eigenen
+Texten (siehe „Eigene Texte und Feldnamen“), dann aus den eingebauten (193
+VAG-Codes und 316 P-Codes, deutsch und englisch, gegen KLineKWP1281Lib bzw. die
+Norm geprüft), dann aus den Tabellen von KLineKWP1281Lib (rund 9.700 Codes,
+83 Fehlerarten). Fehlt ein Text, steht „(kein Klartext hinterlegt)“.
+Fehlerart 34 heißt bei vagdiag „keine Grundeinstellung“, in der Bibliothek
+„keine Fehlerart erkannt“ – welcher Text stimmt, ist offen.
 
-Links das Interface (KKL-Kabel oder Simulator) und das Steuergerät wählen
-(Doppelklick öffnet). Rechts stehen die Reiter Identifikation, Fehlerspeicher,
-Messwertblöcke, Anpassung, Fahrtenschreiber, Scan, OBD-II und Experte. Unten
-läuft das Protokoll.
+**Fehlerspeicher löschen …** fragt vorher nach und nennt dabei Teilenummer,
+Bauteil und ob es der Simulator oder das Auto ist. Löschen beseitigt keine
+Ursache.
 
-Nach dem Öffnen eines Steuergeräts erscheint wieder der Reiter, der zuletzt
-für ein Steuergerät benutzt wurde – Identifikation, Fehlerspeicher,
-Messwertblöcke, Anpassung oder Experte (seit 0.8.1; vorher immer
-Identifikation). Das gilt bis zum Beenden des Programms. Gesendet wird dadurch
-nichts: Fehler und Messwerte liest erst der jeweilige Knopf.
+### Messwertblöcke
 
-- **Sprache:** *Datei → Einstellungen → Sprache / Language* (Deutsch oder
-  English). Das Fenster startet danach neu.
-- **Dateien:** Standardmäßig schreibt vagdiag weder ein Protokoll noch
-  CSV-Dateien. Einschalten lässt sich beides unter *Datei → Einstellungen*,
-  die CSV-Aufzeichnung auch mit dem Häkchen „aufzeichnen (CSV)“ im Reiter
-  Messwertblöcke. Die letzten 256.000 Zeilen des Protokolls (beim
-  Fahrtenschreiber gut eine halbe Stunde) bleiben im Speicher und lassen sich
-  nach einem Problem mit *Datei → Protokoll speichern …* sichern.
-- **Ablage:** Daten liegen in `~/vagdiag-daten` (Windows:
-  `%USERPROFILE%\vagdiag-daten`), Einstellungen in `~/.config/vagdiag`
-  (Windows: `%APPDATA%\vagdiag`). Deutsche CSV-Dateien nutzen Semikolon und
-  Dezimalkomma, englische Komma und Dezimalpunkt. Beide öffnen direkt in
-  Excel und LibreOffice.
-- **Speichern (seit 0.8.0):** In den Reitern Identifikation, Fehlerspeicher,
-  Anpassung und Scan speichert **Speichern …**, was der Reiter gerade zeigt,
-  als Textdatei – beim Fehlerspeicher alle gelesenen Fehler, bei der Anpassung
-  alle Kanäle der Liste, beim Scan alle gefundenen Steuergeräte. Der Vorschlag
-  liegt im Ordner der Messwerte, im Simulator mit „sim-“ davor. Dabei wird
-  nichts an das Steuergerät gesendet.
-- **Bordspannung beim Anlassen:** Im Reiter Messwertblöcke nur die Gruppe mit
-  der Spannung aktivieren (bei ME7 Gruppe 004). Dann wird sie am häufigsten
-  gelesen. Min/Max steht unter dem Feld. Bricht die Verbindung beim
-  Spannungseinbruch ab, verbindet vagdiag mit dem Häkchen „bei Abbruch neu
-  verbinden“ von selbst neu.
-- **Gruppe 000 (seit 0.9.0):** Wie bei VAG 1551/1552 und VCDS liefert Gruppe 000
-  zehn Rohwerte (0–255) ohne Umrechnung; vagdiag zeigt sie nummeriert in
-  einer Zeile und schreibt sie in die CSV-Datei (Spalten Feld 1 bis Feld 10).
-  Was sie bedeuten, steht im Reparaturleitfaden des Steuergeräts. Nur bei
-  KW1281 – bei KWP2000 gibt es dafür keinen beschriebenen Dienst.
-- **Marker (seit 0.9.0):** Während einer Messung setzt **Marker setzen** oder
-  **F9** einen fortlaufend nummerierten Marker („Marker 1“, „Marker 2“ …) in
-  die CSV-Datei und ins Protokoll – z. B. wenn eine Warnlampe angeht. Jede
-  neue Messung beginnt wieder bei 1. Im Fahrtenschreiber bleibt F9 das
-  Ereignis mit Fehlerspeicher.
+- **Anzeige 1–3:** je ein Häkchen **Gruppe** und die Gruppennummer. Jedes Feld
+  zeigt Wert und Namen, darunter Min/Max; den Rohwert zeigt der Tooltip.
+- **Start** liest die angehakten Gruppen reihum. Je weniger Gruppen, desto
+  öfter wird jede gelesen – für die Bordspannung beim Anlassen nur die Gruppe
+  mit der Spannung anhaken (ME7: 004).
+- **aufzeichnen (CSV):** schreibt die Werte in eine CSV-Datei; **CSV-Ordner
+  öffnen** zeigt sie. Deutsche CSV-Dateien nutzen Semikolon und Dezimalkomma,
+  englische Komma und Dezimalpunkt – beide öffnen direkt in Excel und
+  LibreOffice.
+- **bei Abbruch neu verbinden:** bricht die Verbindung ab (etwa beim
+  Spannungseinbruch), verbindet vagdiag von selbst neu.
+- **Min/Max zurücksetzen**, **Gruppen durchsuchen …** (findet alle belegten
+  Gruppen ab 000) und **Marker setzen (F9)** – ein nummerierter Marker in CSV
+  und Protokoll, z. B. wenn eine Warnlampe angeht.
+- **Gruppe 000** liefert zehn Rohwerte (0–255), nur bei KW1281. Beim
+  6K0 906 032 M sind vier davon benannt und umgerechnet: 1 Kühlmittel
+  (Rohwert − 100 = °C), 2 Motorlast (× 100/133 = %), 3 Drehzahl (× 40 = /min),
+  8 Lambdaregelung ((Rohwert − 128) × 100/128 = %).
+- **Verlaufskurve** (standardmäßig aus): jedes Zahlenfeld als eigener Streifen
+  über eine gemeinsame **Zeitachse** von 30 Sekunden bis 60 Minuten. Der
+  Mauszeiger zeigt alle Werte zu einem Zeitpunkt, **Kurve leeren** beginnt neu.
+  Das Zeichnen kostet Rechenzeit – auf langsamen Rechnern (TV-Box, Raspberry
+  Pi) bricht die Verbindung damit öfter ab.
 
-## Fahrtenschreiber
+vagdiag rechnet nach allen Formeltypen von KLineKWP1281Lib, auch bei Gruppen im
+Kopf-Rumpf-Format und Feldern mit eigener Länge (Texte). Unbenutzte Stellen
+eines Schalterfelds stehen als „·“; ab einem unbekannten Format zeigt vagdiag
+die Gruppe roh („roh: …“).
 
-Über die K-Leitung spricht man immer nur mit einem Steuergerät. Der
-Fahrtenschreiber wechselt deshalb selbst:
-- Das Motorsteuergerät liest er durchgehend.
-- Kombi und ABS besucht er in einstellbaren Abständen, das ABS aber nur im
-  Stand (z. B. an der Ampel): Manche ABS-Steuergeräte nehmen während der
-  Fahrt keine Verbindung an. Das Tempo dafür kommt aus einer Motor-Gruppe
-  (bei ME7 Gruppe 005) – die sollte deshalb mitgelesen werden. Als Stand
-  zählt seit 0.8.0 erst, wenn mindestens zwei Werte mit einer Sekunde Abstand
-  0 km/h zeigen (vorher reichte ein einziger Wert, auch kurz vor dem Anhalten).
-- Am Anfang und am Ende liest er die Fehlerspeicher und den Tankinhalt im
-  Stand.
-- Startprüfung (seit 0.8.1): zuerst die Wegfahrsperre, zuletzt der Motor. Mit
-  dem Motor bleibt vagdiag danach verbunden, und die Aufforderung zum Anlassen
-  kommt erst, wenn die ersten Motorwerte da sind. Bis 0.8.0 kam sie schon nach
-  der Startprüfung, einige Sekunden bevor der Motor gelesen wurde – wer gleich
-  startete, verpasste das Anlassen. Läuft der Motor schon beim ersten
-  Messwert, steht das als Notiz und in der Zusammenfassung („Anlassen nicht
-  aufgezeichnet“).
+### Anpassung
 
-1. Laptop sicher ablegen, nicht vor einem Airbag. Das Kabel so verlegen, dass
-   es nicht an die Pedale kommt.
-2. Zündung an, Motor aus, Reiter Fahrtenschreiber → **Fahrt starten**. Erst
-   wenn „Aufzeichnung läuft – jetzt Motor starten und losfahren“ erscheint,
-   den Motor anlassen und losfahren. Dann ist das Anlassen mit aufgezeichnet.
-3. Geht unterwegs eine Warnlampe an: **F9** drücken. Das setzt eine Markierung
-   und liest sofort den Fehlerspeicher des Motors, den des ABS beim nächsten
-   Halt.
-4. Am Ziel **Fahrt beenden**, solange die Zündung noch an ist (der Motor darf
-   aus sein), und warten, bis „Fahrtenschreiber beendet“ erscheint. Ist die
-   Zündung schon aus, wartet vagdiag bis zu 60 Sekunden, ob sie wieder
-   eingeschaltet wird.
+Nur lesen: **Lesen** liest einen Kanal, **durchsuchen** alle Kanäle eines
+Bereichs (z. B. 1 bis 99). Kanal 00 (bei vielen Steuergeräten „alle Anpassungen
+löschen“) spricht vagdiag nie an. Lehnt ein Steuergerät einen Kanal ab, gibt es
+ihn nicht oder er verlangt eine Anmeldung – vagdiag meldet sich nie an.
 
-Ergebnis ist eine CSV-Datei und eine Zusammenfassung mit diesen Punkten:
-- Fehlerspeicher (seit 0.8.1 nach Adressen sortiert)
-- Kühlmittel
-- Bordspannung (Motor aus, beim Anlassen, im Lauf – die ersten Sekunden nach
-  dem Anspringen zählen noch zum Anlassen)
-- Drehzahl, Lambdaregelung (nur mit warmem Motor) und Tempo
-- Tankanzeige im Stand und während der Fahrt
-- Bremslichtschalter
-- Steuergeräte, die nicht erreichbar waren
-- Zündung zwischendurch aus (seit 0.8.0): Antwortet der Motor nach einem
-  Verbindungsverlust gar nicht mehr und später wieder, steht das mit Uhrzeit
-  in der Zusammenfassung und zählt nicht als Störung. Als Störung zählen
-  gestörte Verbindungsaufbauten und Verbindungsverluste mit sofortiger
-  Antwort danach.
+### Fahrtenschreiber
 
-Der Fahrtenschreiber schreibt seine Datei immer, auch wenn die
-CSV-Aufzeichnung sonst aus ist. Jede Notiz der Fahrt (Verbindungsverlust,
-Zündung aus, F9 …) steht seit 0.8.0 auch im Protokoll – Protokoll und CSV
-lassen sich so nebeneinanderlegen.
+Über die K-Leitung spricht man immer nur mit einem Steuergerät, der
+Fahrtenschreiber wechselt deshalb selbst: Den Motor liest er durchgehend, Kombi
+und ABS besucht er in Abständen – das ABS nur im Stand (zweimal 0 km/h im
+Abstand einer Sekunde), denn viele ABS-Steuergeräte antworten während der Fahrt
+nicht. Das Tempo kommt aus einer Motor-Gruppe (ME7: 005), die deshalb
+mitgelesen werden sollte.
 
-## Scan
+Einstellungen:
+- **Aufzeichnung:** „ganze Fahrt“ (eine Datei je Fahrt) oder „passiv wie eine
+  Dashcam“ (Ringspeicher, siehe unten) mit der **Zeitspanne** 5 min, 20 min,
+  1 h oder 5 h Fahrzeit.
+- **Motor-Gruppen** (Standard 1,2,3,4,5 – fehlende werden übersprungen),
+  **Kombi alle … s**, **ABS alle … s** (0 = nie) und **Dauer je Besuch**.
+- **Start- und Abschlussprüfung:** liest am Anfang und am Ende alle
+  Fehlerspeicher und den Tankinhalt im Stand; der Start wartet dafür bis zu
+  60 Sekunden auf die Zündung. Die Prüfung beginnt an der Wegfahrsperre und
+  endet am Motor, mit dem vagdiag dann verbunden bleibt.
+- **Auch den Airbag-Fehlerspeicher lesen (15):** erst nach dem Hinweis zum
+  Airbag; bei jedem Programmstart wieder aus.
 
-Reiter **Scan** → **Scan starten** fragt die Steuergeräte nacheinander ab
-(nur lesen): Kennung und, wenn angehakt, den Fehlerspeicher. Zwei Umfänge:
-- **Übliche Adressen:** die 15 häufigsten (Liste links), etwa eine Minute. Die
-  Tabelle zeigt jede davon.
-- **Alle Adressen 01–7F:** jede Adresse, etwa acht Minuten. Die Tabelle zeigt
-  nur die, die antworten. Nie gereizt werden 33 (die allgemeine OBD-II-Adresse,
-  kein eigenes Steuergerät – dafür gibt es den OBD-II-Test) und 7C (Werksmodus
-  des Radios).
+Ablauf:
+1. Laptop sicher ablegen, nicht vor einem Airbag; das Kabel von den Pedalen
+   fernhalten.
+2. Zündung an, Motor aus, **Fahrt starten**. Erst bei „Aufzeichnung läuft –
+   jetzt Motor starten und losfahren“ anlassen – dann ist das Anlassen mit
+   aufgezeichnet.
+3. Geht eine Warnlampe an: **F9** (**Ereignis markieren**). Das markiert die
+   Stelle und liest sofort den Fehlerspeicher des Motors, den des ABS beim
+   nächsten Halt.
+4. Am Ziel **Fahrt beenden**, solange die Zündung an ist (der Motor darf aus
+   sein), und warten, bis „Fahrtenschreiber beendet“ erscheint. Ist die Zündung
+   schon aus, wartet vagdiag bis zu 60 Sekunden auf sie. **Sofort abbrechen**
+   endet ohne Abschlussprüfung.
+
+**Aktuelle Werte** zeigt Drehzahl, Tempo, Kühlmittel, Bordspannung, Ansaugluft,
+Tank, Saugrohrdruck und Bremslichtschalter. Ergebnis ist eine CSV-Datei (auch
+wenn die CSV-Aufzeichnung sonst aus ist) mit einer Zusammenfassung:
+Fehlerspeicher nach Adressen, Kühlmittel, Bordspannung (Motor aus, Anlassen,
+Lauf), Drehzahl, Lambdaregelung, Tempo, Tank, Bremslichtschalter, nicht
+erreichbare Steuergeräte, Zündung zwischendurch aus und Zeiten ohne Kabel. Jede
+Notiz steht auch im Protokoll. Fehlt unterwegs das Kabel (abgezogen,
+Ruhezustand), notiert vagdiag das einmal, wartet und macht weiter, sobald es
+wieder da ist.
+
+### Passiv wie eine Dashcam
+
+Der passive Fahrtenschreiber arbeitet wie oben, schreibt aber in einen
+Ringspeicher (Ordner `passiv` unter dem CSV-Ordner, im Simulator `passiv-sim`):
+- Gespeichert wird in Stücken von etwa einer Minute Fahrzeit; ist mehr als die
+  Zeitspanne beisammen, fällt das älteste Stück weg. Als Fahrzeit zählt nur
+  Zeit mit Zündung an – bei ausgeschalteter Zündung wird nichts überschrieben,
+  auch wenn vagdiag weiterläuft.
+- Die Stücke bleiben über Fahrten und Neustarts hinweg erhalten.
+- Am Ende jedes Laufs setzt vagdiag daraus `fahrt-passiv.csv` mit genau der
+  Zeitspanne zusammen, mit Zusammenfassung (zuerst Fehlerspeicher und
+  Ereignisse im Zeitraum, dann die Werte). Diese Datei wird jedes Mal neu
+  geschrieben.
+- **F9** markiert ein Ereignis und sichert die Zeitspanne bis jetzt zusätzlich
+  in `fahrt-passiv-gesichert-<Datum>-<Uhrzeit>.csv` – solche Dateien
+  überschreibt vagdiag nie. **Zeitspanne sichern …** tut dasselbe ohne laufende
+  Aufzeichnung.
+- **Weiterlaufen nach einem Neustart:** Lief der passive Fahrtenschreiber, als
+  vagdiag geschlossen oder der Rechner ausgeschaltet wurde, startet er beim
+  nächsten Öffnen von selbst wieder, mit demselben Kabel. **Fahrt beenden** oder
+  **Sofort abbrechen** schalten das ab. Steckt das Kabel nicht, wartet er still
+  darauf („Warte auf das Kabel …“).
+- In einen Ringspeicher schreibt immer nur ein vagdiag. Läuft schon einer,
+  meldet ein zweiter das, statt mitzuschreiben; sichern geht trotzdem.
+
+**Im Auto von selbst:** *Datei → Beim Anmelden starten* startet vagdiag nach
+jeder Anmeldung. Unter Linux legt es dafür `~/.config/autostart/vagdiag.desktop`
+an (GNOME, KDE, Xfce, Cinnamon, MATE, LXQt und andere lesen diesen Ordner),
+unter Windows den Eintrag „vagdiag“ unter
+`HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run` (sichtbar im
+Task-Manager unter „Autostart“). Geht das nicht, zeigt vagdiag den Befehl zum
+Eintragen von Hand. Zusammen mit dem Weiterlaufen zeichnet ein passiver
+Fahrtenschreiber so nach jedem Start des Rechners weiter auf. Für den
+Dauerbetrieb die Start- und Abschlussprüfung abschalten.
+
+**Ohne Fenster** (etwa auf einem Rechner ohne Bildschirm) läuft er über die
+Kommandozeile:
+```bash
+./vagdiag-cli.sh fahrt --passiv 1h --ohne-pruefung
+```
+Linux, als systemd-Benutzerdienst – Datei
+`~/.config/systemd/user/vagdiag-fahrt.service`, Pfad an den eigenen Ordner
+anpassen:
+```ini
+[Unit]
+Description=vagdiag – passiver Fahrtenschreiber
+
+[Service]
+ExecStart=%h/vagdiag/vagdiag-cli.sh fahrt --passiv 1h --ohne-pruefung
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+Einschalten mit `systemctl --user enable --now vagdiag-fahrt.service`; soll er
+schon vor der Anmeldung laufen, einmal `loginctl enable-linger $USER`. Beim
+Herunterfahren beendet vagdiag die Aufzeichnung sofort und schreibt noch
+`fahrt-passiv.csv`. Der Dienst belegt das Kabel – für die Oberfläche oder ein
+Update vorher `systemctl --user stop vagdiag-fahrt.service`.
+
+Windows: in der **Aufgabenplanung** eine Aufgabe mit dem Trigger „Bei
+Anmeldung“ und der Aktion „Programm starten“ anlegen: `vagdiag-cli.bat` aus dem
+vagdiag-Ordner mit den Argumenten `fahrt --passiv 1h --ohne-pruefung`. Beim
+Herunterfahren beendet Windows das Programm ohne Rückmeldung; der Ringspeicher
+bleibt trotzdem erhalten – die Zeitspanne dann mit **Zeitspanne sichern …**
+oder `vagdiag-cli.bat fahrt-export` holen.
+
+### Scan
+
+**Scan starten** fragt die Steuergeräte nacheinander ab – nur lesen: Kennung
+und, mit **Fehlerspeicher mitlesen**, die Fehler.
+- **Übliche Adressen:** die 15 aus der Liste, etwa eine Minute.
+- **Alle Adressen 01–7F:** etwa acht Minuten; die Tabelle zeigt nur, wer
+  antwortet. Nie gereizt werden 33 (die allgemeine OBD-II-Adresse – dafür gibt
+  es den OBD-II-Test) und 7C (Werksmodus des Radios).
 
 Die Tabelle zeigt Teilenummer, Bauteil, Protokoll, Fehlerzahl und Status. Ein
-Klick auf eine Zeile zeigt Kennung und Fehler, ein Doppelklick öffnet das
-Steuergerät. **Speichern …** schreibt alles als Textdatei. Jede nicht
-verbaute Adresse kostet einige Sekunden. Der Airbag (15) ist nur mit dem
-Häkchen „Airbag (15) einschließen“ dabei. Die Baudrate links gilt auch für den
-Scan: „Automatisch“ probiert 10400 und 9600; sehr alte Steuergeräte mit 4800
-Baud findet der Scan nur, wenn dort 4800 gewählt ist. In der Kommandozeile:
-`./vagdiag-cli.sh scan`, alle Adressen mit `./vagdiag-cli.sh scan --alle`, mit
-fester Baudrate `./vagdiag-cli.sh --baud 4800 scan`.
+Klick zeigt Kennung und Fehler, ein Doppelklick öffnet das Steuergerät. Den
+Airbag fragt der Scan nur mit **Airbag (15) einschließen** ab. Die Baudrate
+links gilt auch hier: Steuergeräte mit 4800 Baud findet der Scan nur, wenn dort
+4800 gewählt ist.
 
-## OBD-II-Test (seit 0.9.0)
+### OBD-II
 
-Reiter **OBD-II** → **OBD-II-Test starten** (Kommandozeile:
-`./vagdiag-cli.sh obd2`). vagdiag prüft, ob das Auto die allgemeine
-Abgasdiagnose OBD-II/EOBD über die K-Leitung spricht – wie der
-Kompatibilitätstest von VCDS-Lite – und zeigt dazu:
-- **Protokoll:** ISO 9141-2 oder ISO 14230-4 (KWP2000), erkannt an der Antwort
-  auf die 5-Baud-Reizung von Adresse 33; antwortet niemand, folgt der Fast-Init.
-- **Readiness:** für jede Abgasprüfung „abgeschlossen“, „nicht abgeschlossen“
-  oder „nicht vorhanden“ (Katalysator, Tankentlüftung, Lambdasonden …), dazu
-  die Motorkontrollleuchte und die Zahl der gespeicherten Abgasfehler. Nach
-  dem Fehlerlöschen sind die Prüfungen wieder offen, bis das Auto sie bei
-  einer Fahrt erledigt hat – vor der AU wichtig.
-- **OBD-Norm** (z. B. EOBD), **Fahrgestellnummer** und welche Werte das Auto
-  über OBD-II liefert.
+**OBD-II-Test starten** prüft wie der Kompatibilitätstest von VCDS-Lite, ob das
+Auto die allgemeine Abgasdiagnose OBD-II/EOBD über die K-Leitung spricht
+(ISO 9141-2 oder ISO 14230-4), und zeigt:
+- die **Readiness** je Abgasprüfung (abgeschlossen, nicht abgeschlossen, nicht
+  vorhanden). Nach dem Fehlerlöschen sind die Prüfungen wieder offen, bis das
+  Auto sie bei einer Fahrt erledigt hat – vor der AU wichtig;
+- Motorkontrollleuchte, Zahl der gespeicherten Abgasfehler, OBD-Norm,
+  Fahrgestellnummer und welche Werte das Auto über OBD-II liefert.
 
-Gesendet werden nur lesende Anfragen: Mode 01 (unterstützte Werte, Readiness,
-OBD-Norm) und Mode 09 (Fahrgestellnummer). Mode 04 – Abgasfehler löschen, was
-auch die Readiness zurücksetzt – schickt vagdiag nie; jede andere Anfrage
-sperrt es, bevor sie hinausgeht. Eine offene Verbindung zu einem Steuergerät
-beendet vagdiag vorher. Danach hält das Motorsteuergerät seine OBD-Sitzung
-noch bis zu 5 Sekunden; so lange wartet vagdiag, bevor es wieder ein
-Steuergerät öffnet.
+Gesendet werden nur Anfragen aus Mode 01 und Mode 09 – nie Mode 04
+(Abgasfehler löschen, setzt auch die Readiness zurück). Eine offene Verbindung
+beendet vagdiag vorher und wartet danach bis zu 5 Sekunden, bevor es wieder ein
+Steuergerät öffnet. Antwortet niemand, spricht das Auto kein OBD-II über die
+K-Leitung (oder die Zündung ist aus). Pflicht ist EOBD bei Benzinern ab etwa
+2001, bei Dieseln ab etwa 2004.
 
-Antwortet niemand, spricht das Auto kein OBD-II über die K-Leitung (oder die
-Zündung ist aus). EOBD ist bei Benzinern ab etwa 2001, bei Dieseln ab etwa
-2004 Pflicht; ältere Autos können es trotzdem haben – genau das zeigt der
-Test. Die VAG-eigene Readiness aus den Messwertgruppen des Motors (Funktion 15
-bei VAG 1551/1552) ist nicht eingebaut: Für das ME7.5 des Polo ist die
-Gruppe nicht sicher belegt.
+### Experte
 
-## Expertenmodus
+*Experte → Expertenmodus …* schaltet den Expertenmodus nach einem Hinweis ein,
+bis zum Programmende. Unter jedem Knopf steht, ob die Funktion gerade geht und,
+wenn nicht, warum. Jede Funktion fragt vorher nach und nennt das Ziel.
+**Simulator: Motor aus (Zündung an)** erlaubt, alles im Simulator
+auszuprobieren. Benutzung auf eigene Gefahr.
 
-Menü **Experte → Expertenmodus …** schaltet ihn nach einem Hinweis ein. Er
-gilt nur bis zum Beenden des Programms. Erst dann werden die Knöpfe im Reiter
-**Experte** aktiv. Unter jedem Knopf steht, ob die Funktion gerade geht und,
-wenn nicht, warum – etwa „Verbunden ist 17 … – dafür links mit 01 …
-verbinden“ (seit 0.8.0). Drosselklappe und Service-Reset gehören zu einem
-bestimmten Steuergerät, die Stellglieddiagnose zum gerade geöffneten: Das
-Steuergerät muss links geöffnet sein.
-
-- **Drosselklappe anlernen** (Motor 01, Grundeinstellung Gruppe 060 bei E-Gas
-  wie ME7, Gruppe 098 bei Seilzug). vagdiag prüft vorher über die Messwerte:
-  Motor aus, Bordspannung mindestens 11,5 V, Kühlmittel 5–95 °C, kein Fehler
-  im Motor-Fehlerspeicher (Bedingungen wie bei Ross-Tech). Dann läuft die
-  Grundeinstellung etwa 30 Sekunden. Gaspedal dabei nicht berühren. Danach
-  liest vagdiag die Gruppe normal (das beendet die Grundeinstellung) und den
-  Fehlerspeicher. Feld 4 zeigt das Ergebnis. Den Statustext („ADP i.O.“)
-  kennt vagdiag bei echten Steuergeräten noch nicht; dann steht dort
-  „Text Nr. …“ – bitte das Protokoll schicken.
+- **Drosselklappe anlernen** (Motor 01; Gruppe 060 bei E-Gas wie ME7, 098 bei
+  Seilzug). vagdiag prüft vorher: Motor aus, Bordspannung mindestens 11,5 V,
+  Kühlmittel 5–95 °C, kein Fehler im Motor – und dass die Gruppe wie die
+  Anpassung aufgebaut ist, denn sonst könnte das Steuergerät mit derselben
+  Gruppe etwas anderes anlernen. Die Grundeinstellung dauert etwa 30 Sekunden;
+  Gaspedal nicht berühren. Weicht eine Antwort ab, hört vagdiag sofort auf.
+  Feld 4 zeigt das Ergebnis („ADP. läuft“, „ADP. i.O.“). Bei KWP2000
+  experimentell (Ablauf nach einem Mitschnitt an einem EDC16, an keinem
+  Benziner geprüft).
 - **Service-Intervall zurücksetzen** (Kombi 17, Anpassungskanal 02 auf 0 –
-  so bei Kombis ab etwa 1998). vagdiag liest den Kanal, sichert den alten
-  Wert als JSON-Datei in `~/vagdiag-daten/sicherungen`, testet und speichert
-  den Wert 0 und liest danach zurück. Gibt es Kanal 02 nicht, geht der Reset
-  nur am Kombi selbst. Geht bei KW1281 und KWP2000.
-- **Stellglieddiagnose** (das geöffnete Steuergerät). Das Steuergerät steuert
-  seine Stellglieder nacheinander an – im Kombi z. B. Zeiger, Warnlampen und
-  Gong, im Motor Relais und Ventile. Zündung an, Motor aus, Auto steht; beim
-  Motor prüft vagdiag vorher, dass die Drehzahl 0 ist. **Weiter** schaltet zum
-  nächsten Stellglied, **Stopp** hört auf; kommt 60 Sekunden lang kein
-  **Weiter**, hört vagdiag von selbst auf. Danach beendet vagdiag die
-  Verbindung – dann hört jedes Steuergerät sicher auf, etwas anzusteuern – und
-  verbindet neu. Angezeigt wird die Nummer des Stellglieds (wie ein
-  Fehlercode) und, wenn bekannt, sein Name. Fehlende Namen lassen sich in
-  `fehlertexte.json` eintragen (siehe unten). Bei KWP2000 ist sie
-  **experimentell**: Der Ablauf stammt aus einem Mitschnitt an einem
-  Diesel-Steuergerät (EDC16). Dort steuert der erste Schritt das angezeigte
-  Stellglied an, der zweite schaltet weiter.
+  Kombis ab etwa 1998). Den alten Wert sichert vagdiag vorher als JSON-Datei in
+  `~/vagdiag-daten/sicherungen` und liest danach zurück.
+- **Stellglieddiagnose** am geöffneten Steuergerät: Es steuert seine
+  Stellglieder nacheinander an – im Kombi Zeiger, Lampen und Gong, im Motor
+  Relais und Ventile. Zündung an, Motor aus, Auto steht (beim Motor prüft
+  vagdiag die Drehzahl 0, beim ABS 0 km/h). **Weiter** schaltet weiter,
+  **Stopp** hört auf, ohne **Weiter** endet sie nach 60 Sekunden; danach
+  verbindet vagdiag neu. Bei Bremsen (03, 23, 53), Airbag (15), Wegfahrsperre
+  (25), Niveauregulierung (34) und Lenkung (44) kommt vorher eine Warnung mit
+  den möglichen Schäden (Vorgabe: Nein); passt die Kennung nicht zur Adresse,
+  bleibt sie gesperrt. Die Reihenfolge merkt sich vagdiag je
+  Steuergerät in `~/vagdiag-daten/stellglieder.json` und zeigt sie beim
+  nächsten Mal als Übersicht – vorher lesen lässt sie sich nicht. Bei KWP2000
+  experimentell.
 
-**Stellglieddiagnose an allen Steuergeräten (seit 0.8.0).** Bis 0.7.2 waren
-Bremsen, Airbag, Wegfahrsperre und Lenkung gesperrt. Jetzt gilt:
-- Bei Bremsen (03 ABS, 23 Bremskraftverstärker, 53 Parkbremse), Airbag (15),
-  Wegfahrsperre (25), Niveauregulierung (34) und Lenkung (44) erscheint vor
-  der Rückfrage eine **Warnung** mit den möglichen Schäden für genau dieses
-  Steuergerät und der nötigen Vorbereitung (Vorgabe: Nein). Beim ABS etwa:
-  Luft aus der Hydraulikeinheit kann in die Bremsleitungen kommen, ein Rad
-  kann ungebremst sein; vorher das Auto gegen Wegrollen sichern, danach die
-  Bremse prüfen. Die Bestätigung reicht bis in die Schreibsperre des
-  Protokolls: Ohne sie geht kein Stellglied-Block hinaus.
-- Beim ABS prüft vagdiag vorher, dass alle Räder stehen (0 km/h in Gruppe
-  001), beim Motor wie bisher die Drehzahl 0.
-- Bei den übrigen Steuergeräten nennt die Rückfrage, was sich bewegen kann
-  (z. B. beim Motor der Kühlerlüfter, bei Zentralverriegelung und Komfort die
-  Fenster).
-- Meldet sich unter einer Adresse ein Gerät, das nach Teilenummer oder Name zu
-  einer anderen Art gehört (etwa ein ABS unter 17, wenn eine Störung die
-  Reizung verfälscht hat), bleibt die Stellglieddiagnose gesperrt.
-- Airbag-Steuergeräte und Wegfahrsperren haben meist keine Stellglieddiagnose
-  und lehnen ab. Schlüssel anlernen gehört nicht dazu – das ginge nur mit
-  Anmeldung und PIN, die vagdiag nie sendet. Das Airbag-Steuergerät öffnet
-  vagdiag wie bisher nur nach der eigenen Rückfrage.
+Auch im Expertenmodus gesperrt: Kanal 00, Kilometerstand, Codierung, Login sowie
+Grundeinstellung und Anpassung bei Airbag, Bremsen, Wegfahrsperre, Lenkung und
+Niveauregulierung. Jeder Schreibblock steht im Protokoll („SCHREIBEN: …“ bzw.
+„STELLGLIED: …“). Schlüssel anlernen gibt es nicht – das ginge nur mit Anmeldung
+und PIN, die vagdiag nie sendet.
 
-**Protokoll (seit 0.8.1).** Bei der Stellglieddiagnose steht jetzt auch im
-Protokoll, ob die Warnung bestätigt oder abgelehnt wurde (mit Teilenummer), ob
-die Rückfrage mit Nein beantwortet wurde und welche Bedingung nicht erfüllt
-war. Die Startzeile nennt die bestätigte Warnung. Lehnt das Steuergerät die
-Stellglieddiagnose ab oder bricht sie mit einem Fehler ab, steht das mit der
-Zahl der Schritte im Protokoll; ebenso eine Grundeinstellung oder ein
-Service-Reset, die mit einem Fehler enden. Nach einem Fehler sendet vagdiag
-nichts erneut.
+### Menüs, Protokoll und Einstellungen
 
-**Liste der Stellglieder (seit 0.8.0).** Lesen lässt sich die Liste vorher
-nicht: Das Steuergerät nennt das nächste Stellglied erst, wenn es es
-ansteuert. Deshalb merkt sich vagdiag nach jedem Durchlauf die Reihenfolge je
-Steuergerät (Teilenummer und Bauteil) in `~/vagdiag-daten/stellglieder.json`
-und zeigt sie beim nächsten Öffnen im Reiter Experte an; während eines
-Durchlaufs ist das gerade angesteuerte markiert. Die Liste ist eine Übersicht
-– welches Stellglied als nächstes kommt, bestimmt das Steuergerät, weiter geht
-es nur mit **Weiter**. Ein abgebrochener Durchlauf ersetzt keine längere
-Liste, die genauso beginnt.
+- *Datei → Einstellungen …:* **Sprache / Language** (das Fenster startet danach
+  neu), die Ordner für Protokolle und Messwerte, **Protokolldatei schreiben**,
+  **Messwertblöcke automatisch als CSV aufzeichnen** und **Bei Abbruch während
+  der Messung neu verbinden** (Voreinstellungen der beiden Häkchen im Reiter
+  Messwertblöcke).
+- *Datei → Beim Anmelden starten:* Autostart an oder aus (siehe „Passiv wie
+  eine Dashcam“).
+- *Datei → Protokoll speichern …:* Die letzten 256.000 Zeilen des Protokolls
+  (beim Fahrtenschreiber gut eine halbe Stunde) bleiben im Speicher und lassen
+  sich nach einem Problem sichern – auch ohne Protokolldatei.
+- *Datei → Ordner der Protokolle öffnen / Ordner der Messwerte öffnen.*
+- *Hilfe:* Über vagdiag, Lizenztext und Hinweise zu fremden Bestandteilen.
+- **Protokoll** unten: **Blöcke anzeigen** und **Einzelbytes anzeigen** zeigen
+  den Datenverkehr genauer.
 
-Auch im Expertenmodus gesperrt: Kanal 00 (alle Anpassungen löschen), der
-Kilometerstand, Codierung, Login sowie Grundeinstellung und Anpassung bei
-Airbag, Bremsen, Wegfahrsperre, Lenkung und Niveauregulierung. Jeder Schreibblock
-steht im Protokoll („SCHREIBEN: …“ bzw. „STELLGLIED: …“). Die Drosselklappe
-gibt es bisher nur bei KW1281; alle Expertenfunktionen gibt es nur in der
-Oberfläche. Im Simulator lässt sich mit dem Häkchen „Simulator: Motor aus“
-alles ausprobieren. Benutzung auf eigene Gefahr.
+Standardmäßig schreibt vagdiag weder Protokoll- noch CSV-Dateien. Daten liegen
+in `~/vagdiag-daten` (Windows: `%USERPROFILE%\vagdiag-daten`), Einstellungen in
+`~/.config/vagdiag` (Windows: `%APPDATA%\vagdiag`).
 
-**Störungen auf der Leitung.** Bei KW1281 bestätigt das Steuergerät jedes
-Byte, indem es das Byte invertiert zurückschickt. Stimmt diese Bestätigung
-nicht, hat das Steuergerät ein anderes Byte bekommen. vagdiag sendet den Block
-dann nicht zu Ende, sendet eine halbe Sekunde lang nichts und beendet die
-Verbindung – so wird aus einer gestörten Anfrage nie ein anderer Befehl (z. B.
-„Fehler löschen“ statt „Fehler lesen“). Die Versionen 0.2.0 bis 0.7.0 haben in
-diesem Fall einmal pro Block weitergesendet; bitte nicht mehr verwenden.
-Außerdem gilt seit 0.7.1:
-- Nach Testen und Speichern muss das Steuergerät genau den Kanal und Wert
-  zurückmelden, sonst speichert vagdiag nicht bzw. beendet die Verbindung.
-- Testen, Speichern und die Schritte der Stellglieddiagnose wiederholt
-  vagdiag nie von selbst – bei KWP2000 auch dann nicht, wenn das Steuergerät
-  „beschäftigt“ meldet. Die Antwort muss zur gesendeten Routine passen.
-- Lässt sich eine KWP2000-Anpassung nach einem Schreibversuch nicht beenden,
-  beendet vagdiag die Verbindung, damit kein Testwert aktiv bleibt.
-- Eine Freigabe gilt nur für das gerade geöffnete Steuergerät und endet mit
-  jedem neuen Verbindungsaufbau. Kanal 00 wird auch nicht gelesen.
+## Sicherheit
 
-**Pausen des Rechners (seit 0.7.2).** Nach seiner Bestätigung wartet das
-Steuergerät nur kurz auf das nächste Byte – ein ME7.5 im Auto etwa 45 ms.
-Kommt es später, verwirft das Steuergerät den halben Block und hält das späte
-Byte für den Anfang eines neuen. Die Bestätigungen stimmen dann trotzdem, und
-aus dem Rest kann ein anderer Befehl werden: Im Simulator nachgestellt, wurde
-so aus „Gruppe 005 lesen“ ein „Fehlerspeicher löschen“ (ob echte Steuergeräte
-das am Blockzähler erkennen, ist unbekannt). Bei zwei Fahrten mit 0.6.1 hing
-vagdiag mit eingeschalteter Protokolldatei alle 30,72 Sekunden bis zu 47 ms,
-weil es auf das Dateisystem wartete; bis 0.7.1 ist das gleich. Ältere
-Versionen deshalb nicht mehr mit Protokolldatei benutzen. Seit 0.7.2:
-- Protokolldatei und Konsolenausgabe (`-v`, `--bytes`) schreibt ein eigener
-  Thread; Speichern geht in Stücken.
-- Zeitwächter: Geht ein Byte nicht innerhalb von 15 ms nach der Bestätigung
-  hinaus (im Zweifel ab dem früher möglichen Zeitpunkt gerechnet), bricht
-  vagdiag den Block ab, ohne weiterzusenden, und verbindet neu. Bei KWP2000
-  muss jedes eigene Byte innerhalb von 18 ms nach dem vorigen hinaus (Norm:
-  20 ms), sonst ebenso. Während eines Blocks
-  pausiert die Speicherbereinigung von Python. Auf vier echten Protokollen
-  eines Polo (über 80.000 eigene Bytes) nachgespielt, hätte der Wächter genau
-  an den 11 Hängern abgebrochen und sonst nie.
-- Bricht eine Verbindung ohne Endeblock ab, reizt vagdiag ein anderes
-  Steuergerät erst nach 2,5 s (KWP2000: 5,5 s). Vorher könnte das alte noch
-  zuhören und Blöcke für das neue als seine eigenen nehmen – KW1281-Blöcke
-  tragen keine Adresse. Auch der Fahrtenschreiber wartet jetzt so lange.
+- Ohne Expertenmodus sendet vagdiag nur lesende Anfragen; einzige Ausnahme ist
+  das Löschen des Fehlerspeichers nach Rückfrage. Rückfragen nennen
+  Teilenummer, Bauteil und ob Simulator oder Auto. Ausgeführt wird nur, solange
+  genau dieses Gerät verbunden ist.
+- Bei KW1281 schickt das Steuergerät jedes empfangene Byte invertiert zurück.
+  Stimmt diese Bestätigung nicht, sendet vagdiag den Block nicht zu Ende und
+  beendet die Verbindung – aus einer gestörten Anfrage wird so nie ein anderer
+  Befehl. Schreibvorgänge und Schritte der Stellglieddiagnose wiederholt vagdiag
+  nie von selbst.
+- Nach seiner Bestätigung wartet ein Steuergerät nur kurz auf das nächste Byte
+  (ein ME7.5 etwa 45 ms). Ginge ein Byte später als 15 ms nach der Bestätigung
+  hinaus (KWP2000: 18 ms nach dem vorigen), weil der Rechner hängt, bricht
+  vagdiag den Block ab und verbindet neu.
+- Nach einem Verbindungsabbruch reizt vagdiag ein anderes Steuergerät erst nach
+  2,5 s (KWP2000: 5,5 s) – vorher könnte das alte noch zuhören.
+- Meldet sich ein Gerät als Airbag, Bremse, Wegfahrsperre oder Lenkung, bekommt
+  es keine Grundeinstellung und keine Anpassung – auch unter einer fremden
+  Adresse, falls eine Störung die Reizung verfälscht hat.
 
-**Rückfragen gelten für genau ein Steuergerät (seit 0.7.2).** Jede Rückfrage,
-die etwas am Steuergerät ändert (Fehler löschen, Expertenfunktionen), nennt
-Teilenummer und Bauteil und ob das Ziel der Simulator oder das echte Auto ist.
-Ausgeführt wird nur, wenn noch genau dieses Gerät verbunden ist. Meldet sich
-ein Gerät als Airbag, Bremse, Wegfahrsperre oder Lenkung (Teilenummer oder
-Name), bekommt es keine Grundeinstellung und keine Anpassung – auch unter einer
-anderen Adresse, falls etwa eine Störung die Reizung verfälscht hat. Für
-„Motor steht“ zählt die höchste Drehzahl aus allen gelesenen Gruppen.
+### Airbag (Adresse 15)
+
+Airbag-Steuergeräte **6Q0 909 605 A** (Golf/Jetta/Beetle 2000–2001 und ähnliche
+SEAT/Škoda) haben laut Ross-Tech einen Firmwarefehler: Bei Störungen in der
+Kommunikation können sie einen nicht löschbaren Fehler (65535) speichern; die
+Airbaglampe bleibt dann an, und das Steuergerät muss getauscht werden. Deshalb:
+- vagdiag fragt vor dem Öffnen von Adresse 15 nach (Vorgabe: Nein) und trennt
+  ein betroffenes Gerät sofort.
+- Meldet sich unter einer anderen Adresse ein Airbag, trennt vagdiag sofort
+  nach der Kennung.
+- Fahrtenschreiber und Scan lesen den Airbag nur mit eigenem Häkchen, die
+  Kommandozeile nur mit `--mit-airbag`.
+
+Unabhängig von jeder Software: Nie bei eingeschalteter Zündung an der
+Airbaganlage arbeiten.
+
+## Geprüfte Steuergeräte
+
+vagdiag funktioniert auch an anderen Autos. Geprüft ist es an diesen
+Steuergeräten (nach Teilenummer):
+
+| Teilenummer | Steuergerät |
+|---|---|
+| 6K0 906 032 M | Motor ME7.5.10 |
+| 6K9 920 806 | Kombiinstrument TRW |
+| 6X0 907 379 B | ABS |
+| 6X0 953 257 | Wegfahrsperre |
+| 1J0 909 609 Q | Airbag |
+| 6N0 909 901 | Gateway K<->CAN |
+
+An jedem anderen Steuergerät (auch mit anderem Index) steht ein Hinweis – über
+den Reitern, in Identifikation und Berichten, im Scan und in jeder Rückfrage.
+Gesperrt wird dadurch nichts. Feldnamen stehen dort mit „(nicht geprüft)“; die
+Erklärung des Bitfelds in Gruppe 001 und die Merker der Fahrt-Zusammenfassung
+gelten nur am 6K0 906 032 M, die Namen der Diesel-Stellglieder nur an
+Steuergeräten mit „EDC“ in der Kennung.
 
 ## KWP2000
 
 Viele VAG-Steuergeräte von etwa 2002 bis 2006 sprechen über die K-Leitung
-KWP2000 statt KW1281. vagdiag erkennt das an der Antwort auf die Reizung und
-liest dann Identifikation, Fehlerspeicher, Messwertblöcke und
-Anpassungskanäle wie gewohnt – auch im Fahrtenschreiber.
-
-- **Anpassung:** Bei KWP2000 liest vagdiag die Kanäle über die
-  VAG-Anpassungsroutine (beginnen, Kanal wählen, Wert lesen, beenden). So
-  beschreiben es zwei freie Programme (kw1281test für ein EDC16, bri3d/kwp2000
-  für einen Service-Reset am Kombi). Manche Steuergeräte verlangen dafür eine
-  Anmeldung – vagdiag meldet sich nicht an und zeigt dann „nur nach
-  Anmeldung“.
-
-- **Fast-Init:** Manche spätere Motorsteuergeräte (vor allem Diesel)
-  antworten nicht auf die 5-Baud-Reizung, sondern nur auf den schnelleren
-  Fast-Init. Dafür links das Häkchen „Motor: zuerst Fast-Init (KWP2000)“
-  setzen (Kommandozeile: `--fast-init`). Gilt nur für Adresse 01; ohne
-  Antwort folgt die normale Reizung. Bei älteren Motoren nicht nötig.
-- **Noch ungeprüft:** KWP2000 ist bisher nur gegen den Simulator getestet.
-  Vor Versuchen an einem unbekannten Auto unter *Datei → Einstellungen* die
-  Protokolldatei einschalten – jede KWP2000-Nachricht steht dann darin. Wie
-  das Statusbyte eines Fehlers zu lesen ist (Fehlerart, sporadisch), ist bei
-  KWP2000 noch nicht an echten Geräten bestätigt.
-- **CAN:** Ab etwa Modelljahr 2005 (z. B. Golf V) läuft die Diagnose über
-  CAN (OBD-Pins 6 und 14). Das kann ein KKL-Kabel grundsätzlich nicht.
-
-## Airbag (Adresse 15)
-
-Laut Ross-Tech (VCDS) haben Airbag-Steuergeräte **6Q0 909 605 A** einen
-Firmwarefehler. Verbaut sind sie in Golf/Jetta/Beetle 2000–2001 und ähnlichen
-SEAT/Škoda. Bei Störungen in der Kommunikation können sie einen nicht
-löschbaren Fehler (65535) speichern. Die Airbaglampe bleibt dann an, und das
-Steuergerät muss getauscht werden. Deshalb:
-- vagdiag fragt vor dem Öffnen von Adresse 15 nach (Vorgabe: Nein).
-- Meldet sich ein betroffenes Gerät, trennt vagdiag sofort.
-- Meldet sich unter einer anderen Adresse ein Airbag (etwa weil eine Störung
-  die Reizung verfälscht hat), trennt vagdiag ebenfalls sofort nach der
-  Kennung – auch ohne Freigabe (seit 0.7.2).
-- Im Fahrtenschreiber ist der Airbag standardmäßig nicht dabei. Das Häkchen
-  „Airbag-Fehlerspeicher lesen“ zeigt beim Setzen denselben Hinweis.
-- Auf der Kommandozeile geht es nur mit `--mit-airbag`.
-
-Unabhängig von jeder Software gilt: Nie bei eingeschalteter Zündung an der
-Airbaganlage arbeiten. Fehlerspeicher löschen beseitigt keine Ursache.
+KWP2000. vagdiag erkennt das an der Antwort auf die Reizung und liest
+Identifikation, Fehlerspeicher, Messwertblöcke und Anpassungskanäle wie gewohnt,
+auch im Fahrtenschreiber. KWP2000 ist bisher nur gegen den Simulator geprüft –
+vor Versuchen an einem unbekannten Auto die Protokolldatei einschalten. Wie das
+Statusbyte eines Fehlers (Fehlerart, sporadisch) zu lesen ist, ist an echten
+Geräten noch nicht bestätigt. Ab etwa Modelljahr 2005 (z. B. Golf V) läuft die
+Diagnose über CAN – das kann ein KKL-Kabel nicht.
 
 ## Kommandozeile
 
 ```bash
 ./vagdiag-cli.sh geraete                       # Kabel finden
+./vagdiag-cli.sh --adresse 01 ident            # Identifikation Motor
 ./vagdiag-cli.sh --adresse 01 fehler           # Fehlerspeicher Motor
 ./vagdiag-cli.sh --adresse 01 gruppe 4 --dauer --csv   # Enter = Marker, Strg+C = Ende
-./vagdiag-cli.sh --adresse 01 gruppe 0         # Gruppe 000: zehn Rohwerte
-./vagdiag-cli.sh obd2                          # OBD-II-Test: Readiness, FIN (nur lesen)
 ./vagdiag-cli.sh --adresse 17 kilometerstand
-./vagdiag-cli.sh fahrt                         # Enter = Ereignis, Strg+C = beenden
-./vagdiag-cli.sh einstellungen --sprache-setzen en --log-datei ja
-./vagdiag-cli.sh --log scan                    # alle üblichen Steuergeräte, mit Protokoll
 ./vagdiag-cli.sh scan --alle                   # alle Adressen 01–7F (etwa 8 Minuten)
-./vagdiag-cli.sh --fast-init --adresse 01 ident   # KWP2000-Motor per Fast-Init
+./vagdiag-cli.sh obd2                          # OBD-II-Test (nur lesen)
+./vagdiag-cli.sh fahrt                         # Enter = Ereignis, Strg+C = beenden
+./vagdiag-cli.sh fahrt --passiv 20min          # passiv: 5min, 20min, 1h oder 5h
+./vagdiag-cli.sh fahrt-export --zeitspanne 1h  # Zeitspanne aus dem Ringspeicher sichern
+./vagdiag-cli.sh --experte drosselklappe       # Gruppe 060; --gruppe 98 bei Seilzug
+./vagdiag-cli.sh --experte service-reset       # Kombi 17, Kanal 02 → 0
+./vagdiag-cli.sh --experte --adresse 17 stellglieder   # Enter = weiter, q = beenden
+./vagdiag-cli.sh einstellungen --sprache-setzen en --log-datei ja
 ./vagdiag-cli.sh --sim --adresse 01 ident      # Simulator
-./vagdiag-cli.sh --sim-kwp2000 --adresse 01 fehler   # Simulator, Motor und Kombi mit KWP2000
+./vagdiag-cli.sh --version                     # Version, Urheber, Lizenz
 ```
 Unter Windows heißt das Skript `vagdiag-cli.bat`. Jeder Befehl und jede Option
 hat auch einen englischen Namen (`fehler` = `faults`, `--adresse` =
 `--address` …), siehe `--help`. `--log` schreibt für diesen Lauf eine
-Protokolldatei.
+Protokolldatei, `--baud 4800` legt die Baudrate fest. Expertenfunktionen
+schaltet `--experte` nur nach dem Hinweis und dem eingetippten Wort „ja“ frei,
+nur an einer Konsole – ohne Konsole (Skript, Dienst) startet keine.
+
+## Installation im Einzelnen
+
+Der Linux-Installer
+- installiert Python ab 3.11, libusb und PySide6 (für die Oberfläche) über die
+  Paketverwaltung. Fehlt dort ein passendes PySide6 (etwa Debian 12, Ubuntu
+  22.04), kommt es per pip; ist das Python des Systems älter als 3.11 (Ubuntu
+  22.04, Linux Mint 21), holt er Python 3.11 dazu. Gibt es PySide6 gar nicht
+  (etwa Raspberry Pi OS mit 32 Bit), richtet er nur die Kommandozeile ein.
+- installiert pyftdi in die Python-Umgebung `.venv` im Ordner `vagdiag`.
+- richtet die udev-Regel ein, damit das Kabel ohne root-Rechte geht, und nimmt
+  den Benutzer in die Gruppe `uucp` auf – so geht das Kabel auch über SSH und
+  für den automatisch gestarteten Fahrtenschreiber (ab der nächsten Anmeldung).
+- legt die Startdateien `vagdiag.sh` und `vagdiag-cli.sh` in den Ordner
+  `vagdiag` (Windows: `vagdiag.bat` und `vagdiag-cli.bat`) und fragt zuletzt
+  nach dem Autostart.
+
+Die Installer und Startdateien laufen auch aus der fish-Shell (Standard unter
+CachyOS); `installation/teile` enthält nur ihre Bestandteile. Unter Alpine
+steht PySide6 im Paketquellen-Verzeichnis „community“ (in
+`/etc/apk/repositories` freischalten); ohne udev (mdev) darf nur root aufs
+Kabel – dann `setup-devd udev` ausführen und den Installer noch einmal starten.
+Unter Windows 10 bleibt PySide6 bei Version 6.12, laut Qt der letzten für
+Windows 10. Das Kabel darf nicht gleichzeitig in einem anderen Programm (z. B.
+VCDS-Lite) geöffnet sein; Kabel mit nachgemachtem FTDI-Chip arbeiten mit dem
+Windows-Treiber nicht immer zuverlässig.
+
+Die Installer sind im Trockenlauf geprüft (Paketverwaltung nachgebildet), noch
+nicht auf jedem dieser Systeme selbst.
+
+## Eigene Texte und Feldnamen
+
+Im Einstellungsordner lassen sich `fehlertexte.json` (Fehlertexte und Namen der
+Stellglieder, z. B. `{"01247": "Magnetventil Aktivkohlebehälter"}`),
+`texte.json` (Klartexte) und `beschriftungen.json` (Feldnamen) anlegen. Eigene
+Einträge haben Vorrang und gelten in beiden Sprachen. Feldnamen: Adresse (hex)
+→ Gruppe → Namen; `"01:036906034AM"` statt `"01"` gilt nur für diese
+Teilenummer.
+```json
+{ "25": { "2": ["Start erlaubt", "Motor-SG antwortet", "Schlüssel lesbar", "angelernte Schlüssel"] } }
+```
 
 ## Wenn etwas nicht klappt
 
 | Meldung | Was tun |
 |---|---|
-| „Kein FTDI-Kabel gefunden“ | Linux: `installieren.sh` erneut ausführen, Kabel neu stecken. Windows: FTDI-Treiber installieren. |
-| „Keine Antwort von Adresse …“ | Zündung an? Steuergerät vorhanden? Sonst Reizung „Bitbang“ probieren (für Klon-Chips). |
-| „spricht KWP2000 …, antwortet aber auf keine Anfrage“ | Beim Motor Fast-Init probieren. Sonst Protokoll speichern und mitschicken. |
-| „Anpassungskanal … abgelehnt“ | Kanal gibt es nicht oder er braucht eine Anmeldung – nichts kaputt. |
-| „Stellglieddiagnose abgelehnt“ | Das Steuergerät kennt keine, oder eine Bedingung fehlt (z. B. läuft der Motor) – nichts kaputt. |
-| „… passt nicht zu dieser Adresse“ | Unter der Adresse hat sich ein anderes Gerät gemeldet (meist nach einer Störung bei der Reizung). Neu öffnen; bleibt es so, Protokoll mitschicken. |
+| „Kein FTDI-Kabel gefunden“ | Linux: den Installer noch einmal ausführen, Kabel neu stecken. Windows: FTDI-Treiber installieren. |
+| „KKL-Kabel konnte nicht geöffnet werden … busy“ | Ein anderes Programm hat das Kabel, etwa ein zweites vagdiag oder der Dienst: `systemctl --user stop vagdiag-fahrt.service`, unter Windows die Aufgabe beenden. |
+| „Lesen vom Kabel fehlgeschlagen …“ oder ein anderer USB-Fehler | Kabel abgezogen oder Rechner im Ruhezustand gewesen. Kabel stecken und noch einmal versuchen – vagdiag öffnet es neu. |
+| „Kabel nicht erreichbar – vagdiag wartet darauf“ | Der Fahrtenschreiber wartet auf das Kabel und macht weiter, sobald es steckt. |
+| „Keine Antwort von Adresse …“ | Zündung an? Steuergerät verbaut? Sonst Reizung „Bitbang“ probieren (Klon-Chips). |
+| „spricht KWP2000 …, antwortet aber auf keine Anfrage“ | Beim Motor Fast-Init probieren, sonst Protokoll speichern und mitschicken. |
+| „Anpassungskanal … abgelehnt“ / „Stellglieddiagnose abgelehnt“ | Gibt es nicht, braucht eine Anmeldung oder eine Bedingung fehlt – nichts kaputt. |
+| „… passt nicht zu dieser Adresse“ | Ein anderes Gerät hat sich gemeldet (meist nach einer Störung bei der Reizung). Neu öffnen; bleibt es so, Protokoll mitschicken. |
 | „… verworfen“ im Protokoll | Gestörte Antwort erkannt und neu angefragt – kein Fehler. |
-| „Falsches Komplement … Block abgebrochen“ | Störung auf der K-Leitung (Wackelkontakt, Spannungseinbruch beim Anlassen). vagdiag hat den Block nicht zu Ende gesendet – neu verbinden. |
-| „Byte … zu spät … Block abgebrochen“ | Der Rechner hat kurz gehangen. vagdiag hat den Block nicht zu Ende gesendet und verbindet neu – nichts kaputt. Kommt das oft: andere Programme schließen, Protokoll mitschicken. |
+| „Falsches Komplement … Block abgebrochen“ | Störung auf der K-Leitung (Wackelkontakt, Spannungseinbruch beim Anlassen) – neu verbinden. |
+| „Byte … zu spät … Block abgebrochen“ | Der Rechner hat kurz gehangen; vagdiag verbindet neu – nichts kaputt. Kommt das oft: andere Programme schließen, Verlaufskurve aus, Protokoll mitschicken. |
+| „Gruppe 060 ist … anders aufgebaut als die Drosselklappen-Anpassung“ | Die Gruppe ist bei diesem Motor etwas anderes – vagdiag hat nichts gesendet. Anlernen nach Reparaturleitfaden. |
+| „An diesem Steuergerät ist vagdiag nicht geprüft“ | Nur ein Hinweis. Feldnamen und Erklärungen mit dem Reparaturleitfaden vergleichen. |
+| „In den Ringspeicher … schreibt gerade ein anderes vagdiag“ | Der passive Fahrtenschreiber läuft schon (etwa als Dienst). Ihn beenden – oder nur **Zeitspanne sichern …**, das geht nebenher. |
 
-Für eine Fehlermeldung direkt nach dem Problem *Datei → Protokoll speichern …*
+Für eine Fehlermeldung gleich nach dem Problem *Datei → Protokoll speichern …*
 wählen und die Datei mitschicken.
-
-## Fehlertexte (seit 0.8.1)
-
-Eingebaut sind 193 fünfstellige VAG-Fehlercodes (Motor, Getriebe, ABS,
-Airbag, Kombi, Wegfahrsperre, Klima, Komfort, Radio, Datenbus) und 316 P-Codes
-(SAE P0xxx und VAG P1xxx), jeweils auf Deutsch und Englisch – bis 0.8.0 waren
-es 15 VAG-Codes und 72 P-Codes. Die Bedeutung jedes Codes wurde gegen die
-Tabellen des freien Projekts KLineKWP1281Lib geprüft, bei P0-Codes gegen die
-Norm; die Texte sind selbst formuliert. Beispiel aus dem Polo: 18058 = P1650
-„Datenbus Antrieb: Botschaft vom Kombiinstrument fehlt“. Wo VAG einen P0-Code
-anders belegt als die Norm (etwa P0700), fehlt er bewusst. Ohne Eintrag zeigt
-vagdiag „(kein Klartext hinterlegt)“; eigene Texte gehen über
-`fehlertexte.json` (siehe unten) und haben Vorrang.
-
-## Eigene Texte und Feldnamen
-
-Im Einstellungsordner lassen sich drei Dateien anlegen: `fehlertexte.json`,
-`texte.json` und `beschriftungen.json`. Damit ergänzt man Fehlertexte,
-Klartexte und Feldnamen für weitere Steuergeräte. Die Namen der Stellglieder
-kommen aus `fehlertexte.json` – die Nummern stammen aus derselben Liste, z. B.
-`{"01247": "Magnetventil Aktivkohlebehälter"}`. Eigene Einträge gelten in
-beiden Sprachen. Beispiel für Feldnamen (Adresse hex → Gruppe → Namen):
-```json
-{ "25": { "2": ["Start erlaubt", "Motor-SG antwortet", "Schlüssel lesbar", "angelernte Schlüssel"] } }
-```
 
 ## Grenzen
 
-- Eingebaut sind Feldnamen und Klartexte der Messwerte nur für die geprüften
-  Steuergeräte (ME7.5, TRW-Kombi, ABS Mark 20). Andere zeigen Rohwerte und
-  „Text Nr. …“. Auch die Fehlertexte decken nicht jeden Code ab. Für
-  Wegfahrsperre (25), Gateway (19) und Airbag (15) gibt es keine eingebauten
-  Feldnamen, weil sich keine Belegung sicher prüfen ließ – eigene gehen über
-  `beschriftungen.json`.
-- OBD-II nur über die K-Leitung (ISO 9141-2, ISO 14230-4); OBD-II über CAN geht
-  mit einem KKL-Kabel nicht. Gelesen werden nur Readiness, OBD-Norm,
-  unterstützte Werte und Fahrgestellnummer – keine Live-Werte und keine
-  OBD-II-Fehlercodes.
+- Eingebaute Feldnamen gibt es nur für Gruppen der geprüften Steuergeräte;
+  Wegfahrsperre und Gateway haben keine (eigene über `beschriftungen.json`).
+  Die vier Felder der Airbag-Gruppe 001 sind nach dem Reparaturleitfaden des
+  Polo 6N benannt (Zündpillen N95, N131, N153, N154), die Reihenfolge ist am
+  Auto nicht nachgeprüft.
 - Der Fahrtenschreiber kennt die Motorgruppen nur vom ME7.5 (z. B. das Tempo
-  in Gruppe 005). Bei anderen Motoren, etwa Dieseln, bleibt die
-  Zusammenfassung lückenhaft.
-- KWP2000: Identifikation, Fehlerspeicher, Messwertblöcke und Anpassung, noch
-  nicht am Auto geprüft; die Stellglieddiagnose dort experimentell.
-  CAN-Diagnose geht mit einem KKL-Kabel nicht.
-- Eingebaute Namen der Stellglieder gibt es nur für Kombi-Anzeigen und einige
-  Diesel-Stellglieder; sonst zeigt vagdiag nur die Nummer. Die Liste der
-  Stellglieder entsteht erst beim ersten Durchlauf.
-- Welche Stellglieder ABS, Airbag, Wegfahrsperre, Lenkung und
-  Niveauregulierung haben, kennt vagdiag nicht im Einzelnen; die Warnungen
-  beschreiben, was dort typischerweise angesteuert wird.
-- „Automatisch“ probiert 10400 und 9600 Baud. Manche alten Steuergeräte
-  brauchen 4800 oder 1200 – dann die Baudrate von Hand wählen.
-- Beim A4 B6 mit Xenon und beim A6 C5 (2002–2004) hängen einige Steuergeräte
-  an einer zweiten K-Leitung. Ein normales KKL-Kabel erreicht sie nicht.
-- Autos vor etwa 1996 haben teils eine 2×2-Diagnosebuchse statt OBD – dafür
-  braucht es einen Adapter.
-- Der Kilometerstand aus Anpassungskanal 09 ist nicht bei jedem Kombi
-  bestätigt. Deshalb immer mit der Anzeige vergleichen.
+  in Gruppe 005); bei anderen Motoren bleibt die Zusammenfassung lückenhaft.
+- OBD-II nur über die K-Leitung: Readiness, OBD-Norm, unterstützte Werte und
+  Fahrgestellnummer – keine Live-Werte und keine OBD-II-Fehlercodes.
+- Stellgliednamen gibt es nur für Kombi-Anzeigen und einige
+  Diesel-Stellglieder; sonst zeigt vagdiag den Fehlertext zur Nummer oder die
+  Nummer.
+- Beim A4 B6 mit Xenon und beim A6 C5 (2002–2004) hängen einige Steuergeräte an
+  einer zweiten K-Leitung, die ein normales KKL-Kabel nicht erreicht. Autos vor
+  etwa 1996 haben teils eine 2×2-Diagnosebuchse – dafür braucht es einen
+  Adapter.
 
----
+## Lizenz
 
-## English
+Copyright (C) 2026 Nenveo
 
-vagdiag reads identification, fault codes, measuring blocks and adaptation
-channels (read only, KW1281 and KWP2000) from older VW/Audi/SEAT/Škoda cars
-(K-line) via an FTDI KKL cable. It also records whole drives with the drive
-logger (it visits the ABS only at standstill). KWP2000 is new and so far only
-tested against the simulator; for engines that ignore the 5-baud init, tick
-“Engine: fast init first” (command line: `--fast-init`). CAN diagnostics are not
-possible with a KKL cable.
+vagdiag ist freie Software: Du kannst es unter den Bedingungen der GNU General
+Public License, wie von der Free Software Foundation veröffentlicht,
+weitergeben und/oder verändern – entweder nach Version 3 der Lizenz oder (nach
+deiner Wahl) jeder späteren Version (SPDX: GPL-3.0-or-later). vagdiag wird in
+der Hoffnung verbreitet, dass es nützlich ist, aber **ohne jede
+Gewährleistung** – sogar ohne die implizite Gewährleistung der Marktreife oder
+der Verwendbarkeit für einen bestimmten Zweck. Den Lizenztext enthält die
+Datei `LICENSE`.
 
-- **Install:** Linux: `./installieren.sh`, then `./vagdiag.sh`. Windows 10/11:
-  install Python 3.11+ (python.org, tick “Add python.exe to PATH”), run
-  `installieren.bat`, then `vagdiag.bat`.
-- **Language:** File → Settings → Sprache / Language → English. On the command
-  line, use `--language en`.
-- **Files:** no log or CSV files by default. Turn them on under File →
-  Settings, or save the in-memory log via File → Save log ….
-- **Airbag (15):** asks before connecting. It is never read by the drive
-  logger unless you tick the checkbox. If an airbag module answers at any other
-  address (e.g. after a disturbed wake-up), vagdiag disconnects right after its
-  identification.
-- **Save (0.8.0):** the Identification, Fault codes, Adaptation and Scan tabs
-  have a **Save …** button that writes what the tab shows as a text file
-  (nothing is sent to the module).
-- **Drive logger (0.8.0):** the ABS is visited only after two readings at least
-  one second apart show 0 km/h; ignition off during the drive is noted with
-  its time and no longer counted as a disturbance; every note also goes to the
-  log.
-- **Drive logger start (0.8.1):** the start check reads the immobilizer first
-  and the engine last and stays connected to the engine. Crank the engine only
-  when “Recording – start the engine now and drive off” appears – it now comes
-  after the first engine readings, so cranking is recorded. If the engine was
-  already running, the summary says “cranking not recorded”. Fault codes in
-  the summary are sorted by address.
-- **Fault texts (0.8.1):** 193 VAG five-digit codes and 316 P-codes (SAE P0xxx,
-  VAG P1xxx) in German and English (0.8.0: 15 and 72). Each meaning was checked
-  against the tables of the free KLineKWP1281Lib project, P0 codes against the
-  standard; the wording is our own. Example: 18058 = P1650 “Powertrain Data
-  Bus: Missing Message from Instrument Cluster”.
-- **OBD-II test (0.9.0):** the OBD-II tab (command line: `obd2`) checks whether
-  the car speaks generic OBD-II/EOBD over the K-line (address 33, ISO 9141-2 or
-  ISO 14230-4) and shows readiness (complete / incomplete / not supported per
-  monitor), the check-engine light, the number of stored emission fault codes,
-  the OBD standard, the VIN and the supported values. Read only: only mode 01
-  and mode 09 requests are sent – never mode 04 (clear emission codes, which
-  would also reset readiness). An open connection is closed first; afterwards
-  vagdiag waits about 5 s (the engine ECU keeps its OBD session) before opening
-  a module again.
-- **Group 000 and markers (0.9.0):** measuring blocks show group 000 as ten raw
-  values (KW1281 only; CSV columns Field 1–10). While measuring, “Set marker”
-  or F9 writes a numbered marker into the CSV and the log (command line: Enter
-  during `group … --continuous`).
-- **Tabs (0.8.1):** opening a control module shows the module tab used last
-  (Identification, Fault codes, Measuring blocks, Adaptation or Expert)
-  instead of always Identification; nothing is sent because of it.
-- **Scan:** the Scan tab queries the 15 usual addresses (about 1 minute) or
-  every address 01–7F (about 8 minutes, only answering ones are listed; 33 =
-  OBD-II and 7C = radio factory mode are never woken) – read only – and shows
-  part numbers, protocol and fault counts; the report can be saved as text.
-  The baud rate selected on the left also applies to the scan (Automatic =
-  10400 and 9600; choose 4800 for very old control units). Command line:
-  `scan --all`.
-- **Expert mode** (menu Expert, off at every start, with a warning): throttle
-  body alignment (basic setting 060/098, KW1281, conditions checked first),
-  service interval reset (cluster channel 02 → 0, old value backed up, KW1281
-  and KWP2000) and output tests (“Next”/“Stop”; the connection is ended and
-  re-established afterwards, and after 60 s without “Next” vagdiag stops by
-  itself; experimental with KWP2000). Below each button the Expert tab shows
-  whether the function is available and, if not, why (0.8.0). Since 0.8.0
-  output tests work on every module: on brakes (03, 23, 53), airbag (15),
-  immobilizer (25), level control (34) and steering (44) a warning first lists
-  the possible damage for that module (default No) – without that confirmation
-  the protocol's write lock lets no output-test block out; the ABS also needs
-  all wheels at 0 km/h; if a module's identification does not match its
-  address, output tests stay locked. After each run vagdiag remembers the
-  order of the actuators per module and shows it as an overview next time
-  (the module names the next actuator only when it drives it, so the list
-  cannot be read beforehand). Everything else that writes stays blocked,
-  including channel 00, the odometer, and basic settings and adaptation on
-  airbag, brakes, immobilizer, steering and level control. Since 0.8.1 the log
-  also records confirmed and declined warnings, a “No” to the confirmation,
-  unmet conditions, and output tests, basic settings or service resets that a
-  module refused or that ended with an error.
-- **Line disturbances:** with KW1281 the control module confirms every byte
-  with its inverse. If that confirmation is wrong, the module received a
-  different byte – vagdiag stops the block, stays silent for half a second and
-  ends the connection, so a disturbed request never turns into a different
-  command. Versions 0.2.0 to 0.7.0 carried on once per block; please update.
-  Test/save/output-test steps are never repeated automatically (with KWP2000
-  not even after “busy”), and after test/save the module must report exactly
-  the channel and value.
-- **Computer stalls (0.7.2):** after its confirmation the module waits only
-  briefly for the next byte (an ME7.5 in the car about 45 ms); a later byte
-  starts a new block, which could turn into a different command. vagdiag now
-  writes the log file and console output from their own thread (up to 0.7.1
-  it stalled up to 47 ms every 30.72 s with the log file on – don't use older
-  versions with the log file) and aborts a block if a byte would leave more
-  than 15 ms after the confirmation (with KWP2000: more than 18 ms after the
-  previous byte; message “Byte … too late”; it reconnects, nothing is
-  harmed).
-  After a connection breaks off, another module is only woken after 2.5 s
-  (KWP2000: 5.5 s). Confirmations name the exact module and whether it is the
-  simulator or the real car, and only apply to that module; modules that
-  identify as airbag, brakes, immobilizer or steering never get basic settings
-  or adaptation, whatever their address.
-- **Command line:** `vagdiag-cli --help`. All commands have English names
-  (`faults`, `group`, `odometer`, `drive`, `settings` …).
+- **FTDI-Treiber:** Unter Windows nutzt vagdiag die D2XX-Bibliothek des
+  FTDI-Treibers, die keine freie Software ist. Eine zusätzliche Erlaubnis nach
+  Abschnitt 7 der GPL erlaubt, vagdiag mit ihr verbunden weiterzugeben –
+  Wortlaut in `NOTICE.txt`.
+- **Fremde Bestandteile:** die Texttabellen aus KLineKWP1281Lib (domnulvlad,
+  GPL-3.0) in `vagdiag/daten/klinekwp1281lib`; die Rechnung der Messwerte folgt
+  dieser Bibliothek. Protokollbeschreibungen und Stellgliednamen nach
+  kw1281test (Greg Menounos, MIT-Lizenz). Einzelheiten in `NOTICE.txt`.
+- In der Oberfläche: *Hilfe → Über vagdiag …*; auf der Kommandozeile:
+  `--version` und `lizenz`.

@@ -1,0 +1,166 @@
+vagdiag – VAG-Diagnose über KKL-Kabel
+Copyright (C) 2026 Nenveo
+
+(English below)
+
+
+LIZENZ
+======
+
+vagdiag ist freie Software: Du kannst es unter den Bedingungen der GNU General Public
+License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder
+verändern – entweder nach Version 3 der Lizenz oder (nach deiner Wahl) jeder späteren
+Version (SPDX: GPL-3.0-or-later).
+
+vagdiag wird in der Hoffnung verbreitet, dass es nützlich ist, aber OHNE JEDE
+GEWÄHRLEISTUNG – sogar ohne die implizite Gewährleistung der MARKTREIFE oder der
+VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. Einzelheiten stehen in der GNU General Public
+License.
+
+Den Lizenztext enthält die Datei LICENSE (englisches Original; nur dieses ist rechtlich
+maßgeblich). Ohne diese Datei: https://www.gnu.org/licenses/gpl-3.0.html
+
+
+ZUSÄTZLICHE ERLAUBNIS NACH ABSCHNITT 7 DER GPL (FTDI-TREIBER)
+=============================================================
+
+Unter Windows spricht vagdiag das Kabel über die D2XX-Bibliothek des FTDI-Treibers an
+(FTD2XX.DLL von Future Technology Devices International Ltd.). Sie ist keine freie
+Software. Damit vagdiag trotzdem mit ihr zusammen weitergegeben werden darf, gilt diese
+Erlaubnis (der englische Wortlaut ist maßgeblich):
+
+    Additional permission under GNU GPL version 3 section 7
+
+    If you modify this Program, or any covered work, by linking or combining it with the
+    FTDI D2XX driver library (FTD2XX.DLL or libftd2xx, by Future Technology Devices
+    International Ltd.) or a modified version of that library, containing parts covered
+    by the terms of the FTDI driver licence, the licensors of this Program grant you
+    additional permission to convey the resulting work.
+
+Auf Deutsch (nur zur Information): Wenn du dieses Programm oder ein darauf beruhendes
+Werk veränderst, indem du es mit der FTDI-D2XX-Treiberbibliothek (FTD2XX.DLL oder
+libftd2xx, von Future Technology Devices International Ltd.) oder einer veränderten
+Fassung davon verbindest oder kombinierst, die Teile unter den Bedingungen der
+FTDI-Treiberlizenz enthält, erteilen dir die Lizenzgeber dieses Programms die zusätzliche
+Erlaubnis, das entstehende Werk weiterzugeben.
+
+Die Erlaubnis gibt Nenveo für den Code von vagdiag. Wer vagdiag verändert, darf sie für
+seine Fassung beibehalten oder streichen (GPL Abschnitt 7). Für die Texttabellen aus
+KLineKWP1281Lib (siehe unten) kann sie nur deren Urheber geben.
+
+
+FREMDE BESTANDTEILE
+===================
+
+1. Texttabellen aus KLineKWP1281Lib
+   Ordner: vagdiag/daten/klinekwp1281lib (Fehlertexte, OBD-Texte, Fehlerarten, Klartexte
+   der Messwerte, deutsch und englisch)
+   Quelle: https://github.com/domnulvlad/KLineKWP1281Lib, Version 2.2.1
+   Copyright (C) domnulvlad und die Mitwirkenden der Bibliothek
+   Lizenz: GNU GPL Version 3 (die Bibliothek nennt keine spätere Version,
+   SPDX: GPL-3.0-only)
+   Für vagdiag umgewandelt (nur die Schreibweise, Inhalt unverändert) – siehe
+   LIESMICH.txt in diesem Ordner und werkzeuge/texte_aus_klinekwp1281lib.py.
+   Woher die Texte ursprünglich stammen, gibt die Bibliothek nicht an. Die Tabellen sind
+   eigenständige Datendateien, die vagdiag beim Anzeigen liest; die eingebauten Texte von
+   vagdiag und eigene Texte haben Vorrang. Als Ganzes gibt man vagdiag mit diesen Dateien
+   deshalb unter GPL Version 3 weiter.
+   Außerdem folgt die Rechnung der Messwerte (Formeltypen bis B5, Felder mit anderer Länge
+   als drei Bytes, Gruppen als Kopf und Rumpf) dem, was diese Bibliothek über das Protokoll
+   zeigt; vagdiag rechnet sie in eigenem Code (vagdiag/messwerte.py).
+
+2. kw1281test – Greg Menounos und Mitwirkende, https://github.com/gmenounos/kw1281test
+   Daraus stammen Beschreibungen des Protokolls (KWP2000-Messwertblöcke und -Anpassung,
+   Stellglieddiagnose und Grundeinstellung am EDC16, Gruppe 000) und beobachtete Namen von
+   Stellgliedern.
+   Lizenzhinweis von kw1281test:
+
+   MIT License
+
+   Copyright © 2021 Greg Menounos
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+3. Programme, die die Installation nachlädt (nicht in diesem Paket enthalten)
+   - pyftdi (Linux): BSD-3-Clause
+   - ftd2xx (Windows, Python-Anbindung an den FTDI-Treiber): MIT
+   - PySide6-Essentials (Qt for Python): LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+   - FTDI-Treiber mit D2XX (Windows): proprietär, von FTDI; kommt mit dem Treiber
+
+
+-------------------------------------------------------------------------------------------
+
+vagdiag – VAG diagnostics over a KKL cable
+Copyright (C) 2026 Nenveo
+
+
+LICENSE
+=======
+
+This program is free software: you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version
+(SPDX: GPL-3.0-or-later).
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+The license text is in the file LICENSE. Without it: https://www.gnu.org/licenses/gpl-3.0.html
+
+
+ADDITIONAL PERMISSION UNDER GNU GPL VERSION 3 SECTION 7 (FTDI DRIVER)
+=====================================================================
+
+If you modify this Program, or any covered work, by linking or combining it with the FTDI
+D2XX driver library (FTD2XX.DLL or libftd2xx, by Future Technology Devices International
+Ltd.) or a modified version of that library, containing parts covered by the terms of the
+FTDI driver licence, the licensors of this Program grant you additional permission to
+convey the resulting work.
+
+Nenveo grants this permission for vagdiag's code. If you modify vagdiag, you may keep or
+remove it for your version (GPL section 7). For the text tables from KLineKWP1281Lib (see
+below) only their authors can grant it.
+
+
+THIRD-PARTY COMPONENTS
+======================
+
+1. Text tables from KLineKWP1281Lib (folder vagdiag/daten/klinekwp1281lib: fault texts,
+   OBD texts, fault elaborations, measuring block texts, German and English)
+   Source: https://github.com/domnulvlad/KLineKWP1281Lib, version 2.2.1
+   Copyright (C) domnulvlad and the contributors of the library
+   License: GNU GPL version 3 (the library names no later version, SPDX: GPL-3.0-only)
+   Converted for vagdiag (notation only, content unchanged) – see LIESMICH.txt in that
+   folder and werkzeuge/texte_aus_klinekwp1281lib.py. The library does not say where the
+   texts originally come from. The tables are separate data files that vagdiag reads for
+   display; vagdiag's built-in texts and your own texts take precedence. Taken as a whole,
+   vagdiag with these files is therefore conveyed under GPL version 3.
+   In addition, the calculation of measured values (formula types up to B5, fields with a
+   length other than three bytes, groups as header and body) follows what this library
+   shows about the protocol; vagdiag computes them in its own code (vagdiag/messwerte.py).
+
+2. kw1281test – Greg Menounos and contributors, https://github.com/gmenounos/kw1281test
+   (MIT license, full notice above): protocol descriptions (KWP2000 measuring blocks and
+   adaptation, output tests and basic setting on the EDC16, group 000) and observed
+   actuator names.
+
+3. Packages installed by the setup scripts (not part of this package): pyftdi
+   (BSD-3-Clause), ftd2xx (MIT), PySide6-Essentials (LGPL-3.0-only OR GPL-2.0-only OR
+   GPL-3.0-only), FTDI driver with D2XX on Windows (proprietary, by FTDI).

@@ -1,0 +1,88 @@
+# fehlerarten: Fehlerarten (Statusbyte ohne Bit 7)
+# Aus KLineKWP1281Lib 2.2.1 (https://github.com/domnulvlad/KLineKWP1281Lib), Datei src/fault_code_elaboration_EN.h
+# Copyright (C) domnulvlad und Mitwirkende der Bibliothek
+# SPDX-License-Identifier: GPL-3.0-only
+# Umgewandelt für vagdiag am 2026-10-28 (nur die Schreibweise, siehe werkzeuge/texte_aus_klinekwp1281lib.py)
+0000	-
+0001	Signal Shorted to Plus
+0002	Signal Shorted to Ground
+0003	No Signal
+0004	Mechanical Malfunction
+0005	Input Open
+0006	Signal too High
+0007	Signal too Low
+0008	Control Limit Surpassed
+0009	Adaptation Limit Surpassed
+000A	Adaptation Limit Not Reached
+000B	Control Limit Not Reached
+000C	Adaptation Limit (Mul) Exceeded
+000D	Adaptation Limit (Mul) Not Reached
+000E	Adaptation Limit (Add) Exceeded
+000F	Adaptation Limit (Add) Not Reached
+0010	Signal Outside Specifications
+0011	Control Difference
+0012	Upper Limit
+0013	Lower Limit
+0014	Malfunction in Basic Setting
+0015	Front Pressure Build-up Time too Long
+0016	Front Pressure Reducing Time too Long
+0017	Rear Pressure Build-up Time too Long
+0018	Rear Pressure Reducing Time too Long
+0019	Unknown Switch Condition
+001A	Output Open
+001B	Implausible Signal
+001C	Short to Plus
+001D	Short to Ground
+001E	Open or Short to Plus
+001F	Open or Short to Ground
+0020	Resistance Too High
+0021	Resistance Too Low
+0022	No Elaboration Available
+0023	-
+0024	Open Circuit
+0025	Faulty
+0026	Output won't Switch or Short to Plus
+0027	Output won't Switch or Short to Ground
+0028	Short to Another Output
+0029	Blocked or No Voltage
+002A	Speed Deviation too High
+002B	Closed
+002C	Short Circuit
+002D	Connector
+002E	Leaking
+002F	No Communications or Incorrectly Connected
+0030	Supply voltage
+0031	No Communications
+0032	Setting (Early) Not Reached
+0033	Setting (Late) Not Reached
+0034	Supply Voltage Too High
+0035	Supply Voltage Too Low
+0036	Incorrectly Equipped
+0037	Adaptation Not Successful
+0038	In Limp-Home Mode
+0039	Electric Circuit Failure
+003A	Can't Lock
+003B	Can't Unlock
+003C	Won't Safe
+003D	Won't De-Safe
+003E	No or Incorrect Adjustment
+003F	Temperature Shut-Down
+0040	Not Currently Testable
+0041	Unauthorized
+0042	Not Matched
+0043	Set-Point Not Reached
+0044	Cylinder 1
+0045	Cylinder 2
+0046	Cylinder 3
+0047	Cylinder 4
+0048	Cylinder 5
+0049	Cylinder 6
+004A	Cylinder 7
+004B	Cylinder 8
+004C	Terminal 30 missing
+004D	Internal Supply Voltage
+004E	Missing Messages
+004F	Please Check Fault Codes
+0050	Single-Wire Operation
+0051	Open
+0052	Activated

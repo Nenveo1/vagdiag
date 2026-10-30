@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Nenveo
+# KKL-Kabel mit FT232R(L): Zugriff ohne root für pyftdi (libusb).
+# uaccess gibt dem angemeldeten Benutzer Zugriff; uucp ist die Arch-Gruppe für serielle Geräte.
+SUBSYSTEM=="usb", ATTR{idVendor}=="0403", ATTR{idProduct}=="6001", MODE="0660", GROUP="uucp", TAG+="uaccess"

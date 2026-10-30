@@ -1,0 +1,1646 @@
+# texte: Klartexte der Messwerte vom Typ 37 (25 hex), Schlüssel = a·256 + b
+# Aus KLineKWP1281Lib 2.2.1 (https://github.com/domnulvlad/KLineKWP1281Lib), Datei src/text_table_EN.h
+# Copyright (C) domnulvlad und Mitwirkende der Bibliothek
+# SPDX-License-Identifier: GPL-3.0-only
+# Umgewandelt für vagdiag am 2026-10-28 (nur die Schreibweise, siehe werkzeuge/texte_aus_klinekwp1281lib.py)
+0000	-
+0001	ADP. Run
+0002	ADP. O.K.
+0003	O2-Reg.OFF
+0004	O2-Reg.ON
+0005	Idle
+0006	Part Throttle
+0007	Full Throt
+0008	Enrich.
+0009	Overrun
+000A	Driving mode ON
+000B	Neutral
+000C	Torq. Reduc.
+000D	A/C-High
+000E	A/C-Low
+000F	Compr.ON
+0010	Compr.OFF
+0011	TankVent ON
+0012	TankVent OFF
+0013	SecAirInj On
+0014	SecAirInj Off
+0015	Evap Adp On
+0016	Evap Adp Off
+0017	IMC-V ON
+0018	IMC-V OFF
+0019	EGR On
+001A	EGR Off
+001B	O2 Adapt.
+001C	Oil Pr. 1 <min
+001D	Oil Pr. 1 OK
+001E	Oil Pr. 2 <min
+001F	Oil Pr. 2 OK
+0020	Min Button
+0021	Hour Button
+0022	Trip Button
+0023	MFA Mem1
+0024	MFA Mem2
+0025	MFA RESET
+0026	MFA MODE
+0027	Engine ON
+0028	Engine Off
+0029	Engine
+002A	Transmission
+002B	Eng. + Trans.
+002C	CAT Mon. ON
+002D	CAT Mon. ON
+002E	Air Co. YES
+002F	Air Co. NO
+0030	Immobilizer
+0031	Term 15 On
+0032	Term 15 Off
+0033	Term 50 On
+0034	Term 50 Off
+0035	Footbr. OK
+0036	Footbr. n.OK
+0037	UP Button
+0038	DN Button
+0039	M Switch
+003A	Brakes
+003B	Kick Down
+003C	TC Open
+003D	TC Closed
+003E	A/C KD
+003F	PN Active
+0040	PN Inactive
+0041	Press Pedal
+0042	and
+0043	Hold...
+0044	-
+0045	Release Pedal
+0046	FR+FL bleed
+0047	Screws
+0048	OPEN
+0049	Pedal 10x
+004A	Press;
+004B	Bleed Screws
+004C	CLOSE
+004D	Partial
+004E	Venting Ended
+004F	...
+0050	-
+0051	Please wait
+0052	...(10 sec)
+0053	-
+0054	-
+0055	Switch
+0056	Outlet
+0057	Valves …
+0058	-
+0059	-
+005A	ERROR
+005B	Too Low
+005C	Correct
+005D	Too High
+005E	End Pos. GND
+005F	End Pos. B+
+0060	Term 30 ON
+0061	Term 30 OFF
+0062	BLS ON
+0063	BLS OFF
+0064	DoorSw ON
+0065	DoorSw OFF
+0066	PF Airbag
+0067	Enabled
+0068	Disabled
+0069	R.wn.ht.ON
+006A	R.wn.h.OFF
+006B	-
+006C	Old Key
+006D	Count
+006E	New Key
+006F	Pump on
+0070	Pump off
+0071	Relay ON
+0072	Relay OFF
+0073	Invalid
+0074	ASR ON
+0075	Supp. CCS
+0076	Torq.Conv.Reg
+0077	ASR OFF
+0078	No Torq Red
+0079	Cam V1 On
+007A	Cam V1 Off
+007B	Cam V2 On
+007C	Cam V2 Off
+007D	Occupied
+007E	Not Occup.
+007F	Belt: Yes
+0080	Belt: No
+0081	Undefined
+0082	Reverse Pol.
+0083	Sensitivity
+0084	in PerCent
+0085	Early
+0086	Late
+0087	ON
+0088	OFF
+0089	TankSensor
+008A	Tank Cont.
+008B	Actual Value
+008C	Basic Value
+008D	Oil in 1
+008E	Insp. in 1
+008F	000 km
+0090	000 Miles
+0091	0 days
+0092	Language
+0093	Consumption
+0094	Indicator
+0095	Kilometer
+0096	Mileage
+0097	Reading
+0098	Factor for
+0099	Speedometer
+009A	Odometer
+009B	Locked
+009C	Bus OK
+009D	Bus Not OK
+009E	Driver
+009F	Driver & Pass.
+00A0	Passenger
+00A1	Rear Left
+00A2	R/Left + Rear/R
+00A3	Rear Right
+00A4	Memory
+00A5	Lock
+00A6	Unlock
+00A7	Not Oper.
+00A8	Turning
+00A9	Still
+00AA	OPEN
+00AB	Closed
+00AC	Door Open
+00AD	Door Closed
+00AE	Ctrl. Module
+00AF	Does not
+00B0	Respond
+00B1	-
+00B2	Locked
+00B3	Unlocked
+00B4	safe
+00B5	Not Safe
+00B6	Pos. X+
+00B7	Pos. X-
+00B8	Pos. Y+
+00B9	Pos. Y-
+00BA	Left
+00BB	Right
+00BC	Fold down
+00BD	disengaged
+00BE	engaged
+00BF	Yes
+00C0	No
+00C1	Activated
+00C2	OK
+00C3	Not OK
+00C4	no Value
+00C5	Key
+00C6	O2 Reg.1 ON
+00C7	O2 Reg.1 OFF
+00C8	O2 Reg.2 ON
+00C9	O2 Reg.2 OFF
+00CA	B1-S1 ON
+00CB	B1-S1 OFF
+00CC	B2-S1 ON
+00CD	B2-S1 OFF
+00CE	B1-S2 ON
+00CF	B1-S2 OFF
+00D0	B1-S2 Not OK
+00D1	B1-S2 OK
+00D2	B2-S2 ON
+00D3	B2-S2 OFF
+00D4	B2-S2 Not OK
+00D5	B2-S2 OK
+00D6	Htg. S1 ON
+00D7	Htg. S1 OFF
+00D8	Htg. S2 ON
+00D9	Htg. S2 OFF
+00DA	Cat B1 Not OK
+00DB	Cat B1 OK
+00DC	Cat B2 Not OK
+00DD	Cat B2 OK
+00DE	EVAP Not OK
+00DF	EVAP OK
+00E0	Testing..
+00E1	Test Complete
+00E2	System Test
+00E3	System Not OK
+00E4	System OK
+00E5	Small Leak
+00E6	Large Leak
+00E7	Abort
+00E8	Injectors OK
+00E9	Inject. Not OK
+00EA	Test ON
+00EB	Test OFF
+00EC	B1-S1 Not OK
+00ED	B1-S1 OK
+00EE	B2-S1 Not OK
+00EF	B2-S1 OK
+00F0	Speak.: Frt
+00F1	Speak.: Rear
+00F2	Short Circuit
+00F3	Open Circuit
+00F4	Antenna
+00F5	Telephone
+00F6	CD Connect.
+00F7	ext. Display
+00F8	Not Installed
+00F9	Line
+00FA	Cam Ctrl. ON
+00FB	Cam Ctrl. OFF
+00FC	Range Not OK
+00FD	Range OK
+00FE	----------
+00FF	Filling
+0100	Quieter >
+0101	Quieter >>
+0102	Louder >
+0103	Base Val. 1
+0104	Base Val. 2
+0105	Insp. 1 In. 1
+0106	Insp. 2 In 1
+0107	Insp. 2 In 5
+0108	00 km
+0109	00 Miles
+010A	Days
+010B	Months
+010C	Oil in 5
+010D	Implausible
+010E	Octane
+010F	First Map
+0110	Second Map
+0111	Passive
+0112	Active
+0113	Heater On
+0114	Heater Off
+0115	Aux Heat
+0116	Ventilating
+0117	Heating
+0118	Blower On
+0119	Blower Off
+011A	Automatic
+011B	Manual
+011C	Louder >>
+011D	Mem DN >
+011E	Start
+011F	After-Run
+0120	Ctrl. Pause
+0121	Malfunction
+0122	Under-
+0123	Voltage
+0124	Turn-Off
+0125	New Value
+0126	Adaptation
+0127	to Battery
+0128	END
+0129	Reed Open
+012A	Reed Closed
+012B	Mem DN >>
+012C	Mem UP >
+012D	Mem UP >>
+012E	Radio
+012F	Send
+0130	Adj. Steering
+0131	Angle Sensor
+0132	Bleed
+0133	System
+0134	Wait
+0135	Continue With
+0136	Basic
+0137	Setting 2
+0138	Reg. Position
+0139	Learned
+013A	Increase
+013B	Decrease
+013C	Regulation
+013D	Lid open
+013E	Lid close
+013F	Adjust
+0140	Headlights
+0141	Level
+0142	Hill
+0143	Sound On
+0144	Sound Off
+0145	Reverse: Yes
+0146	Reverse: No
+0147	Trailer: Yes
+0148	Trailer: No
+0149	in 10
+014A	km
+014B	miles
+014C	O2 Reg.1 OK
+014D	O2 Reg.1 N.OK
+014E	O2 Reg.2 OK
+014F	O2 Reg.2 N.OK
+0150	forwards
+0151	backwards
+0152	Dev. from
+0153	forwards
+0154	backwards
+0155	Any
+0156	Not Recogn.
+0157	Auto Open
+0158	Auto Close
+0159	Manual Open
+015A	Manual Close
+015B	Trunk Remote
+015C	Trunk Handle
+015D	Auto Lock /
+015E	Unlock
+015F	Interior
+0160	Monitor
+0161	System
+0162	Monitoring
+0163	Wheel: F/Left
+0164	Wheel: F/Right
+0165	Wheel: R/Left
+0166	Wheel: R/Right
+0167	Spare Wheel
+0168	TV-Antenna 1
+0169	TV-Antenna 2
+016A	TV-Antenna 3
+016B	TV-Antenna 4
+016C	Navigation
+016D	Connection
+016E	Reverse ON
+016F	Reverse OFF
+0170	GPS Antenna
+0171	Data Bus
+0172	Engine 0
+0173	Engine 1
+0174	ABS 0
+0175	ABS 1
+0176	Transm. 0
+0177	Transm. 1
+0178	Instruments 0
+0179	Instruments 1
+017A	Dsl Pump 0
+017B	Dsl Pump 1
+017C	Steer. ang. 0
+017D	Steer. ang. 1
+017E	Distance 0
+017F	Distance 1
+0180	Hybrid
+0181	Diesel
+0182	Electro
+0183	TDI Start
+0184	ABS
+0185	Shift
+0186	Gear
+0187	Synchr.1
+0188	Synchr.2
+0189	E. Drive Free
+018A	Gener. Free
+018B	Gener. ON
+018C	Spkr. Frt/Lft
+018D	Spkr. Frt/Rt
+018E	Spkr. R/Lft
+018F	Spkr. R/Rt
+0190	Tweeter
+0191	Woofer
+0192	LF Frt/Lft
+0193	LF Frt/Rt
+0194	LF R/Lft
+0195	LF R/Rt
+0196	LF Left
+0197	LF Right
+0198	Sound
+0199	Cable-Head
+019A	Button:
+019B	Beep
+019C	Blink
+019D	Airbag 0
+019E	Airbag 1
+019F	Cent. Elect. 0
+01A0	Cent. Elect. 1
+01A1	HVAC 0
+01A2	HVAC 1
+01A3	Clutch 0
+01A4	Clutch 1
+01A5	AWD 0
+01A6	AWD 1
+01A7	Adapt Value
+01A8	Learned
+01A9	Erased
+01AA	Pin ?
+01AB	Stage 1
+01AC	Stage 2
+01AD	Stage 3
+01AE	Stage 4
+01AF	D.F. Airbag
+01B0	D.S. Airbag
+01B1	P.S. Airbag
+01B2	D. Belt Tens.
+01B3	P. Belt Tens.
+01B4	GALA On
+01B5	GALA Off
+01B6	Rear Window
+01B7	Windshield
+01B8	Heating
+01B9	Installed
+01BA	Elect. Regul.
+01BB	Stage Int.
+01BC	CO2
+01BD	Adjustment
+01BE	BTS On
+01BF	BTS Off
+01C0	ABS Off
+01C1	EDL On
+01C2	EDL Off
+01C3	ESP On
+01C4	ESP Off
+01C5	MIL On
+01C6	MIL Off
+01C7	Wheel Pos. +
+01C8	ID Number
+01C9	Input
+01CA	Invalid
+01CB	Volume
+01CC	Lamp On
+01CD	Lamp Off
+01CE	OPEN
+01CF	CLOSE
+01D0	Recognized
+01D1	Front
+01D2	Rear
+01D3	Free
+01D4	Oil
+01D5	Quality
+01D6	Qty. in 1
+01D7	Soot
+01D8	Liter
+01D9	Thermal Load
+01DA	in 1
+01DB	Min. Value
+01DC	Max. Value
+01DD	Type
+01DE	Normalized
+01DF	Consumption
+01E0	Frequency
+01E1	Aux. Heat On
+01E2	Aux. Heat Off
+01E3	Seat Sensor
+01E4	RR/RL un-
+01E5	-
+01E6	Adjustment
+01E7	Alarm horn
+01E8	Rest-Europe
+01E9	Germany
+01EA	UK
+01EB	learn (adapt)
+01EC	Light ON
+01ED	Light OFF
+01EE	Dr. Door 0
+01EF	Dr. Door 1
+01F0	Pas. Door 0
+01F1	Pas. Door 1
+01F2	RL Door 0
+01F3	RL Door 1
+01F4	RR Door 0
+01F5	RR Door 1
+01F6	Central 0
+01F7	Central 1
+01F8	Memory 0
+01F9	Memory 1
+01FA	Cent Elec 0
+01FB	Cent Elec 1
+01FC	Roof Elec 0
+01FD	Roof Elec 1
+01FE	Tire 0
+01FF	Tire 1
+0200	St. Wheel 0
+0201	St. Wheel 1
+0202	Steering 0
+0203	Steering 1
+0204	Parking 0
+0205	Parking 1
+0206	Level 0
+0207	Level 1
+0208	1-Wire
+0209	2-Wire
+020A	Stage 1
+020B	Stage 2
+020C	Adjustment
+020D	Not Possible
+020E	Auto Unlock
+020F	Pedal
+0210	Release
+0211	Solenoid
+0212	Coil
+0213	Coil Test
+0214	Ended
+0215	Dr. Head Airbag
+0216	Pas. Head Airb.
+0217	Dr.R. Side Airb.
+0218	Pas.R. Side Airb.
+0219	Dr.R. Belt Tens.
+021A	Pas.R. Belt Tens.
+021B	No Commun.
+021C	Inactive
+021D	Line-Out F/Lft
+021E	Line-Out F/Rt
+021F	Line-Out R/Lft
+0220	Line-Out R/Rt
+0221	LED On
+0222	LED Off
+0223	Switch On
+0224	Switch Off
+0225	Volume Front
+0226	Volume Rear
+0227	Tone Front
+0228	Tone Rear
+0229	Rel. Switch 1
+022A	Rel. Switch 2
+022B	ADR On
+022C	ADR Off
+022D	Smaller
+022E	Larger
+022F	Radio 0
+0230	Radio 1
+0231	Telephone 0
+0232	Telephone 1
+0233	Navigation 0
+0234	Navigation 1
+0235	Telemat 0
+0236	Telemat 1
+0237	VoiceCmd 0
+0238	VoiceCmd 1
+0239	GALA
+023A	Conn.RadioDSP
+023B	CD-function
+023C	Ant.Sw.Outp
+023D	Error Detect.
+023E	WndShldHtr
+023F	Warn. Buzz
+0240	Load Mgmt
+0241	Reset
+0242	ServRemInd
+0243	Trailer 0
+0244	Trailer 1
+0245	Stage 5
+0246	Tip Operation
+0247	Aux. Heater 0
+0248	Aux. Heater 1
+0249	Conv. Top 0
+024A	Conv. Top 1
+024B	El.Ign.Lock 0
+024C	El.Ign.Lock 1
+024D	Wipermodule 0
+024E	Wipermodule 1
+024F	Batt.Mgmt 0
+0250	Batt.Mgmt 1
+0251	Memory Pax 0
+0252	Memory Pax 1
+0253	Memory Rear 0
+0254	Memory Rear 1
+0255	CD-ROM 0
+0256	CD-ROM 1
+0257	Radio Nav 0
+0258	Radio Nav 1
+0259	TV-Tuner 0
+025A	TV-Tuner 1
+025B	CD-changer 0
+025C	CD-changer 1
+025D	Tel/Telemat 0
+025E	Tel/Telemat 1
+025F	Disp/Ctrl/F 0
+0260	Disp/Ctrl/F 1
+0261	Disp/Ctrl/R 0
+0262	Disp/Ctrl/R 1
+0263	Continue
+0264	Registered
+0265	N. Registered
+0266	SignalStrength
+0267	Emerg.battery
+0268	Full
+0269	Empty
+026A	Weak
+026B	Dimmer
+026C	Speed signal
+026D	Emrg.Call Sw.
+026E	Brk.Dn.Switch
+026F	Timer Rear
+0270	Window Htr.
+0271	Brake Boost 0
+0272	Brake Boost 1
+0273	Damper Ctrl 0
+0274	Damper Ctrl 1
+0275	Slave-A 0
+0276	Slave-A 1
+0277	Slave-B 0
+0278	Slave-B 1
+0279	Gateway 0
+027A	Gateway 1
+027B	Fuel Pump 0
+027C	Fuel Pump 1
+027D	Dig.Soundp. 0
+027E	Dig.Soundp. 1
+027F	Operate
+0280	Test
+0281	Started
+0282	Faulty
+0283	Switch UP
+0284	Switch DN
+0285	Switch Reset
+0286	Accel
+0287	Delay
+0288	Stored Off
+0289	Resume
+028A	Distance +
+028B	Distance -
+028C	Voice Cmd
+028D	Service-Mode
+028E	Wheel Circumf
+028F	Wheel Imp.
+0290	Emerg.Antenna
+0291	Main Antenna
+0292	not
+0293	CAT B3 Not OK
+0294	CAT B3 OK
+0295	CAT B4 Not OK
+0296	CAT B4 OK
+0297	B3-S1 Not OK
+0298	B3-S1 OK
+0299	B3-S2 Not OK
+029A	B3-S2 OK
+029B	B4-S1 Not OK
+029C	B4-S1 OK
+029D	B4-S2 Not OK
+029E	B4-S2 OK
+029F	Fuel Level
+02A0	Display
+02A1	Charger 1 ON
+02A2	Charger 2 ON
+02A3	Front Axle
+02A4	Rear Axle
+02A5	Pres.Reserv.
+02A6	Bleed
+02A7	Fill
+02A8	Function
+02A9	Running
+02AA	Done
+02AB	Aborted
+02AC	Continue With
+02AD	Next Channel
+02AE	Value
+02AF	Valid
+02B0	Invalid
+02B1	Enter
+02B2	Elec.CE. 1W
+02B3	Elec.CE. 1W
+02B4	Central 1W
+02B5	Dr.Door 1W
+02B6	Pas.Door 1W
+02B7	RL Door 1W
+02B8	RR Door 1W
+02B9	Memory 1W
+02BA	Roof 1W
+02BB	Instrum. 1W
+02BC	Tires 1W
+02BD	Gateway 1W
+02BE	St.Wheel 1W
+02BF	HVAC 1W
+02C0	Parking 1W
+02C1	Level 1W
+02C2	AuxHeat 1W
+02C3	ConvTop 1W
+02C4	IgnLock 1W
+02C5	Wipers 1W
+02C6	Battery 1W
+02C7	Fuel 1W
+02C8	Mem.Pass. 1W
+02C9	Mem.Rear 1W
+02CA	Disp.Rear 1W
+02CB	Disp.Frt. 1W
+02CC	Soundp. 1W
+02CD	CD-ROM 1W
+02CE	Telemat 1W
+02CF	RadioNav 1W
+02D0	TVTuner 1W
+02D1	CD Chg. 1W
+02D2	Radio 1W
+02D3	Teleph. 1W
+02D4	Navig. 1W
+02D5	SpeechR 1W
+02D6	Tel.mati 1W
+02D7	Trailer 1W
+02D8	Antenna 2
+02D9	Receiver OK
+02DA	Receiver N.Ok
+02DB	Button
+02DC	Switch
+02DD	OPEN
+02DE	CLOSE
+02DF	AV 1 InUse
+02E0	AV 1 Avail
+02E1	AV 2 InUse
+02E2	AV 2 Avail
+02E3	Monitor 2 On
+02E4	Monitor 2 Off
+02E5	Voltage
+02E6	Ign.Bat.Disc.
+02E7	Activate
+02E8	Activate
+02E9	Telephone 0
+02EA	Telephone 1
+02EB	Traffic Radio 0
+02EC	Traffic Radio 1
+02ED	WIV
+02EE	1 = No
+02EF	2 = Yes
+02F0	TV.Ant.Amp. 0
+02F1	TV.Ant.Amp. 1
+02F2	ESP Sens. 0
+02F3	ESP Sens. 1
+02F4	Sel.Lev. 0
+02F5	Sel.Lev. 1
+02F6	Damper FL
+02F7	Damper FR
+02F8	Damper RL
+02F9	Damper RR
+02FA	Wheel Accel.
+02FB	Body Accel.
+02FC	Comfort
+02FD	normal
+02FE	sport 1
+02FF	sport 2
+0300	MOST Bus Static
+0301	Low Level
+0302	Normal Level
+0303	High Level
+0304	Terminal X On
+0305	Terminal X Off
+0306	Mid-Range
+0307	Mid-Bass
+0308	Connected
+0309	Not Connected
+030A	Acq. Sattelites
+030B	HangUpButton
+030C	Window Open
+030D	via Rear Lock
+030E	Deactivated
+030F	ShortToPlus
+0310	ShortToGND
+0311	Close S Contact
+0312	GPS-reception
+0313	no GPS-recept
+0314	Sat. Search
+0315	Load almanac
+0316	Test call
+0317	Park Brake 1
+0318	Park Brake 0
+0319	Park Brk 1W
+031A	Latitude
+031B	Longitude
+031C	Altitude
+031D	Date
+031E	Time
+031F	Direction
+0320	NOx-S1 0
+0321	NOx-S1 1
+0322	NOx-S1 1W
+0323	NOx-S2 0
+0324	NOx-S2 1
+0325	NOx-S2 1W
+0326	Driver Entry 0
+0327	Driver Entry 1
+0328	Pass Entry 0
+0329	Pass Entry 1
+032A	Driver Entry 1W
+032B	Pass Entry 1W
+032C	Comp. Test
+032D	Sensor Adj.
+032E	Login
+032F	Performed
+0330	Switch On
+0331	Switch Off
+0332	Initiate
+0333	CDC Test
+0334	CDC Damper
+0335	Soft
+0336	Current
+0337	Band Init
+0338	END
+0339	Switch Test
+033A	Reached
+033B	Not Learned
+033C	El.SteeringAdj
+033D	Valid
+033E	Possible
+033F	Impossible
+0340	Head Airb. D/R
+0341	Head Airb. P/R
+0342	User
+0343	Set
+0344	Erase
+0345	Erased
+0346	HdLtRange 0
+0347	HdLtRange 1
+0348	Special Veh 0
+0349	Special Veh 1
+034A	Sp.veh 1W
+034B	PwrCAN Static
+034C	CmfCAN Static
+034D	InfoCAN Static
+034E	Engine Slp.Ind
+034F	Slave1 Slp.Ind
+0350	Slave2 Slp.Ind
+0351	ABS Slp.Ind
+0352	Trans. Slp.Ind
+0353	Brakef Slp.Ind
+0354	Distan Slp.Ind
+0355	Battma Slp.Ind
+0356	Airbag Slp.Ind
+0357	Steering Slp.Ind
+0358	SteerAS Slp.Ind
+0359	SteerWh Slp.Ind
+035A	KESSY Slp.Ind
+035B	Level Slp.Ind
+035C	Damp Slp.Ind
+035D	AWD Slp.Ind
+035E	D-Pump Slp.Ind
+035F	Clutch Slp.Ind
+0360	Fuel Slp.Ind
+0361	Gateway Slp.Ind
+0362	Instrum. Slp.Ind
+0363	HVAC Slp.Ind
+0364	RoofEl Slp.Ind
+0365	el. CM Slp.Ind
+0366	Wiper Slp.Ind
+0367	Tire Slp.Ind
+0368	Park Slp.Ind
+0369	Central Slp.Ind
+036A	El.CM Slp.Ind
+036B	ParkHtr Slp.Ind
+036C	Trailer Slp.Ind
+036D	ConvTop Slp.Ind
+036E	DrDoor Slp.Ind
+036F	PsDoor Slp.Ind
+0370	DoorLR Slp.Ind
+0371	DoorRR Slp.Ind
+0372	Memory Slp.Ind
+0373	Mem P Slp.Ind
+0374	Mem R Slp.Ind
+0375	CD-ROM Slp.Ind
+0376	Navigat Slp.Ind
+0377	TV-Tune Slp.Ind
+0378	CD-chan Slp.Ind
+0379	TelTele Slp.Ind
+037A	Disp fr Slp.Ind
+037B	Disp re Slp.Ind
+037C	Soundp. Slp.Ind
+037D	Headlev Slp.Ind
+037E	Radio Slp.Ind
+037F	Telepho Slp.Ind
+0380	Telemat Slp.Ind
+0381	Langua Slp.Ind
+0382	Auxheat Slp.Ind
+0383	Specveh Slp.Ind
+0384	Diseng Slp.Ind
+0385	Fuel Slp.Ind
+0386	V-ident Slp.Ind
+0387	Voicev Slp.Ind
+0388	El. CE2 Slp.Ind
+0389	Park br.Slp.Ind
+038A	-
+038B	Immo 0
+038C	Immo 1
+038D	Aux. Htg 0
+038E	Aux. Htg 1
+038F	Aux Htg 1W
+0390	CheckSum
+0391	Dr-Ident. 0
+0392	Dr-Ident. 1
+0393	Dr-Ident 1W
+0394	Trlr. detect
+0395	Trld n.detect
+0396	E-Mgmnt 0
+0397	E-Mgmnt 1
+0398	E-Mgmnt 1W
+0399	Lock-El. 0
+039A	Lock-El. 1
+039B	DispCtrl.LR 0
+039C	DispCtrl.LR 1
+039D	DispCtrl.RR 0
+039E	DispCtrl.RR 1
+039F	Media P.1 0
+03A0	Media P.1 1
+03A1	Media P.2 0
+03A2	Media P.2 1
+03A3	Media P.3 0
+03A4	Media P.3 1
+03A5	Media P.4 0
+03A6	Media P.4 1
+03A7	Mirror in
+03A8	Position 1
+03A9	Position 2
+03AA	Position 3
+03AB	Screw 1
+03AC	Screw 2
+03AD	Rotations
+03AE	Remote Ctrl.
+03AF	Term. S On
+03B0	Term. S Off
+03B1	Single Door
+03B2	Kessy
+03B3	Beep + Blink
+03B4	Comfort
+03B5	Alarm delay
+03B6	CentElect.2 0
+03B7	CentElect.2 1
+03B8	El.CU2 1wire
+03B9	B1-S3 n.OK
+03BA	B1-S3 OK
+03BB	B2-S3 n.OK
+03BC	B2-S3 OK
+03BD	B3-S3 n.OK
+03BE	B3-S3 OK
+03BF	B4-S3 n.OK
+03C0	B4-S3 OK
+03C1	Cat1 B1 OK
+03C2	Cat1 B1 n.OK
+03C3	Cat2 B1 OK
+03C4	Cat2 B1 n.OK
+03C5	Cat3 B1 OK
+03C6	Cat3 B1 n.OK
+03C7	Cat4 B1 OK
+03C8	Cat4 B1 n.OK
+03C9	Cat1 B2 OK
+03CA	Cat1 B2 n.OK
+03CB	Cat2 B2 OK
+03CC	Cat2 B2 n.OK
+03CD	Cat3 B2 OK
+03CE	Cat3 B2 n.OK
+03CF	Cat4 B2 OK
+03D0	Cat4 B2 n.OK
+03D1	Cat1 B3 OK
+03D2	Cat1 B3 n.OK
+03D3	Cat2 B3 OK
+03D4	Cat2 B3 n.OK
+03D5	Cat3 B3 OK
+03D6	Cat3 B3 n.OK
+03D7	Cat4 B3 OK
+03D8	Cat4 B3 n.OK
+03D9	CAT B4 OK
+03DA	Cat B4 n.OK
+03DB	Kat2 B4 OK
+03DC	Cat2 B4 n.OK
+03DD	Cat3 B4 OK
+03DE	Kat3 B4 n.OK
+03DF	Cat4 B4 OK
+03E0	Cat4 B4 n.OK
+03E1	VoiceAmp 0
+03E2	VoiceAmp 1
+03E3	VoiceAmp 1W
+03E4	Measure
+03E5	SteerAng Init
+03E6	SteerAng n.Init
+03E7	WSC
+03E8	Contro Head
+03E9	Mic. LF
+03EA	Mic. RF
+03EB	Mic. cent L
+03EC	Mic. cent R
+03ED	Mic. RL
+03EE	Mic. RR
+03EF	Up
+03F0	Down
+03F1	At Bottom
+03F2	At Top
+03F3	Over-Temp S/O
+03F4	Pinch Protect
+03F5	Ends Learned
+03F6	not Active
+03F7	Fold In
+03F8	store
+03F9	small
+03FA	center
+03FB	large
+03FC	15 inch
+03FD	16 inch
+03FE	Brake assist.
+03FF	Tire Pressure
+0400	Brake Booster
+0401	Rollover prot.
+0402	ChipCardRdr 0
+0403	ChipCardRdr 1
+0404	A/C Rear 0
+0405	A/C Rear 1
+0406	A/C R. 1W
+0407	A/C R Slp.Ind
+0408	SatRadio 0
+0409	SatRadio 1
+040A	DigitRadio 0
+040B	DigitRadio 1
+040C	All Users
+040D	el.ign. Slp.Ind
+040E	E-manag Slp.Ind
+040F	Ctrl.Hd.pht.0
+0410	Ctrl.Hd.pht.1
+0411	Cont.Hd.pht1W
+0412	GPS FIX
+0413	DVD Status
+0414	BrkFl.levl 0
+0415	BrkFl.levl 1
+0416	WashFluid 0
+0417	WashFluid 1
+0418	BrakePad 0
+0419	BrakePad 1
+041A	Cool.level 0
+041B	Cool.level 1
+041C	Oil Level 0
+041D	Oil Level 1
+041E	MultifuncSw 0
+041F	MultifuncSw 1
+0420	Microphone
+0421	Mute Button
+0422	AudioOut.(+)
+0423	AudioOut.(-)
+0424	Entry.assis 0
+0425	Entry.assis 1
+0426	ConsSwOff 0
+0427	ConsSwOff 1
+0428	StatCurStg 0
+0429	StatCurStg 1
+042A	StatCurStg 2
+042B	StatCurStg 3
+042C	StatCurStg 4
+042D	StatCurStg 5
+042E	StatCurStg 6
+042F	OilMin
+0430	detection
+0431	evaluation
+0432	Side Opening
+0433	Rear Lid
+0434	Charger.1 0
+0435	Charger.1 1
+0436	Charger.2 0
+0437	Charger.2 1
+0438	MainBattery
+0439	Phone SIM
+043A	Telem. SIM
+043B	Subsc.Bluetoo
+043C	RS 232
+043D	Serv.Emerg.
+043E	twConsSwOff 1
+043F	Defective
+0440	Compass 0
+0441	Compass 1
+0442	Compass 1W
+0443	Connected
+0444	front Left
+0445	front Right
+0446	Rear Left
+0447	Rear Right
+0448	Bluetooth
+0449	Basic setting
+044A	Servicesettin
+044B	Child Seat
+044C	LightAdult
+044D	HeavyAdult
+044E	other
+044F	Zone
+0450	calibrated
+0451	nor/lightvehi
+0452	Sport
+0453	Mobilit.help
+0454	City Deliv
+0455	User 1
+0456	User 2
+0457	KD-Init
+0458	Tilt Sensor
+0459	Pers. Ident
+045A	Mid Adult
+045B	Motor Gasol.
+045C	Motor Diesel
+045D	ECU Gasoline
+045E	ECU Diesel
+045F	Drivetrain
+0460	Knee Airb. Dr.
+0461	Knee Airb. Pas.
+0462	BeltTensCtrR
+0463	Left Output 0
+0464	Left Output 1
+0465	Right Output 0
+0466	Right Output 1
+0467	T-Halt Connec
+0468	Output High
+0469	Output Low
+046A	Normal 1
+046B	Normal 2
+046C	Normal 3
+046D	Normal 4
+046E	Normal 5
+046F	MPV 1
+0470	MPV 2
+0471	GTI
+0472	User 3
+0473	User 4
+0474	User 5
+0475	User 6
+0476	Switc.PASairb
+0477	StabDisc 0
+0478	StabDisc 1
+0479	Temperature
+047A	K-Lamp 1-col.
+047B	K-Lamp 2-col.
+047C	Rodcoupl S.ln
+047D	StabDisc Slp.Ind
+047E	Rear lid 1
+047F	Rear lid 0
+0480	Rear lid Slp.Ind
+0481	Rear lid 1W
+0482	CD-read error
+0483	CD-access time
+0484	Limit exceeded
+0485	Ant Bluetooth
+0486	Calibr EPB-CM
+0487	performing
+0488	Brake WarnL on
+0489	Brake WarnL off
+048A	ABS WarnL on
+048B	ABS WarnL off
+048C	ASR/ESP WL on
+048D	ASR/ESP WL off
+048E	ESP button
+048F	Fct.auto park
+0490	Function ECD
+0491	calibrated
+0492	kNewton
+0493	TransvAccSens
+0494	BrakePrSens
+0495	AngleSpdSens
+0496	Day
+0497	Month
+0498	Year
+0499	Brake pad
+049A	Wear indicat.
+049B	Hour
+049C	Minute
+049D	Operation 0
+049E	Operation 1
+049F	Operation 1W
+04A0	Operation Sl.In
+04A1	ADR
+04A2	Keep-Awake
+04A3	Charge cond.
+04A4	Private handset
+04A5	Button Info.
+04A6	Button lang.
+04A7	Button call
+04A8	visible
+04A9	n_visible
+04AA	HandsetCradle
+04AB	Roaming
+04AC	Home System
+04AD	BT_connection
+04AE	EEPROM Reset
+04AF	Allroad
+04B0	Clutch
+04B1	OPEN
+04B2	Vehic version
+04B3	Parameter ESP
+04B4	Emerg braking
+04B5	Dir.stab.as 0
+04B6	Dir.stab.as 1
+04B7	Lanechag.as 0
+04B8	Lanechag.as 1
+04B9	Brake discs
+04BA	wiper
+04BB	Steer
+04BC	recommend
+04BD	Trailer
+04BE	De-
+04BF	Normal 6
+04C0	Normal 7
+04C1	BackupCam 0
+04C2	BackupCam 1
+04C3	BackupCam 1W
+04C4	BackupCam Sl.In
+04C5	E-CAN BusRest
+04C6	CentConv2 0
+04C7	CentConv2 1
+04C8	CenConv2 1W
+04C9	CenConv2 Sl.In
+04CA	ACAN Afterrun
+04CB	F-CAN BusRest
+04CC	Reset
+04CD	Reset Not OK
+04CE	RoofDisp 0
+04CF	RoofDisp 1
+04D0	RoofDisp 1W
+04D1	RoofDisp Sl.In
+04D2	Wheel 1
+04D3	Wheel 2
+04D4	Wheel 3
+04D5	Wheel 4
+04D6	Wheel 5
+04D7	DVD ReadErr
+04D8	DVD AccTime
+04D9	High Pres.
+04DA	Blower Def.
+04DB	Low Pres.
+04DC	no eng. speed
+04DD	ECON Oper.
+04DE	A/C OFF
+04DF	ExteriorTemp
+04E0	UnderVoltage
+04E1	Engine Temp
+04E2	SwOff from ECU
+04E3	OverVoltage
+04E4	Evap Temp
+04E5	Coding
+04E6	Compr.Ctrl.
+04E7	Press. Sens.
+04E8	SwOff Eng.Rev
+04E9	SwOff from BCM
+04EA	Refrig.Loss
+04EB	smCoolAirSig
+04EC	Immo Sl.In
+04ED	Immo 1W
+04EE	Freewheel
+04EF	Hold
+04F0	Closed
+04F1	Opening
+04F2	Closing
+04F3	stiff/tight
+04F4	Obstacle
+04F5	Stopped
+04F6	OPEN
+04F7	left tight
+04F8	right tight
+04F9	Start Assist
+04FA	Defrost Rear
+04FB	A/C ON
+04FC	A/C Control
+04FD	Rel AC Compr.
+04FE	CoolFan Stage
+04FF	no Basic.Set
+0500	Imp.Conv. 1
+0501	Imp.Conv. 2
+0502	WARNING
+0503	No
+0504	Turned In
+0505	Stabiliz.
+0506	Retracted
+0507	Extended
+0508	Display group
+0509	Fan
+050A	via
+050B	Conn. to RSE
+050C	RSP active
+050D	RSP n. active
+050E	Eng.braketorq
+050F	assistance
+0510	Dis.Em.Br.On
+0511	Dis.Em.Br.Off
+0512	Camera-sync
+0513	Display-sync
+0514	Requireme nOK
+0515	ESP-switch-on
+0516	Luggage cover
+0517	Closing assis
+0518	Hydraul.pump
+0519	Hydr.valves
+051A	high
+051B	critical
+051C	Parameter set
+051D	Damp.failure
+051E	Speed
+051F	Startup mode
+0520	Fan ON
+0521	Fan OFF
+0522	ParkSteerAss.
+0523	Installed
+0524	Not Installed
+0525	ESPSensor2 0
+0526	ESPSensor2 1
+0527	P.Curb: yes
+0528	P.Curb: no
+0529	D.Curb: yes
+052A	D.Curb: no
+052B	PLA-button
+052C	Parksteeras 0
+052D	Parksteeras 1
+052E	EntryD 0
+052F	EntryD 1
+0530	EntryD 1W
+0531	D.EnAst.Sl.In
+0532	EntryP 0
+0533	EntryP 1
+0534	EntryP 1W
+0535	P.EnAst.Sl.In
+0536	Pre-filling
+0537	Brake assist
+0538	Tires_2 0
+0539	Tires_2 1
+053A	completely
+053B	Intermed pos.
+053C	Door/Win.Clsd
+053D	Runtime.monit
+053E	Pinching
+053F	D.BltForceLmt
+0540	P.BltForceLmt
+0541	D.SeatPosSens
+0542	P.SeatPosSens
+0543	WarnTexts On
+0544	WarnTexts Off
+0545	WarnSound On
+0546	WarnSound Off
+0547	Door/Win.Open
+0548	Em.Brk.Active
+0549	EmBrk.n.Act.
+054A	MOST active
+054B	I-CAN active
+054C	C-CAN active
+054D	P-CAN active
+054E	E-CAN static
+054F	Generator 0
+0550	Generator 1
+0551	Info.1 0
+0552	Info.1 1
+0553	Info.2 0
+0554	Infor.2 1
+0555	BDM 0
+0556	BDM 1
+0557	Rapid heat 0
+0558	Rapid heat 1
+0559	ParkAsstSl.In
+055A	S-CAN active
+055B	S-CAN static
+055C	Init. value
+055D	Counter
+055E	Reset
+055F	pushed
+0560	pulled
+0561	Diff. lock
+0562	Act. Steer 0
+0563	Act. Steer 1
+0564	Transportmode
+0565	Initiate
+0566	ERROR
+0567	offroad
+0568	Position 4
+0569	Position 5
+056A	Position 6
+056B	Position 7
+056C	Position 8
+056D	Position 9
+056E	Position 10
+056F	Tilt position
+0570	Slid position
+0571	Unnormed
+0572	Normed
+0573	D.BltForceLmt
+0574	P.BltForceLmt
+0575	TowProt 0
+0576	TowProt 1
+0577	TowProt 1W
+0578	TowProt Sl. In
+0579	SDown Query
+057A	SDown Suspend
+057B	Ldspkr.center
+057C	reduced
+057D	not reduced
+057E	not available
+057F	Angle Veloc.
+0580	Status
+0581	E-Can active
+0582	Headrest Driv
+0583	Headrest Pass
+0584	MediaPos3 1W
+0585	MedPos3 Sl.In
+0586	Info.2 1W
+0587	Info.2 Sl.In
+0588	Movement
+0589	Rr. lid large
+058A	Rr. lid small
+058B	Init
+058C	Driv.lt.as. 0
+058D	Driv.lt.as. 1
+058E	Media
+058F	Repeat
+0590	Condition DSP
+0591	Media player
+0592	Battery charge
+0593	HF-connection
+0594	Veh locate 1
+0595	Veh locate 0
+0596	Veh locat 1W
+0597	Veh locat Sl.In
+0598	QR current mode
+0599	Latch open
+059A	Latch closed
+059B	Ratchet open
+059C	Ratchet closed
+059D	Phone book
+059E	A/C comp. 1
+059F	A/C comp. 0
+05A0	Electr. drive 1
+05A1	Electr. drive 0
+05A2	HV battery 1
+05A3	HV battery 0
+05A4	Stage 0
+05A5	Stage 6
+05A6	Stage 7
+05A7	Active
+05A8	Coming Home
+05A9	Leaving Home
+05AA	HCS time
+05AB	Footwell light.
+05AC	AFL
+05AD	Level 2
+05AE	Level 3
+05AF	drying
+05B0	Conf. tone
+05B1	3rd row 0
+05B2	3rd row 1
+05B3	3rd row Slp.Ind
+05B4	3rd row 1W
+05B5	MFM 0
+05B6	MFM 1
+05B7	MFM Sl.In
+05B8	MFM 1W
+05B9	ESCL 0
+05BA	ESCL 1
+05BB	ESCL Sl.In
+05BC	ESCL 1-W
+05BD	Lightcl 0
+05BE	Lightcl 1
+05BF	Lightcl Slp.Ind
+05C0	Lightcl 1W
+05C1	HDF
+05C2	Panic button
+05C3	SlideDoor Left
+05C4	SlideDoor Light
+05C5	Acc.
+05C6	Acc. on
+05C7	Kessy 0
+05C8	Kessy 1
+05C9	Kessy 1W
+05CA	E drive Slp.Ind
+05CB	Hybrid Slp.Ind
+05CC	Volt.Stab. 0
+05CD	Volt.Stab.1
+05CE	Normal 6
+05CF	Normal 7
+05D0	Normal 8
+05D1	Normal 9
+05D2	Normal 10
+05D3	BeltMicro 0
+05D4	BeltMicro 1
+05D5	User w/o BDH
+05D6	HighFreq. 2
+05D7	Stop-Phase
+05D8	Restart
+05D9	XDS
+05DA	DSR
+05DB	Strong
+05DC	Connected
+05DD	Not Connected
+05DE	Coupled
+05DF	Not Coupled
+05E0	Frt.Sens.FAS 0
+05E1	Frt.Sens.FAS 1
+05E2	Poor
+05E3	Sufficient
+05E4	Good
+05E5	Very Good
+05E6	optimal
+05E7	Active mode
+05E8	Remote Statrs
+05E9	P not Selected
+05EA	v <> 0 km/h
+05EB	AntiTheftAlarm
+05EC	Hood/Bonnet
+05ED	Time Lapse
+05EE	Vehicle CM 0
+05EF	Vehicle CM 1
+05F0	Infinite
+05F1	Stage 8
+05F2	Stage 9
+05F3	OPS display
+05F4	BackUpCam
+05F5	Comfort
+05F6	AUTO
+05F7	DYNAMIC
+05F8	INDIVIDUAL
+05F9	Not. Calib.
+05FA	Never Calib.
+05FB	normal
+05FC	Sport
+05FD	CORSA
+05FE	Subwoofer
+05FF	Aerodyn. 0
+0600	Aerod. 1
+0601	Aerod. Slp.Ind
+0602	Inverter 0
+0603	Inverter 1
+0604	BrakeSens 0
+0605	BrakeSens 1
+0606	InterfaceSB 0
+0607	InterfaceSB 1
+0608	Interf SB 1W
+0609	Body Accoust. 0
+060A	Body Accoust. 1
+060B	APS switch
+060C	c.Switchoff
+060D	SCR Mod 0
+060E	SCR Mod 1
+060F	SCR Mod Slp.Ind
+0610	Camera 0
+0611	Camera 1
+0612	Aux.Control 0
+0613	Aux.Control 1
+0614	Transmission2 0
+0615	Transmission2 1
+0616	Roof el. 2 0
+0617	Roof el. 2 1
+0618	Roof el. 2 1Dr
+0619	HVcharger 0
+061A	HVcharger 1
+061B	Roof el. 2 Sli
+061C	Outer ger. 0
+061D	Outer ger. 1
+061E	Fct. blocked
+061F	Aggre.pos 0
+0620	Aggre.pos 1
+0621	Coolant
+0622	Temperature
+0623	Display mode
+0624	Engine Revs
+0625	Thermomgt. 0
+0626	Thermomgt. 1
+0627	Thermom.Slind
+0628	HV-Charger. 0
+0629	HV-Charger. 1
+062A	HV-Charge.Slind
+062B	Hyb.BMS 0
+062C	Hyb.BMS 1
+062D	Hyb.BMS Slind
+062E	Emer call 0
+062F	Emer call 1
+0630	Emer call Slind
+0631	Electro drive0
+0632	Electro drive1
+0633	Elec.Dr.Slind
+0634	L-CAN Busstat
+0635	L-CAN active
+0636	RE-Charger 0
+0637	RE-Charger 1
+0638	RE-Charge.Slind
+0639	Front end 0
+063A	Front end 1
+063B	Ped.protection0
+063C	Ped. protect.1
+063D	Memory FSH 0
+063E	Memory FSH 1
+063F	Memo. FSH 1Dr
+0640	Ped.protect.1Dr
+0641	Emer call 1Dr
+0642	closed.step2
+0643	delay.step2
+0644	not transmitted
+0645	transmitted
+0646	Spd limit
+0647	Cut off ctrl 1
+0648	Cut off ctrl 3
+0649	Cut off ctrl 2
+064A	Not op ready
+064B	Overheating
+064C	Overtemp prot.
+064D	Sensor error
+064E	VA liftsys. 0
+064F	VA liftsys. 1
+0650	No power limit
+0651	75% power limit
+0652	50% power limit
+0653	25% power limit
+0654	Info 1 1W
+0655	Info 2 Slp.In
+0656	SpoilWarnAct
+0657	Fuel Log
+0658	Rem.Fuel
+0659	UpperThreshFuel
+065A	Distance
+065B	RA-Steer. 0
+065C	RA-Steer. 1
+065D	RA-Steer. Slind
+065E	Standard
+0668	-
+0669	Test Mode
+066A	Start Screen
+066B	High Speed
+066C	Em.Call 1-Wire
+066D	TSUS/Nversion
+066E	TSUP/Nversion
+066F	TSU HWversion
+0670	TSU SWversion
+0672	Expire Date

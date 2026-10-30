@@ -1,0 +1,664 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Nenveo
+"""Zugriff auf das KKL-Kabel (FTDI FT232R/FT232RL).
+
+Zwei Wege, gewählt über die Kabel-Adresse:
+
+  ftdi:///1   Linux (und macOS): pyftdi spricht den Chip direkt über libusb an.
+              Die 5-Baud-Reizung lässt sich so exakt per Break-Signal erzeugen,
+              was über /dev/ttyUSB0 nicht sauber geht. Solange das Programm
+              läuft, verschwindet /dev/ttyUSB0 – das ist normal.
+  d2xx:0      Windows: über den FTDI-Treiber (D2XX, Paket ftd2xx), den Windows
+              beim Einstecken selbst installiert. Statt 0 (erstes Kabel) geht
+              auch die Seriennummer des Kabels, z. B. d2xx:A50285BI.
+
+Nach einem USB-Fehler (Kabel kurz gezogen, Rechner im Ruhezustand) ist der Zugang zum Chip
+tot. Beide Wege schließen ihn dann und öffnen das Kabel beim nächsten Zugriff neu. Der
+fehlgeschlagene Zugriff selbst wird nie wiederholt – er meldet seinen Fehler wie sonst.
+"""
+
+from __future__ import annotations
+
+import logging
+import sys
+import time
+
+from .sprache import t
+
+log = logging.getLogger("vagdiag.port")
+
+
+class PortError(Exception):
+    """Problem mit dem Interface (nicht gefunden, keine Rechte, USB-Fehler)."""
+
+
+def fehlertext(exc: BaseException) -> str:
+    """Text eines Fehlers für Meldungen. pyftdi meldet manche USB-Fehler wörtlich als
+    „UsbError: {exc}“ (ein Fehler in pyftdi) – dann steht der Grund in __cause__."""
+    text = str(exc)
+    if "{exc}" in text and exc.__cause__ is not None:
+        text = text.replace("{exc}", str(exc.__cause__))
+    return text or exc.__class__.__name__
+
+
+def kabelfehler(exc: BaseException | None) -> PortError | None:
+    """Der PortError in der Kette eines Fehlers, etwa hinter „Verbindungsaufbau abgebrochen:
+    …“ – dann lag es am Kabel, nicht am Steuergerät. None: kein Kabelfehler."""
+    gesehen: set[int] = set()
+    while exc is not None and id(exc) not in gesehen:
+        if isinstance(exc, PortError):
+            return exc
+        gesehen.add(id(exc))
+        exc = exc.__cause__ if exc.__cause__ is not None else (
+            None if exc.__suppress_context__ else exc.__context__)
+    return None
+
+
+class RawPort:
+    """Schnittstelle, die die K-Leitungs-Schicht von einem Interface erwartet."""
+
+    description = "?"
+    simulator = False         # True: kein Auto dran (Rückfragen nennen das Ziel)
+
+    def set_baudrate(self, baud: int) -> int:
+        raise NotImplementedError
+
+    def send_5baud(self, address: int) -> None:
+        """Adresse mit 5 Baud senden (7 Datenbits, ungerade Parität)."""
+        raise NotImplementedError
+
+    def write(self, data: bytes) -> None:
+        raise NotImplementedError
+
+    def read(self, max_bytes: int, timeout: float) -> bytes:
+        """Sobald mindestens ein Byte da ist, zurückgeben; nach timeout b''."""
+        raise NotImplementedError
+
+    def purge_rx(self) -> None:
+        raise NotImplementedError
+
+    def fast_init_puls(self) -> None:
+        """KWP2000-Fast-Init (ISO 14230): Leitung mindestens 300 ms in Ruhe, dann
+        25 ms Low und 25 ms High. Gleich danach muss StartCommunication folgen;
+        der Empfang ist dann leer."""
+        raise PortError(t("Dieses Interface kann keinen Fast-Init."))
+
+    def close(self) -> None:
+        pass
+
+
+FAST_INIT_RUHE = 0.3      # W5: Leitung vorher in Ruhe
+FAST_INIT_LOW = 0.025     # TiniL
+FAST_INIT_WECKEN = 0.050  # TWuP: ab Beginn des Low bis zum ersten Startbit
+
+
+def _genau_bis(deadline: float) -> None:
+    """Aktiv warten – für die 25-ms-Flanken des Fast-Init (time.sleep ist zu grob)."""
+    while time.perf_counter() < deadline:
+        pass
+
+
+def address_byte_7o1(address: int) -> int:
+    """Adresse als 7 Datenbits plus ungerades Paritätsbit."""
+    data = address & 0x7F
+    parity = 0 if bin(data).count("1") % 2 == 1 else 1
+    return data | (parity << 7)
+
+
+def bits_5baud(address: int) -> list[int]:
+    """Bitfolge der Reizung: Startbit, 8 Bits (LSB zuerst), Stoppbit."""
+    byte = address_byte_7o1(address)
+    return [0] + [(byte >> i) & 1 for i in range(8)] + [1]
+
+
+def _sleep_until(deadline: float) -> None:
+    while True:
+        rest = deadline - time.perf_counter()
+        if rest <= 0:
+            return
+        time.sleep(min(rest, 0.01))
+
+
+WINDOWS = sys.platform == "win32"
+
+
+def standard_url() -> str:
+    """Kabel-Adresse für das erste FTDI-Kabel auf diesem Betriebssystem."""
+    return "d2xx:0" if WINDOWS else "ftdi:///1"
+
+
+def einrichtungs_hinweis() -> str:
+    if WINDOWS:
+        return t("Ist der FTDI-Treiber installiert (README)?")
+    return t("Ist die udev-Regel eingerichtet (README)?")
+
+
+def kabel_oeffnen(url: str | None, reizung: str = "break") -> "RawPort":
+    """Kabel nach Adresse öffnen: ftdi:… über pyftdi, d2xx:… über den FTDI-Treiber."""
+    url = (url or "").strip() or standard_url()
+    if url.lower().startswith("d2xx:"):
+        return D2xxPort(url, reizung)
+    if url.lower().startswith("ftdi:"):
+        return FtdiPort(url, reizung)
+    raise PortError(t("Unbekannte Kabel-Adresse „{url}“ – erwartet z. B. ftdi:///1 (Linux) "
+                      "oder d2xx:0 (Windows).", url=url))
+
+
+def list_ftdi_devices() -> list[tuple[str, str]]:
+    """Angeschlossene FTDI-Geräte als (Kabel-Adresse, Beschreibung)."""
+    if WINDOWS:
+        return _d2xx_geraete()
+    try:
+        from pyftdi.ftdi import Ftdi
+        from pyftdi.usbtools import UsbTools
+    except ImportError as exc:
+        raise PortError(t("pyftdi ist nicht installiert (siehe README)")) from exc
+    try:
+        # nach dem Umstecken hat das Kabel eine neue USB-Adresse – nicht die alte Liste nehmen
+        UsbTools.flush_cache()
+        devices = Ftdi.list_devices()
+    except Exception as exc:  # libusb fehlt, keine Rechte …
+        raise PortError(t("USB-Geräte konnten nicht gelesen werden: {fehler}",
+                          fehler=fehlertext(exc))) from exc
+    return UsbTools.build_dev_strings("ftdi", Ftdi.VENDOR_IDS,
+                                      Ftdi.PRODUCT_IDS, devices)
+
+
+class FtdiPort(RawPort):
+    """KKL-Kabel mit FT232RL (oder kompatiblem Klon).
+
+    reizung="break":   TXD per Break-Signal auf Low ziehen (Standard).
+    reizung="bitbang": TXD im Bitbang-Modus direkt schalten – Ausweichweg für
+                       Klon-Chips, die den Break nicht sauber umsetzen.
+
+    Nach einem Fehler ist _ftdi None; der nächste Zugriff öffnet das Kabel neu (_bereit).
+    """
+
+    BIT_TIME = 0.2  # 5 Baud
+
+    def __init__(self, url: str = "ftdi:///1", reizung: str = "break"):
+        if reizung not in ("break", "bitbang"):
+            raise ValueError(t("reizung muss 'break' oder 'bitbang' sein"))
+        self.reizung = reizung
+        self.url = url
+        self._baud = 10400
+        self._ftdi = None
+        self._geschlossen = False
+        try:
+            import pyftdi.ftdi  # noqa: F401 (nur prüfen, ob es da ist)
+        except ImportError as exc:
+            raise PortError(t("pyftdi ist nicht installiert (siehe README)")) from exc
+        # Der Break bei der Reizung erzeugt im FTDI-Status Fehlerbits, die
+        # pyftdi sonst als „FTDI error“ meldet. Das ist hier normal.
+        logging.getLogger("pyftdi").setLevel(logging.CRITICAL)
+        self._oeffnen()
+        self.description = f"FTDI {url}" + (" " + t("(Reizung per Bitbang)")
+                                            if reizung == "bitbang" else "")
+        log.info(t("Interface geöffnet: %s, Reizung per %s"), url, reizung)
+
+    def _oeffnen(self) -> None:
+        from pyftdi.ftdi import Ftdi
+        try:
+            from pyftdi.usbtools import UsbTools
+            # Nach dem Umstecken oder dem Ruhezustand hat das Kabel eine neue USB-Adresse;
+            # pyftdi merkt sich sonst die alte und meldet „No such device“
+            UsbTools.flush_cache()
+        except Exception:
+            pass
+        ftdi = Ftdi()
+        try:
+            ftdi.open_from_url(self.url)
+        except Exception as exc:
+            raise PortError(t(
+                "KKL-Kabel konnte nicht geöffnet werden ({url}): {fehler}. Steckt das Kabel? "
+                "udev-Regel eingerichtet (README)?", url=self.url,
+                fehler=fehlertext(exc))) from exc
+        try:
+            ftdi.set_line_property(8, 1, "N")
+            ftdi.set_flowctrl("")
+            ftdi.set_latency_timer(1)
+            ftdi.set_baudrate(self._baud)
+            ftdi.purge_buffers()
+        except Exception as exc:
+            try:
+                ftdi.close()
+            except Exception:
+                pass
+            raise PortError(t("KKL-Kabel ließ sich nicht einstellen: {fehler}",
+                              fehler=fehlertext(exc))) from exc
+        self._ftdi = ftdi
+
+    def _bereit(self) -> None:
+        """Vor jedem Zugriff: nach einem Fehler das Kabel neu öffnen."""
+        if self._ftdi is None:
+            if self._geschlossen:
+                raise PortError(t("Das Kabel ist geschlossen."))
+            self._oeffnen()
+            log.info(t("Kabel neu geöffnet: %s"), self.url)
+
+    def _gestoert(self, text: str) -> PortError:
+        """Nach einem Fehler am Kabel den Zugang schließen – der nächste Zugriff öffnet das
+        Kabel neu. Liefert den PortError für die Meldung."""
+        ftdi, self._ftdi = self._ftdi, None
+        if ftdi is not None:
+            try:
+                ftdi.close()
+            except Exception:
+                pass
+        return PortError(text)
+
+    def set_baudrate(self, baud: int) -> int:
+        self._bereit()
+        try:
+            real = self._ftdi.set_baudrate(baud)
+        except Exception as exc:
+            raise self._gestoert(t("Baudrate {baud} nicht einstellbar: {fehler}", baud=baud,
+                                   fehler=fehlertext(exc))) from exc
+        self._baud = baud
+        return real
+
+    def send_5baud(self, address: int) -> None:
+        self._bereit()
+        if self.reizung == "bitbang":
+            self._send_5baud_bitbang(address)
+        else:
+            self._send_5baud_break(address)
+
+    def _send_5baud_bitbang(self, address: int) -> None:
+        from pyftdi.ftdi import Ftdi
+        bits = bits_5baud(address)
+        try:
+            self._ftdi.set_bitmode(0x01, Ftdi.BitMode.BITBANG)  # D0 = TXD als Ausgang
+            self._ftdi.write_data(b"\x01")                      # Ruhepegel high
+            time.sleep(0.01)
+            start = time.perf_counter()
+            for i, bit in enumerate(bits):
+                self._ftdi.write_data(b"\x01" if bit else b"\x00")
+                if i == len(bits) - 1:
+                    break
+                _sleep_until(start + (i + 1) * self.BIT_TIME)
+            # zurück in den UART-Betrieb, solange das Stoppbit läuft
+            self._ftdi.set_bitmode(0x00, Ftdi.BitMode.RESET)
+            self._ftdi.set_line_property(8, 1, "N")
+            self._ftdi.set_baudrate(self._baud)
+            self._nach_reizung_leeren()
+        except Exception as exc:
+            try:
+                self._ftdi.set_bitmode(0x00, Ftdi.BitMode.RESET)
+            except Exception:
+                pass
+            raise self._gestoert(t("5-Baud-Reizung (Bitbang) fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def _nach_reizung_leeren(self) -> None:
+        """Reste der Reizung verwerfen. Das Stoppbit dauert 200 ms, und das
+        Steuergerät antwortet frühestens 20 ms danach – zweimal Leeren mit
+        kurzer Pause ist also gefahrlos und fängt nachlaufende USB-Pakete ab.
+
+        purge_buffers() statt purge_rx_buffer(): Die FTDI-Benennung ist aus
+        Chip-Sicht; empfangene Leitungsdaten liegen im „TX-Puffer“ des Chips
+        (Richtung Host). purge_buffers() leert beide Puffer plus pyftdis
+        eigenen Lesepuffer."""
+        self._ftdi.purge_buffers()
+        time.sleep(0.02)
+        self._ftdi.purge_buffers()
+
+    def _send_5baud_break(self, address: int) -> None:
+        bits = bits_5baud(address)
+        try:
+            self._ftdi.purge_buffers()
+            start = time.perf_counter()
+            for i, bit in enumerate(bits):
+                self._ftdi.set_break(bit == 0)
+                if i == len(bits) - 1:
+                    break  # Stoppbit läuft, Steuergerät antwortet gleich
+                _sleep_until(start + (i + 1) * self.BIT_TIME)
+            # Während des Breaks empfängt das Kabel sein eigenes Low-Signal
+            # als Müll-Bytes. Die werden hier verworfen.
+            self._nach_reizung_leeren()
+        except Exception as exc:
+            try:
+                self._ftdi.set_break(False)
+            except Exception:
+                pass
+            raise self._gestoert(t("5-Baud-Reizung fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def fast_init_puls(self) -> None:
+        from pyftdi.ftdi import Ftdi
+        self._bereit()
+        try:
+            if self.reizung == "bitbang":
+                self._ftdi.set_bitmode(0x01, Ftdi.BitMode.BITBANG)
+                self._ftdi.write_data(b"\x01")
+                time.sleep(FAST_INIT_RUHE)
+                start = time.perf_counter()
+                self._ftdi.write_data(b"\x00")
+                _genau_bis(start + FAST_INIT_LOW)
+                self._ftdi.write_data(b"\x01")
+                self._ftdi.set_bitmode(0x00, Ftdi.BitMode.RESET)
+                self._ftdi.set_line_property(8, 1, "N")
+                self._ftdi.set_baudrate(self._baud)
+            else:
+                self._ftdi.set_break(False)
+                time.sleep(FAST_INIT_RUHE)
+                start = time.perf_counter()
+                self._ftdi.set_break(True)
+                _genau_bis(start + FAST_INIT_LOW)
+                self._ftdi.set_break(False)
+            self._ftdi.purge_buffers()
+            _genau_bis(start + FAST_INIT_WECKEN)
+            self._ftdi.purge_buffers()
+        except Exception as exc:
+            try:
+                if self.reizung == "bitbang":
+                    self._ftdi.set_bitmode(0x00, Ftdi.BitMode.RESET)
+                else:
+                    self._ftdi.set_break(False)
+            except Exception:
+                pass
+            raise self._gestoert(t("Fast-Init fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def write(self, data: bytes) -> None:
+        self._bereit()
+        try:
+            self._ftdi.write_data(data)
+        except Exception as exc:
+            raise self._gestoert(t("Schreiben auf das Kabel fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def read(self, max_bytes: int, timeout: float) -> bytes:
+        self._bereit()
+        deadline = time.perf_counter() + timeout
+        while True:
+            try:
+                chunk = self._ftdi.read_data_bytes(max_bytes, attempt=1)
+            except Exception as exc:
+                raise self._gestoert(t("Lesen vom Kabel fehlgeschlagen: {fehler}",
+                                       fehler=fehlertext(exc))) from exc
+            if chunk:
+                return bytes(chunk)
+            if time.perf_counter() >= deadline:
+                return b""
+
+    def purge_rx(self) -> None:
+        self._bereit()
+        try:
+            self._ftdi.purge_buffers()
+        except Exception as exc:
+            raise self._gestoert(t("Empfangspuffer ließ sich nicht leeren: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def close(self) -> None:
+        self._geschlossen = True
+        ftdi, self._ftdi = self._ftdi, None
+        if ftdi is not None:
+            try:
+                ftdi.close()
+            except Exception:
+                pass
+
+
+# ---------------------------------------------------------------------------
+# Windows: FTDI-Treiber (D2XX)
+# ---------------------------------------------------------------------------
+def _ftd2xx():
+    try:
+        import ftd2xx
+    except ImportError as exc:
+        raise PortError(t("Das Paket ftd2xx ist nicht installiert (siehe README).")) from exc
+    except OSError as exc:      # ftd2xx.dll fehlt
+        raise PortError(t("Der FTDI-Treiber (ftd2xx.dll) fehlt: {fehler}. Treiber installieren "
+                          "(README).", fehler=exc)) from exc
+    return ftd2xx
+
+
+def _text(wert) -> str:
+    if isinstance(wert, bytes):
+        return wert.decode("ascii", errors="replace").strip()
+    return str(wert or "").strip()
+
+
+def _d2xx_geraete() -> list[tuple[str, str]]:
+    ftd2xx = _ftd2xx()
+    try:
+        anzahl = ftd2xx.createDeviceInfoList()
+        geraete = []
+        for i in range(anzahl):
+            info = ftd2xx.getDeviceInfoDetail(i, False)
+            seriennummer = _text(info.get("serial"))
+            beschreibung = _text(info.get("description")) or "FTDI"
+            url = f"d2xx:{seriennummer}" if seriennummer else f"d2xx:{i}"
+            geraete.append((url, beschreibung))
+        return geraete
+    except Exception as exc:
+        raise PortError(t("USB-Geräte konnten nicht gelesen werden: {fehler}",
+                          fehler=exc)) from exc
+
+
+class D2xxPort(RawPort):
+    """KKL-Kabel über den FTDI-Treiber (D2XX) – der Weg unter Windows.
+
+    Gleiches Verhalten wie FtdiPort: Latenz-Timer 1 ms, Reizung per Break
+    (oder Bitbang als Ausweichweg für Klon-Chips), nach einem Fehler beim nächsten
+    Zugriff neu öffnen."""
+
+    BIT_TIME = 0.2   # 5 Baud
+    PURGE_RX_TX = 1 | 2
+
+    def __init__(self, url: str = "d2xx:0", reizung: str = "break"):
+        if reizung not in ("break", "bitbang"):
+            raise ValueError(t("reizung muss 'break' oder 'bitbang' sein"))
+        self.reizung = reizung
+        self.url = url
+        self._baud = 10400
+        self._lese_ms: int | None = None
+        self._dev = None
+        self._geschlossen = False
+        self._oeffnen()
+        self.description = f"FTDI D2XX {url}" + (" " + t("(Reizung per Bitbang)")
+                                                 if reizung == "bitbang" else "")
+        log.info(t("Interface geöffnet: %s, Reizung per %s"), url, reizung)
+
+    def _oeffnen(self) -> None:
+        ftd2xx = _ftd2xx()
+        kennung = self.url.split(":", 1)[1].strip() if ":" in self.url else ""
+        try:
+            if not kennung:
+                dev = ftd2xx.open(0)
+            elif kennung.isdigit():
+                dev = ftd2xx.open(int(kennung))
+            else:
+                dev = ftd2xx.openEx(kennung.encode("ascii"))   # Seriennummer
+        except Exception as exc:
+            raise PortError(t(
+                "KKL-Kabel konnte nicht geöffnet werden ({url}): {fehler}. Steckt das Kabel? "
+                "Ist es in einem anderen Programm geöffnet? Ist der FTDI-Treiber installiert?",
+                url=self.url, fehler=fehlertext(exc))) from exc
+        self._dev = dev
+        self._lese_ms = None
+        try:
+            self._leitung_einstellen()
+            dev.setLatencyTimer(1)
+            dev.purge(self.PURGE_RX_TX)
+        except Exception as exc:
+            self._dev = None
+            try:
+                dev.close()
+            except Exception:
+                pass
+            raise PortError(t("KKL-Kabel ließ sich nicht einstellen: {fehler}",
+                              fehler=fehlertext(exc))) from exc
+
+    def _bereit(self) -> None:
+        """Vor jedem Zugriff: nach einem Fehler das Kabel neu öffnen."""
+        if self._dev is None:
+            if self._geschlossen:
+                raise PortError(t("Das Kabel ist geschlossen."))
+            self._oeffnen()
+            log.info(t("Kabel neu geöffnet: %s"), self.url)
+
+    def _gestoert(self, text: str) -> PortError:
+        """Wie FtdiPort._gestoert: Zugang schließen, beim nächsten Zugriff neu öffnen."""
+        dev, self._dev = self._dev, None
+        if dev is not None:
+            try:
+                dev.close()
+            except Exception:
+                pass
+        return PortError(text)
+
+    def _leitung_einstellen(self) -> None:
+        self._dev.setBaudRate(self._baud)
+        self._dev.setDataCharacteristics(8, 0, 0)    # 8 Datenbits, 1 Stoppbit, keine Parität
+        self._dev.setFlowControl(0, 0, 0)            # keine Flusssteuerung
+
+    def set_baudrate(self, baud: int) -> int:
+        self._bereit()
+        try:
+            self._dev.setBaudRate(baud)
+        except Exception as exc:
+            raise self._gestoert(t("Baudrate {baud} nicht einstellbar: {fehler}", baud=baud,
+                                   fehler=fehlertext(exc))) from exc
+        self._baud = baud
+        return baud
+
+    def send_5baud(self, address: int) -> None:
+        self._bereit()
+        if self.reizung == "bitbang":
+            self._send_5baud_bitbang(address)
+        else:
+            self._send_5baud_break(address)
+
+    def _nach_reizung_leeren(self) -> None:
+        """Reste der Reizung verwerfen (siehe FtdiPort._nach_reizung_leeren)."""
+        self._dev.purge(self.PURGE_RX_TX)
+        time.sleep(0.02)
+        self._dev.purge(self.PURGE_RX_TX)
+
+    def _send_5baud_break(self, address: int) -> None:
+        bits = bits_5baud(address)
+        try:
+            self._dev.purge(self.PURGE_RX_TX)
+            start = time.perf_counter()
+            for i, bit in enumerate(bits):
+                if bit == 0:
+                    self._dev.setBreakOn()
+                else:
+                    self._dev.setBreakOff()
+                if i == len(bits) - 1:
+                    break  # Stoppbit läuft, Steuergerät antwortet gleich
+                _sleep_until(start + (i + 1) * self.BIT_TIME)
+            self._nach_reizung_leeren()
+        except Exception as exc:
+            try:
+                self._dev.setBreakOff()
+            except Exception:
+                pass
+            raise self._gestoert(t("5-Baud-Reizung fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def _send_5baud_bitbang(self, address: int) -> None:
+        bits = bits_5baud(address)
+        try:
+            self._dev.setBitMode(0x01, 0x01)     # asynchrones Bitbang, D0 = TXD als Ausgang
+            self._dev.write(b"\x01")             # Ruhepegel high
+            time.sleep(0.01)
+            start = time.perf_counter()
+            for i, bit in enumerate(bits):
+                self._dev.write(b"\x01" if bit else b"\x00")
+                if i == len(bits) - 1:
+                    break
+                _sleep_until(start + (i + 1) * self.BIT_TIME)
+            # zurück in den UART-Betrieb, solange das Stoppbit läuft
+            self._dev.setBitMode(0x00, 0x00)
+            self._leitung_einstellen()
+            self._nach_reizung_leeren()
+        except Exception as exc:
+            try:
+                self._dev.setBitMode(0x00, 0x00)
+            except Exception:
+                pass
+            raise self._gestoert(t("5-Baud-Reizung (Bitbang) fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def fast_init_puls(self) -> None:
+        self._bereit()
+        try:
+            if self.reizung == "bitbang":
+                self._dev.setBitMode(0x01, 0x01)
+                self._dev.write(b"\x01")
+                time.sleep(FAST_INIT_RUHE)
+                start = time.perf_counter()
+                self._dev.write(b"\x00")
+                _genau_bis(start + FAST_INIT_LOW)
+                self._dev.write(b"\x01")
+                self._dev.setBitMode(0x00, 0x00)
+                self._leitung_einstellen()
+            else:
+                self._dev.setBreakOff()
+                time.sleep(FAST_INIT_RUHE)
+                start = time.perf_counter()
+                self._dev.setBreakOn()
+                _genau_bis(start + FAST_INIT_LOW)
+                self._dev.setBreakOff()
+            self._dev.purge(self.PURGE_RX_TX)
+            _genau_bis(start + FAST_INIT_WECKEN)
+            self._dev.purge(self.PURGE_RX_TX)
+        except Exception as exc:
+            try:
+                if self.reizung == "bitbang":
+                    self._dev.setBitMode(0x00, 0x00)
+                else:
+                    self._dev.setBreakOff()
+            except Exception:
+                pass
+            raise self._gestoert(t("Fast-Init fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def write(self, data: bytes) -> None:
+        self._bereit()
+        try:
+            self._dev.write(bytes(data))
+        except Exception as exc:
+            raise self._gestoert(t("Schreiben auf das Kabel fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def read(self, max_bytes: int, timeout: float) -> bytes:
+        self._bereit()
+        try:
+            vorhanden = self._dev.getQueueStatus()
+            if not vorhanden:
+                # auf das erste Byte wartet der Treiber selbst (meldet sich sofort)
+                ms = max(1, int(timeout * 1000 + 0.999))
+                if ms != self._lese_ms:
+                    self._dev.setTimeouts(ms, 1000)
+                    self._lese_ms = ms
+                erstes = bytes(self._dev.read(1))
+                if not erstes or max_bytes <= 1:
+                    return erstes
+                vorhanden = self._dev.getQueueStatus()
+                rest = bytes(self._dev.read(min(vorhanden, max_bytes - 1))) if vorhanden else b""
+                return erstes + rest
+            return bytes(self._dev.read(min(vorhanden, max_bytes)))
+        except Exception as exc:
+            raise self._gestoert(t("Lesen vom Kabel fehlgeschlagen: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def purge_rx(self) -> None:
+        self._bereit()
+        try:
+            self._dev.purge(self.PURGE_RX_TX)
+        except Exception as exc:
+            raise self._gestoert(t("Empfangspuffer ließ sich nicht leeren: {fehler}",
+                                   fehler=fehlertext(exc))) from exc
+
+    def close(self) -> None:
+        self._geschlossen = True
+        dev, self._dev = self._dev, None
+        if dev is not None:
+            try:
+                dev.close()
+            except Exception:
+                pass

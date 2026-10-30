@@ -1,0 +1,42 @@
+Texttabellen aus KLineKWP1281Lib
+================================
+
+Die Dateien in diesem Ordner stammen aus der freien Bibliothek KLineKWP1281Lib
+von domnulvlad (Version 2.2.1, https://github.com/domnulvlad/KLineKWP1281Lib):
+
+  fehler_de.tsv, fehler_en.tsv            aus src/fault_code_description_DE.h / _EN.h
+  obd_de.tsv, obd_en.tsv                  aus src/OBD_fault_code_description_DE.h / _EN.h
+  fehlerarten_de.tsv, fehlerarten_en.tsv  aus src/fault_code_elaboration_DE.h / _EN.h
+  texte_de.tsv, texte_en.tsv              aus src/text_table_DE.h / _EN.h
+
+Lizenz: GNU General Public License Version 3 (die Bibliothek nennt keine spätere Version,
+deshalb SPDX: GPL-3.0-only). Den Lizenztext enthält die Datei LICENSE im Hauptordner von
+vagdiag. Copyright: domnulvlad und die Mitwirkenden der Bibliothek. Woher die Texte
+ursprünglich stammen, gibt die Bibliothek nicht an.
+
+Änderung (GPL-3.0 Abschnitt 5a): Am 28.10.2026 für vagdiag umgewandelt – aus den C-Headern
+in Textdateien mit einer Zeile je Eintrag (Schlüssel hex, Tabulator, Text), Zeichensatz
+Windows-1252 nach UTF-8, geschützte Leerzeichen zu Leerzeichen, weiche Trennzeichen
+entfernt, doppelte Leerzeichen und Leerraum am Rand entfernt. Inhaltlich unverändert.
+Das Umwandlungsprogramm liegt bei: werkzeuge/texte_aus_klinekwp1281lib.py.
+
+vagdiag nutzt diese Texte erst, wenn weder eigene Texte (*.json im Einstellungsordner)
+noch die eingebauten Texte von vagdiag etwas wissen.
+
+
+Text tables from KLineKWP1281Lib
+================================
+
+The files in this folder come from the free library KLineKWP1281Lib by domnulvlad
+(version 2.2.1, https://github.com/domnulvlad/KLineKWP1281Lib), see the list above.
+
+License: GNU General Public License version 3 (the library names no later version, hence
+SPDX: GPL-3.0-only). The license text is in the file LICENSE in vagdiag's main folder.
+Copyright: domnulvlad and the contributors of the library. The library does not say where
+the texts originally come from.
+
+Modification (GPL-3.0 section 5a): converted for vagdiag on 2026-10-28 – from the C headers
+into text files with one line per entry (key in hex, tab, text), character set Windows-1252
+to UTF-8, non-breaking spaces to spaces, soft hyphens removed, double spaces and leading or
+trailing whitespace removed. Content unchanged. The conversion program is included:
+werkzeuge/texte_aus_klinekwp1281lib.py.

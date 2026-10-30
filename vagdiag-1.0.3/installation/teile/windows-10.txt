@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Nenveo
+# Nur unter Windows 10: Qt 6.12 ist laut Qt die letzte Version, die Windows 10 unterstuetzt.
+PySide6-Essentials<6.13
